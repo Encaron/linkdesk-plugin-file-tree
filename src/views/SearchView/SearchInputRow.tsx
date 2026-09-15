@@ -38,10 +38,10 @@ export function SearchInputRow({
   t,
 }: SearchInputRowProps) {
   return (
-    <div className="search-input-row">
+    <div className="file-tree-search-input-row">
       <input
         ref={inputRef}
-        className="search-input"
+        className="file-tree-search-input"
         type="text"
         placeholder={t("搜索")}
         value={query}
@@ -51,21 +51,21 @@ export function SearchInputRow({
         onBlur={() => requestAnimationFrame(() => setShowHistory(false))}
       />
       {showHistory && searchHistory.length > 0 && !query && (
-        <div className="search-history">
+        <div className="file-tree-search-history">
           {searchHistory.map((h, i) => (
-            <div key={i} className="search-history-item" onMouseDown={() => { setQuery(h); setShowHistory(false); }}>
+            <div key={i} className="file-tree-search-history-item" onMouseDown={() => { setQuery(h); setShowHistory(false); }}>
               <span className="codicon codicon-history" />
               <span>{h}</span>
             </div>
           ))}
         </div>
       )}
-      <div className="search-input-actions">
-        <button className={`search-option-btn ${caseSensitive ? "search-option-btn--active" : ""}`}
+      <div className="file-tree-search-input-actions">
+        <button className={`file-tree-search-option-btn ${caseSensitive ? "file-tree-search-option-btn--active" : ""}`}
           title={t("区分大小写")} onClick={() => setCaseSensitive((v) => !v)}>Aa</button>
-        <button className={`search-option-btn ${wholeWord ? "search-option-btn--active" : ""}`}
+        <button className={`file-tree-search-option-btn ${wholeWord ? "file-tree-search-option-btn--active" : ""}`}
           title={t("全词匹配")} onClick={() => setWholeWord((v) => !v)}>ab</button>
-        <button className={`search-option-btn ${useRegex ? "search-option-btn--active" : ""}`}
+        <button className={`file-tree-search-option-btn ${useRegex ? "file-tree-search-option-btn--active" : ""}`}
           title={t("正则表达式")} onClick={() => setUseRegex((v) => !v)}>.*</button>
       </div>
     </div>

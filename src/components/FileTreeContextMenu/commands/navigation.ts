@@ -108,7 +108,7 @@ export function registerNavigationCommands(): void {
   lk.commands.registerCommand("explorer.search", async () => {
     // 搜索面板始终可见（collapsed: false），只需聚焦
     requestAnimationFrame(() => {
-      const input = document.querySelector<HTMLInputElement>(".search-input");
+      const input = document.querySelector<HTMLInputElement>(".file-tree-search-input");
       input?.focus();
     });
   });

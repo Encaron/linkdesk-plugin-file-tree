@@ -58,7 +58,7 @@ const SearchView: React.FC = () => {
         : "";
 
   return (
-    <div className="search-view" onKeyDown={handleKeyDown} tabIndex={-1}>
+    <div className="file-tree-search-view" onKeyDown={handleKeyDown} tabIndex={-1}>
       {/* 搜索框 */}
       <SearchInputRow
         inputRef={search.inputRef}
@@ -104,7 +104,7 @@ const SearchView: React.FC = () => {
 
       {/* 错误 */}
       {search.state === "error" && (
-        <div className="search-error">{search.errorMsg}</div>
+        <div className="file-tree-search-error">{search.errorMsg}</div>
       )}
 
       {/* 结果列表 */}
@@ -119,7 +119,7 @@ const SearchView: React.FC = () => {
 
       {/* 空结果 */}
       {search.state === "noResults" && (
-        <div className="search-empty">{t("未找到结果")}</div>
+        <div className="file-tree-search-empty">{t("未找到结果")}</div>
       )}
     </div>
   );

@@ -31,16 +31,16 @@ export function SearchToolbar({
   return (
     <>
       {/* 过滤输入 */}
-      <div className="search-filter-row">
+      <div className="file-tree-search-filter-row">
         <input
-          className="search-filter-input"
+          className="file-tree-search-filter-input"
           type="text"
           placeholder={t("要包含的文件")}
           value={include}
           onChange={(e) => setInclude(e.target.value)}
         />
         <input
-          className="search-filter-input"
+          className="file-tree-search-filter-input"
           type="text"
           placeholder={t("要排除的文件")}
           value={exclude}
@@ -49,13 +49,13 @@ export function SearchToolbar({
       </div>
 
       {/* 工具栏：替换开关 + 折叠全部 */}
-      <div className="search-toolbar">
-        <span className="search-stats">{statsText}</span>
-        <div className="search-toolbar-actions">
-          <button className="search-option-btn" title={t("替换")}
+      <div className="file-tree-search-toolbar">
+        <span className="file-tree-search-stats">{statsText}</span>
+        <div className="file-tree-search-toolbar-actions">
+          <button className="file-tree-search-option-btn" title={t("替换")}
             onClick={() => setShowReplace((v) => !v)}>{t("替换")}</button>
           {state === "hasResults" && (
-            <button className="search-option-btn" title={t("折叠全部")}
+            <button className="file-tree-search-option-btn" title={t("折叠全部")}
               onClick={() => setExpandedFiles(new Set())}>{t("折叠全部")}</button>
           )}
         </div>

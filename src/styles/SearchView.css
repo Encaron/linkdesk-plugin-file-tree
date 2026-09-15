@@ -3,7 +3,7 @@
  * E4V#37d：全部颜色走 CSS 变量。
  */
 
-.search-view {
+.file-tree-search-view {
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -14,14 +14,14 @@
 
 /* ── 输入行 ── */
 
-.search-input-row {
+.file-tree-search-input-row {
   display: flex;
   gap: 4px;
   align-items: center;
   position: relative;
 }
 
-.search-input {
+.file-tree-search-input {
   flex: 1;
   height: calc(28px * var(--ui-scale)); /* E5.8 Phase 12 #173：容器乘 scale（§三.3） */
   padding: 0 8px;
@@ -33,16 +33,16 @@
   outline: none;
 }
 
-.search-input:focus {
+.file-tree-search-input:focus {
   border-color: var(--accent);
 }
 
-.search-input-actions {
+.file-tree-search-input-actions {
   display: flex;
   gap: 2px;
 }
 
-.search-option-btn {
+.file-tree-search-option-btn {
   height: calc(22px * var(--ui-scale)); /* E5.8 Phase 12 #173：容器乘 scale */
   padding: 0 4px;
   border: 1px solid transparent;
@@ -53,18 +53,18 @@
   border-radius: 3px;
 }
 
-.search-option-btn:hover {
+.file-tree-search-option-btn:hover {
   background: var(--tree-bg-hover, color-mix(in srgb, var(--text-primary) 6%, transparent));
 }
 
-.search-option-btn--active {
+.file-tree-search-option-btn--active {
   color: var(--accent);
   border-color: var(--accent);
 }
 
 /* ── 替换 ── */
 
-.search-replace-btn {
+.file-tree-search-replace-btn {
   height: calc(24px * var(--ui-scale)); /* E5.8 Phase 12 #173：容器乘 scale */
   padding: 0 8px;
   border: 1px solid var(--border); /* E5.8#128.8：幽灵 --border-color → 真实 border */
@@ -76,55 +76,55 @@
   white-space: nowrap;
 }
 
-.search-replace-btn:disabled {
+.file-tree-search-replace-btn:disabled {
   opacity: 0.4;
   cursor: default;
 }
 
 /* ── 过滤行 ── */
 
-.search-filter-row {
+.file-tree-search-filter-row {
   display: flex;
   gap: 4px;
 }
 
-.search-filter-input {
+.file-tree-search-filter-input {
   flex: 1;
   height: calc(22px * var(--ui-scale)); /* E5.8 Phase 12 #173：容器乘 scale */
   padding: 0 4px;
   border: 1px solid var(--border); /* E5.8#128.8：幽灵链 → 真实 border */
-  background: var(--bg-card); /* E5.8#128.8：幽灵 --input-bg/--bg-primary → 真实 bg-card（同行 search-input 先例） */
+  background: var(--bg-card); /* E5.8#128.8：幽灵 --input-bg/--bg-primary → 真实 bg-card（同行 file-tree-search-input 先例） */
   color: var(--text-secondary);
   font-size: var(--font-size-xs); /* E5.8 Phase 12 #173：11→xs */
   outline: none;
 }
 
-.search-filter-input:focus {
+.file-tree-search-filter-input:focus {
   border-color: var(--accent);
 }
 
 /* ── 工具栏 ── */
 
-.search-toolbar {
+.file-tree-search-toolbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 2px 0;
 }
 
-.search-stats {
+.file-tree-search-stats {
   font-size: var(--font-size-xs); /* E5.8 Phase 12 #173：11→xs */
   color: var(--text-secondary);
 }
 
-.search-toolbar-actions {
+.file-tree-search-toolbar-actions {
   display: flex;
   gap: 4px;
 }
 
 /* ── 错误 ── */
 
-.search-error {
+.file-tree-search-error {
   padding: 4px 8px;
   font-size: var(--font-size-xs); /* E5.8 Phase 12 #173：11→xs */
   color: var(--error); /* E5.8#128.8：幽灵 --text-error + 硬编码 #f44336 → 真实 error token */
@@ -132,16 +132,16 @@
 
 /* ── 结果列表 ── */
 
-.search-results {
+.file-tree-search-results {
   flex: 1;
   overflow-y: auto;
 }
 
-.search-file {
+.file-tree-search-file {
   margin-bottom: 2px;
 }
 
-.search-file-header {
+.file-tree-search-file-header {
   display: flex;
   align-items: center;
   gap: 4px;
@@ -151,23 +151,23 @@
   border-radius: 3px;
 }
 
-.search-file-header:hover {
+.file-tree-search-file-header:hover {
   background: var(--tree-bg-hover, color-mix(in srgb, var(--text-primary) 6%, transparent));
 }
 
-.search-file-chevron {
+.file-tree-search-file-chevron {
   font-size: var(--font-size-sm); /* E5.8 Phase 12 #173：12→sm */
   color: var(--text-secondary);
   flex-shrink: 0;
 }
 
-.search-file-icon {
+.file-tree-search-file-icon {
   font-size: var(--font-size-lg); /* E5.8 Phase 12 #173：icon 14→lg */
   color: var(--text-secondary);
   flex-shrink: 0;
 }
 
-.search-file-name {
+.file-tree-search-file-name {
   font-size: var(--font-size-sm); /* E5.8 Phase 12 #173：file-name 12→sm */
   color: var(--text-primary);
   white-space: nowrap;
@@ -175,7 +175,7 @@
   text-overflow: ellipsis;
 }
 
-.search-file-path {
+.file-tree-search-file-path {
   flex: 1;
   font-size: var(--font-size-2xs); /* E5.8 Phase 12 #173：path 10→2xs */
   color: var(--text-muted); /* E5.8#128.8：幽灵 --text-tertiary → 真实 text-muted */
@@ -185,7 +185,7 @@
   margin-left: 4px;
 }
 
-.search-file-count {
+.file-tree-search-file-count {
   font-size: var(--font-size-xs); /* E5.8 Phase 12 #173：11→xs */
   color: var(--text-secondary);
   flex-shrink: 0;
@@ -193,11 +193,11 @@
 
 /* ── 匹配行 ── */
 
-.search-matches {
+.file-tree-search-matches {
   padding-left: 20px;
 }
 
-.search-match {
+.file-tree-search-match {
   display: flex;
   align-items: baseline;
   gap: 6px;
@@ -207,11 +207,11 @@
   border-radius: 3px;
 }
 
-.search-match:hover {
+.file-tree-search-match:hover {
   background: var(--tree-bg-hover, color-mix(in srgb, var(--text-primary) 6%, transparent));
 }
 
-.search-match-line {
+.file-tree-search-match-line {
   font-size: var(--font-size-xs); /* E5.8 Phase 12 #173：11→xs */
   color: var(--text-muted); /* E5.8#128.8：幽灵 --text-tertiary → 真实 text-muted */
   min-width: 28px;
@@ -219,7 +219,7 @@
   flex-shrink: 0;
 }
 
-.search-match-text {
+.file-tree-search-match-text {
   font-size: var(--font-size-sm); /* E5.8 Phase 12 #173：12→sm */
   color: var(--text-primary);
   white-space: nowrap;
@@ -229,7 +229,7 @@
 
 /* ── 空状态 ── */
 
-.search-empty {
+.file-tree-search-empty {
   padding: 16px 8px;
   font-size: var(--font-size-sm); /* E5.8 Phase 12 #173：12→sm */
   color: var(--text-secondary);
@@ -238,7 +238,7 @@
 
 /* ── 搜索历史 ── */
 
-.search-history {
+.file-tree-search-history {
   position: absolute;
   top: calc(28px * var(--ui-scale)); /* E5.8 Phase 12 #173：锚定缩放后 input 高 */
   left: 0;
@@ -251,7 +251,7 @@
   overflow-y: auto;
 }
 
-.search-history-item {
+.file-tree-search-history-item {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -261,11 +261,11 @@
   cursor: pointer;
 }
 
-.search-history-item:hover {
+.file-tree-search-history-item:hover {
   background: var(--tree-bg-hover, color-mix(in srgb, var(--text-primary) 6%, transparent));
 }
 
-.search-history-item .codicon {
+.file-tree-search-history-item .codicon {
   font-size: var(--font-size-lg); /* E5.8 Phase 12 #173：14→lg */
   color: var(--text-secondary);
 }

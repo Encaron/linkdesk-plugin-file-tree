@@ -23,15 +23,15 @@ export function ReplaceRow({
   t,
 }: ReplaceRowProps) {
   return (
-    <div className="search-input-row">
+    <div className="file-tree-search-input-row">
       <input
-        className="search-input"
+        className="file-tree-search-input"
         type="text"
         placeholder={t("替换")}
         value={replaceText}
         onChange={(e) => setReplaceText(e.target.value)}
       />
-      <button className="search-replace-btn" onClick={handleReplaceAll}
+      <button className="file-tree-search-replace-btn" onClick={handleReplaceAll}
         disabled={state !== "hasResults" || !replaceText || replacing !== null}>
         {replacing
           ? t("替换中… {{done}}/{{total}}", { done: replacing.done, total: replacing.total })
