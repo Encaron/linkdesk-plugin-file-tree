@@ -24,6 +24,6 @@ export interface ExplorerItem {
   size?: number;
   modifiedAt?: number;
   decoration?: FileDecoration;
-  /** E4V#10: 文件只读标记——驱动 explorerResourceReadonly context key */
+  /** E4V#10: 文件只读标记——驱动 file-tree.resourceReadonly context key */
   isReadonly?: boolean;
 }

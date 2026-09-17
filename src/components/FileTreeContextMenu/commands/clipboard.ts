@@ -36,12 +36,12 @@ function resolveUris(ctx: FileMenuContext | undefined): string[] {
 
 export function registerClipboardCommands(): void {
   // ── E4V#17: copyPath + copyRelativePath ──
-  lk.commands.registerCommand("explorer.copyPath", async (...args) => {
+  lk.commands.registerCommand("file-tree.copyPath", async (...args) => {
     const ctx = args[0] as FileMenuContext | undefined;
     if (!ctx) return;
     await navigator.clipboard.writeText(ctx.uri);
   });
-  lk.commands.registerCommand("explorer.copyRelativePath", async (...args) => {
+  lk.commands.registerCommand("file-tree.copyRelativePath", async (...args) => {
     const ctx = args[0] as FileMenuContext | undefined;
     if (!ctx) return;
     const folders = await lk.workspace.getFolders();
@@ -52,7 +52,7 @@ export function registerClipboardCommands(): void {
   });
 
   // ── E4V#25: cut + copy（含系统剪贴板写入——桌面粘贴需要）──
-  lk.commands.registerCommand("explorer.cut", async (...args) => {
+  lk.commands.registerCommand("file-tree.cut", async (...args) => {
     const hd = h(); if (!hd) return;
     const uris = resolveUris(args[0] as FileMenuContext | undefined);
     if (uris.length === 0) return;
@@ -60,7 +60,7 @@ export function registerClipboardCommands(): void {
     await writeSystemClipboard(uris);
     hd.rerender();
   });
-  lk.commands.registerCommand("explorer.copy", async (...args) => {
+  lk.commands.registerCommand("file-tree.copy", async (...args) => {
     const uris = resolveUris(args[0] as FileMenuContext | undefined);
     if (uris.length === 0) return;
     fileTreeClipboard.copy(uris);
@@ -68,7 +68,7 @@ export function registerClipboardCommands(): void {
   });
 
   // ── E4V#26: paste ──
-  lk.commands.registerCommand("explorer.paste", async (...args) => {
+  lk.commands.registerCommand("file-tree.paste", async (...args) => {
     const hd = h(); if (!hd) return;
     const model = hd.getModel();
     const ctx = args[0] as FileMenuContext | undefined;

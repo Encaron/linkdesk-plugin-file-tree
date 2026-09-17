@@ -23,20 +23,20 @@ export function useExplorerConfig({ model, filterRef, rerender }: UseExplorerCon
   const [compactFolders, setCompactFolders] = useState<boolean>();
   const [excludeGitIgnore, setExcludeGitIgnore] = useState<boolean>();
   useEffect(() => {
-    lk.configuration.get("files.exclude").then((v: unknown) => setExcludeCfg(v as Record<string, boolean>));
-    return lk.configuration.onChange("files.exclude", (v: unknown) => setExcludeCfg(v as Record<string, boolean>));
+    lk.configuration.get("file-tree.exclude").then((v: unknown) => setExcludeCfg(v as Record<string, boolean>));
+    return lk.configuration.onChange("file-tree.exclude", (v: unknown) => setExcludeCfg(v as Record<string, boolean>));
   }, []);
   useEffect(() => {
-    lk.configuration.get("explorer.compactFolders").then((v: unknown) => setCompactFolders(v as boolean ?? true));
-    return lk.configuration.onChange("explorer.compactFolders", (v: unknown) => setCompactFolders(v as boolean ?? true));
+    lk.configuration.get("file-tree.compactFolders").then((v: unknown) => setCompactFolders(v as boolean ?? true));
+    return lk.configuration.onChange("file-tree.compactFolders", (v: unknown) => setCompactFolders(v as boolean ?? true));
   }, []);
   useEffect(() => {
-    lk.configuration.get("explorer.excludeGitIgnore").then((v: unknown) => setExcludeGitIgnore(v as boolean ?? true));
-    return lk.configuration.onChange("explorer.excludeGitIgnore", (v: unknown) => setExcludeGitIgnore(v as boolean ?? true));
+    lk.configuration.get("file-tree.excludeGitIgnore").then((v: unknown) => setExcludeGitIgnore(v as boolean ?? true));
+    return lk.configuration.onChange("file-tree.excludeGitIgnore", (v: unknown) => setExcludeGitIgnore(v as boolean ?? true));
   }, []);
   const isInitialMount = useRef(true);
 
-  // files.exclude 变更 → 重配 filter + 刷新
+  // file-tree.exclude 变更 → 重配 filter + 刷新
   useEffect(() => {
     if (isInitialMount.current) return;
     if (excludeCfg === undefined) return;

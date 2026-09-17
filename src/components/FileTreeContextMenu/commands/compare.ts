@@ -12,11 +12,11 @@ let _selectedForCompare: string | null = null;
 
 export function registerCompareCommands(): void {
   // ── E4V#40m: Diff——选择以比较 / 与已选项比较 ──
-  lk.commands.registerCommand("editor.selectForCompare", async (...args) => {
+  lk.commands.registerCommand("file-tree.selectForCompare", async (...args) => {
     const item = (args[0] as { uri?: string }) ?? {};
     if (item.uri) _selectedForCompare = item.uri;
   });
-  lk.commands.registerCommand("editor.compareWithSelected", async (...args) => {
+  lk.commands.registerCommand("file-tree.compareWithSelected", async (...args) => {
     const item = (args[0] as { uri?: string }) ?? {};
     const uri = item.uri;
     if (!uri || !_selectedForCompare || _selectedForCompare === uri) return;

@@ -18,10 +18,10 @@ export async function executeSafeDrop(
   targetDir: string,
   operation: "copy" | "move",
 ): Promise<void> {
-  // E4V#34e: explorer.enableDragAndDrop 配置开关
-  if ((await lk.configuration.get("explorer.enableDragAndDrop") ?? true) === false) return;
-  // E4V#34h1: explorer.confirmDragAndDrop——移动/复制前弹确认框
-  if (await lk.configuration.get("explorer.confirmDragAndDrop") ?? true) {
+  // E4V#34e: file-tree.enableDragAndDrop 配置开关
+  if ((await lk.configuration.get("file-tree.enableDragAndDrop") ?? true) === false) return;
+  // E4V#34h1: file-tree.confirmDragAndDrop——移动/复制前弹确认框
+  if (await lk.configuration.get("file-tree.confirmDragAndDrop") ?? true) {
     const names = sources.map((s) => `"${s.name}"`).join(", ");
     const targetName = targetDir.split("/").pop() ?? targetDir;
     const confirmed = await window.linkdesk?.dialog?.confirm?.(`确定${operation === "move" ? "移动" : "复制"} ${names} 到 "${targetName}"？`);

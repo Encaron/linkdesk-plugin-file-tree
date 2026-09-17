@@ -47,9 +47,9 @@ export class FileTreeModel {
 
   /** E4V#34a: 从 lk.configuration API 加载 sortOrder 配置并订阅变更 */
   async init(): Promise<void> {
-    const saved = await lk.configuration.get<SortOrder>("explorer.sortOrder");
+    const saved = await lk.configuration.get<SortOrder>("file-tree.sortOrder");
     if (saved) this._sortOrder = saved;
-    lk.configuration.onChange<SortOrder>("explorer.sortOrder", (value) => {
+    lk.configuration.onChange<SortOrder>("file-tree.sortOrder", (value) => {
       this._sortOrder = value ?? "default";
       for (const root of this._roots) this._resortLoaded(root);
       this.onDidChange.fire();
@@ -113,8 +113,8 @@ export class FileTreeModel {
     current.children = filtered.map((e: FileEntry) => toExplorerItem(e, current));
     this.onDidChange.fire();
     // E4V#9: 文件嵌套——相关文件折叠为父文件的子节点
-    // E4V#34g2: explorer.fileNesting.enabled 开关——默认 false
-    if (this._excludeFilter && (await lk.configuration.get("explorer.fileNesting.enabled") ?? false)) {
+    // E4V#34g2: file-tree.fileNesting.enabled 开关——默认 false
+    if (this._excludeFilter && (await lk.configuration.get("file-tree.fileNesting.enabled") ?? false)) {
       const nesting = this._excludeFilter.buildNestingMap(filtered);
       // 归一化 key——FileEntry.path 可能含反斜杠
       const normalizedNesting = new Map<string, typeof filtered>();
@@ -123,12 +123,12 @@ export class FileTreeModel {
         normalizedNesting.set(normalizePath(parentPath), children);
         for (const c of children) nestedPaths.add(normalizePath(c.path));
       }
-      const expandNesting = await lk.configuration.get("explorer.fileNesting.expand") ?? true;
+      const expandNesting = await lk.configuration.get("file-tree.fileNesting.expand") ?? true;
       for (const item of current.children ?? []) {
         const nested = normalizedNesting.get(item.uri);
         if (nested) {
           item.children = nested.map((e: FileEntry) => toExplorerItem(e, item));
-          // E4V#34k: explorer.fileNesting.expand——嵌套后默认展开父项
+          // E4V#34k: file-tree.fileNesting.expand——嵌套后默认展开父项
           if (expandNesting) this.expand(item.uri);
         }
       }
@@ -144,7 +144,7 @@ export class FileTreeModel {
    *
    * ⚠️ 限制：沿 root.children → child.children 链深度遍历。
    * 如果路径链中某个目录未展开（children === null），链在此断开→返回 null。
-   * 需要绕过此限制的场景（如 revealInExplorer #104）用 findAndExpandToBypassExclude。
+   * 需要绕过此限制的场景（如 file-tree.revealInExplorer #104）用 findAndExpandToBypassExclude。
    *
    * E4b #99h：AI 进场须知——"找文件"前先确保路径已展开。
    */

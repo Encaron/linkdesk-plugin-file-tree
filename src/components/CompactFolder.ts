@@ -1,6 +1,6 @@
 /**
  * CompactFolder——紧凑单子文件夹路径压缩。
- * E4a #94：对标 VS Code explorer.compactFolders。
+ * E4a #94：对标 VS Code file-tree.compactFolders。
  *
  * 当父目录只有一个子目录时，将路径压缩为单行面包屑：
  *   "src / components / Button.tsx"

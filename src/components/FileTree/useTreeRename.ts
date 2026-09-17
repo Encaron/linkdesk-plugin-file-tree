@@ -2,7 +2,7 @@
  * useTreeRename——行内重命名（E4V#27，E6#87a 从 useTreeSelection 拆出）。
  *
  * 🔥 rename 退出是**归一出口**——finish / cancel / 卸载三条路径走同一个 `exitRename`，
- * 它负责还原快捷键捕获 + inputFocus context key + defer 聚焦回容器。
+ * 它负责还原快捷键捕获 + file-tree.inputFocus context key + defer 聚焦回容器。
  */
 import { useCallback, useEffect, useState } from "react";
 import type { FileTreeModel } from "../../services/FileTreeModel";
@@ -32,13 +32,13 @@ export function useTreeRename({
     setSelection(new Set([target]));
     // 🔥 屏蔽全局快捷键——防止 KeybindingRegistry 抢 Enter/Escape
     lk.keybindings.setKeybindingCaptureActive(true);
-    window.linkdesk?.contextKey?.set("inputFocus", true);
+    window.linkdesk?.contextKey?.set("file-tree.inputFocus", true);
   }, [selection, focusedUri, setFocusedUri, setSelection]);
 
   /** 🔥 rename 退出归一出口——finish/cancel/blur 三条路径走同一个 */
   const exitRename = useCallback(() => {
     lk.keybindings.setKeybindingCaptureActive(false);
-    window.linkdesk?.contextKey?.set("inputFocus", false);
+    window.linkdesk?.contextKey?.set("file-tree.inputFocus", false);
     // defer focus: 等 React 卸载 input 后再聚焦→不触发 input onBlur
     requestAnimationFrame(() => getContainerEl()?.focus());
   }, [getContainerEl]);

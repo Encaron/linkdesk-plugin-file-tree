@@ -109,8 +109,8 @@ export function useFileTreeDnD(callbacks: DnDCallbacks): {
         }
         await executeSafeDrop(sources, target.targetDir, "copy");
         await refreshDirSafe(target.targetDir);
-        // E4V#34h2: explorer.autoOpenDroppedFile——拖入后自动打开
-        if (await lk.configuration.get("explorer.autoOpenDroppedFile") ?? false) {
+        // E4V#34h2: file-tree.autoOpenDroppedFile——拖入后自动打开
+        if (await lk.configuration.get("file-tree.autoOpenDroppedFile") ?? false) {
           for (const src of sources) {
             callbacks.onAutoOpenDroppedFile?.(src.path, src.name);
           }

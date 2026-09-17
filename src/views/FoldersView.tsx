@@ -68,10 +68,10 @@ const FoldersView: React.FC = () => {
     (item: ExplorerItem, event: React.MouseEvent) => {
       event.preventDefault();
       // E4V#12 fix: setState 前设 context key——确保菜单 when 求值时已生效
-      window.linkdesk?.contextKey?.set("explorerItemIsFile", item.isDirectory === false);
-      window.linkdesk?.contextKey?.set("explorerItemIsDir", item.isDirectory === true);
-      window.linkdesk?.contextKey?.set("explorerItemIsRoot", item.parent === null);
-      window.linkdesk?.contextKey?.set("explorerResourceReadonly", item.isReadonly === true);
+      window.linkdesk?.contextKey?.set("file-tree.itemIsFile", item.isDirectory === false);
+      window.linkdesk?.contextKey?.set("file-tree.itemIsDir", item.isDirectory === true);
+      window.linkdesk?.contextKey?.set("file-tree.itemIsRoot", item.parent === null);
+      window.linkdesk?.contextKey?.set("file-tree.resourceReadonly", item.isReadonly === true);
       setContextMenu({ item, anchor: { x: event.clientX, y: event.clientY } });
     },
     [],
@@ -80,7 +80,7 @@ const FoldersView: React.FC = () => {
   /* ── E4V#32: autoReveal——切标签页时文件树自动定位 ── */
   // E5.6#11.5g3: inline useConfigurationValue + lk.tabs.onDidChangeActiveTab 替代 CoreEvents
   const [autoReveal, setAutoReveal] = useState<boolean>(true);
-  useEffect(() => { lk.configuration.get("explorer.autoReveal").then((v: unknown) => setAutoReveal(v as boolean ?? true)); return lk.configuration.onChange("explorer.autoReveal", (v: unknown) => setAutoReveal(v as boolean ?? true)); }, []);
+  useEffect(() => { lk.configuration.get("file-tree.autoReveal").then((v: unknown) => setAutoReveal(v as boolean ?? true)); return lk.configuration.onChange("file-tree.autoReveal", (v: unknown) => setAutoReveal(v as boolean ?? true)); }, []);
   useEffect(() => {
     if (!autoReveal) return;
     const unsub = lk.tabs?.onDidChangeActiveTab?.(({ filePath }: { filePath?: string }) => {

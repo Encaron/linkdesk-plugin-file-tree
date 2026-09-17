@@ -52,8 +52,8 @@ export class FileTreeClipboard {
   /* ── 私有 ── */
 
   private _syncKeys(): void {
-    window.linkdesk?.contextKey?.set("explorerResourceCut", this._isCut && !this.isEmpty);
-    window.linkdesk?.contextKey?.set("explorerClipboardEmpty", this.isEmpty);
+    window.linkdesk?.contextKey?.set("file-tree.resourceCut", this._isCut && !this.isEmpty);
+    window.linkdesk?.contextKey?.set("file-tree.clipboardEmpty", this.isEmpty);
   }
 }
 

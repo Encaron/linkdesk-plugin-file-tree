@@ -66,22 +66,22 @@ describe("FileExcludeFilter", () => {
     // dist/ → strip / → "dist" → 默认分支: 精确路径或后缀匹配
     // .env → 默认分支: 精确或后缀匹配
     filter.setGitignore("dist/\n.env\n# comment\n!.keep\n");
-    // files.exclude + gitignore 并集
-    expect(filter.matches("app.log")).toBe(true);       // files.exclude
+    // file-tree.exclude + gitignore 并集
+    expect(filter.matches("app.log")).toBe(true);       // file-tree.exclude
     expect(filter.matches("dist")).toBe(true);           // gitignore: 精确匹配
     expect(filter.matches("sub/dist")).toBe(true);      // gitignore: 后缀匹配
     expect(filter.matches(".env")).toBe(true);           // gitignore: 精确匹配
     expect(filter.matches("app.ts")).toBe(false);        // neither
   });
 
-  it("clearGitignore——清空 gitignore 规则但保留 files.exclude", () => {
+  it("clearGitignore——清空 gitignore 规则但保留 file-tree.exclude", () => {
     filter.configure({ "*.log": true });
     filter.setGitignore("dist/");
     expect(filter.matches("dist")).toBe(true);
 
     filter.clearGitignore();
     expect(filter.matches("dist")).toBe(false);
-    expect(filter.matches("app.log")).toBe(true); // files.exclude 仍在
+    expect(filter.matches("app.log")).toBe(true); // file-tree.exclude 仍在
   });
 
   /* ── 配置更新 ── */

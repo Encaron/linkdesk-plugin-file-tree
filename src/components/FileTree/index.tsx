@@ -141,24 +141,24 @@ const FileTree = forwardRef<FileTreeHandle, FileTreeProps>(function FileTree(
 
   /* ── context keys ── */
   useEffect(() => {
-    window.linkdesk?.contextKey?.set("explorerResourceCut", false);
-    window.linkdesk?.contextKey?.set("explorerClipboardEmpty", true);
-    window.linkdesk?.contextKey?.set("explorerResourceMoveableToTrash", navigator.platform.includes("Win"));
+    window.linkdesk?.contextKey?.set("file-tree.resourceCut", false);
+    window.linkdesk?.contextKey?.set("file-tree.clipboardEmpty", true);
+    window.linkdesk?.contextKey?.set("file-tree.resourceMoveableToTrash", navigator.platform.includes("Win"));
   }, []);
-  const handleFocus = useCallback(() => { window.linkdesk?.contextKey?.set("explorerFocus", true); }, []);
-  const handleBlur = useCallback(() => { window.linkdesk?.contextKey?.set("explorerFocus", false); }, []);
+  const handleFocus = useCallback(() => { window.linkdesk?.contextKey?.set("file-tree.focus", true); }, []);
+  const handleBlur = useCallback(() => { window.linkdesk?.contextKey?.set("file-tree.focus", false); }, []);
   useEffect(() => {
     if (focusedUri) {
       const fi = flatItems.find((f) => f.item.uri === focusedUri);
-      window.linkdesk?.contextKey?.set("explorerItemIsFile", fi?.item.isDirectory === false);
-      window.linkdesk?.contextKey?.set("explorerResourceReadonly", fi?.item.isReadonly === true);
-      window.linkdesk?.contextKey?.set("explorerViewletCompressedFocus", (fi?.compactedSegments?.length ?? 0) > 0);
+      window.linkdesk?.contextKey?.set("file-tree.itemIsFile", fi?.item.isDirectory === false);
+      window.linkdesk?.contextKey?.set("file-tree.resourceReadonly", fi?.item.isReadonly === true);
+      window.linkdesk?.contextKey?.set("file-tree.viewletCompressedFocus", (fi?.compactedSegments?.length ?? 0) > 0);
     } else {
-      window.linkdesk?.contextKey?.set("explorerItemIsFile", false);
-      window.linkdesk?.contextKey?.set("explorerResourceReadonly", false);
-      window.linkdesk?.contextKey?.set("explorerViewletCompressedFocus", false);
+      window.linkdesk?.contextKey?.set("file-tree.itemIsFile", false);
+      window.linkdesk?.contextKey?.set("file-tree.resourceReadonly", false);
+      window.linkdesk?.contextKey?.set("file-tree.viewletCompressedFocus", false);
     }
-    window.linkdesk?.contextKey?.set("viewHasSomeCollapsibleItem", model.getExpandedUris().length > 0);
+    window.linkdesk?.contextKey?.set("file-tree.viewHasSomeCollapsibleItem", model.getExpandedUris().length > 0);
   }, [focusedUri, flatItems, model]);
 
   /** 点文件树空白处→清空选中（对标 VS Code）。节点 onClick 已 stopPropagation 不冒泡到这里 */

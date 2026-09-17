@@ -126,7 +126,7 @@ export function handleNavKey(
     case "F2": {
       e.preventDefault();
       if (fi.parent !== null) {
-        window.linkdesk?.commands?.executeCommand?.("explorer.rename");
+        window.linkdesk?.commands?.executeCommand?.("file-tree.rename");
       }
       break;
     }
@@ -136,7 +136,7 @@ export function handleNavKey(
     case "Delete": {
       e.preventDefault();
       if (fi.parent !== null) {
-        window.linkdesk?.commands?.executeCommand?.("explorer.delete");
+        window.linkdesk?.commands?.executeCommand?.("file-tree.delete");
       }
       break;
     }

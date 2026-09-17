@@ -42,7 +42,7 @@ describe("FileTreeModel", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     (globalThis as { __ldkConfigStore?: Map<string, unknown> }).__ldkConfigStore?.clear();
-    setConfig("explorer.sortOrder", "default");
+    setConfig("file-tree.sortOrder", "default");
     // E5#85 迁移桥接——FileTreeModel 用 lk.filesystem.listDir 而非 @src/core/FileService
     window.linkdesk.filesystem.listDir = listDir;
     model = new FileTreeModel();
@@ -223,7 +223,7 @@ describe("FileTreeModel", () => {
   /* ── sortOrder —— 6 种排序 ── */
 
   it("sortOrder default/foldersNestsFiles——目录优先", async () => {
-    setConfig("explorer.sortOrder", "default");
+    setConfig("file-tree.sortOrder", "default");
     const m = new FileTreeModel();
     await m.init();
     await m.setRoots(["/root"]);
@@ -237,7 +237,7 @@ describe("FileTreeModel", () => {
   });
 
   it("sortOrder filesFirst——文件优先", async () => {
-    setConfig("explorer.sortOrder", "filesFirst");
+    setConfig("file-tree.sortOrder", "filesFirst");
     const m = new FileTreeModel();
     await m.init();
     await m.setRoots(["/root"]);
@@ -250,7 +250,7 @@ describe("FileTreeModel", () => {
   });
 
   it("sortOrder type——按扩展名排序", async () => {
-    setConfig("explorer.sortOrder", "type");
+    setConfig("file-tree.sortOrder", "type");
     const m = new FileTreeModel();
     await m.init();
     await m.setRoots(["/root"]);
@@ -265,7 +265,7 @@ describe("FileTreeModel", () => {
   });
 
   it("sortOrder modified——按修改时间倒序", async () => {
-    setConfig("explorer.sortOrder", "modified");
+    setConfig("file-tree.sortOrder", "modified");
     const m = new FileTreeModel();
     await m.init();
     await m.setRoots(["/root"]);

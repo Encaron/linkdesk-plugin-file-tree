@@ -33,8 +33,8 @@ const { executeSafeDrop } = await import("../services/FileTreeDnD");
 beforeEach(() => {
   mockedCopy.mockClear();
   mockedDelete.mockClear();
-  ldkStore()?.set("explorer.enableDragAndDrop", true);
-  ldkStore()?.set("explorer.confirmDragAndDrop", false);
+  ldkStore()?.set("file-tree.enableDragAndDrop", true);
+  ldkStore()?.set("file-tree.confirmDragAndDrop", false);
 });
 
 describe("executeSafeDrop", () => {

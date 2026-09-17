@@ -9,7 +9,7 @@ import type { FlatItem } from "../../services/FileTreeKeyboard";
 
 const lk = window.linkdesk;
 
-/** E4V#34b: explorer.compactFolders 配置缓存——flattenTree 在 useMemo 中同步读取 */
+/** E4V#34b: file-tree.compactFolders 配置缓存——flattenTree 在 useMemo 中同步读取 */
 let _compactFolders = true;
 export const compactFoldersRef = { get current() { return _compactFolders; } };
 
@@ -20,12 +20,12 @@ export function setCompactFolders(v: boolean): void {
 
 /** 从 lk.configuration 加载 compactFolders */
 export async function loadCompactFolders(): Promise<void> {
-  _compactFolders = await lk.configuration.get("explorer.compactFolders") ?? true;
+  _compactFolders = await lk.configuration.get("file-tree.compactFolders") ?? true;
 }
 
 export function flattenTree(model: FileTreeModel): FlatItem[] {
   const result: FlatItem[] = [];
-  // E4V#34b: explorer.compactFolders 配置开关
+  // E4V#34b: file-tree.compactFolders 配置开关
   const compactFolders = compactFoldersRef.current;
   function walk(item: ExplorerItem, depth: number, guide: boolean) {
     if (item.isDirectory && compactFolders) {

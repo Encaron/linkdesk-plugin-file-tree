@@ -1,8 +1,8 @@
 /**
  * FileExcludeFilter——glob 模式排除过滤器。
- * E4a #95：对标 VS Code files.exclude + files.watcherExclude。
+ * E4a #95：对标 VS Code file-tree.exclude + files.watcherExclude。
  *
- * 消费 ConfigurationService.get("files.exclude") 的 glob 模式字典。
+ * 消费 ConfigurationService.get("file-tree.exclude") 的 glob 模式字典。
  * 🔥 当前版本覆盖常见模式（**、*、! 取反）。后续可升级为 picomatch 做完整 glob。
  */
 
@@ -73,7 +73,7 @@ export class FileExcludeFilter {
 
   /**
    * E4V#8: 解析 .gitignore 内容并设为 gitignore 排除规则。
-   * 与 files.exclude 独立——configure() 不清空 gitignore 规则。
+   * 与 file-tree.exclude 独立——configure() 不清空 gitignore 规则。
    */
   setGitignore(content: string): void {
     this._gitignore = [];
@@ -95,10 +95,10 @@ export class FileExcludeFilter {
 
   /**
    * 检查相对路径是否应被排除。
-   * 返回 true = 排除（files.exclude 或 .gitignore 任一声明排除即排除）。
+   * 返回 true = 排除（file-tree.exclude 或 .gitignore 任一声明排除即排除）。
    */
   matches(relativePath: string): boolean {
-    // files.exclude 优先
+    // file-tree.exclude 优先
     let excluded = false;
     for (const { isNegated, match } of this._patterns) {
       if (match(relativePath)) {

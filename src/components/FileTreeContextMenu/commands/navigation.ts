@@ -9,26 +9,26 @@ const lk = window.linkdesk;
 
 export function registerNavigationCommands(): void {
   // ── E4V#18: revealInOS ──
-  lk.commands.registerCommand("explorer.revealInOS", async (...args) => {
+  lk.commands.registerCommand("file-tree.revealInOS", async (...args) => {
     const ctx = args[0] as FileMenuContext | undefined;
     if (!ctx) return;
     window.linkdesk?.shell?.showItemInFolder(ctx.uri);
   });
 
   // ── E4V#19 + E5#22: openInTerminal——从配置读取终端类型，不再硬编码 PowerShell ──
-  lk.commands.registerCommand("explorer.openInTerminal", async (...args) => {
+  lk.commands.registerCommand("file-tree.openInTerminal", async (...args) => {
     const ctx = args[0] as FileMenuContext | undefined;
     if (!ctx) return;
     const targetPath = ctx.isDirectory ? ctx.uri : dirname(ctx.uri);
     // 插件走 linkdesk.configuration API——禁止直接 import ConfigurationService
     const cfg = window.linkdesk?.configuration;
-    const terminalExe = (await cfg?.get<string>("terminal.external.windowsExec")) || "powershell";
-    const customCommand = (await cfg?.get<string>("terminal.external.customCommand")) || "";
+    const terminalExe = (await cfg?.get<string>("file-tree.external.windowsExec")) || "powershell";
+    const customCommand = (await cfg?.get<string>("file-tree.external.customCommand")) || "";
     window.linkdesk?.shell?.openInTerminal(targetPath, terminalExe, customCommand);
   });
 
-  // ── E4V#30: revealInExplorer——定位文件并展开目录链 ──
-  lk.commands.registerCommand("explorer.revealInExplorer", async (...args) => {
+  // ── E4V#30: file-tree.revealInExplorer——定位文件并展开目录链 ──
+  lk.commands.registerCommand("file-tree.revealInExplorer", async (...args) => {
     const hd = h(); if (!hd) return;
     // 兼容多种 arg 格式：string | { filePath } | { uri } | FileMenuContext
     let targetUri: string | null = null;
@@ -47,27 +47,27 @@ export function registerNavigationCommands(): void {
     await hd.reveal(targetUri);
   });
   // ── E4V#28: openFile —— 扩展名→FileAssociation→createTab ──
-  lk.commands.registerCommand("explorer.openFile", async (...args) => {
+  lk.commands.registerCommand("file-tree.openFile", async (...args) => {
     const ctx = args[0] as FileMenuContext | undefined;
     if (!ctx || ctx.isDirectory) return;
     const name = ctx.uri.split("/").pop() ?? ctx.uri;
     getOpenFileFn()?.(ctx.uri, name, "pin");
   });
   // ── E4V#29: openToSide —— 在侧边分屏打开文件 ──
-  lk.commands.registerCommand("explorer.openToSide", async (...args) => {
+  lk.commands.registerCommand("file-tree.openToSide", async (...args) => {
     const ctx = args[0] as FileMenuContext | undefined;
     if (!ctx || ctx.isDirectory) return;
     const name = ctx.uri.split("/").pop() ?? ctx.uri;
     getOpenFileFn()?.(ctx.uri, name, "pin");
   });
-  lk.commands.registerCommand("explorer.openWith", placeholder("explorer.openWith"));
-  lk.commands.registerCommand("explorer.findInFolder", placeholder("explorer.findInFolder"));
+  lk.commands.registerCommand("file-tree.openWith", placeholder("file-tree.openWith"));
+  lk.commands.registerCommand("file-tree.findInFolder", placeholder("file-tree.findInFolder"));
   // ── E4V#33: openFolder —— 打开工作区文件夹（MenuBar 文件菜单） ──
-  lk.commands.registerCommand("explorer.openFolder", async () => {
+  lk.commands.registerCommand("file-tree.openFolder", async () => {
     await lk.workspace.openFolder();
   });
   // ── E4V#29: openFocused —— 目录→展开/折叠，文件→打开 ──
-  lk.commands.registerCommand("explorer.openFocused", async () => {
+  lk.commands.registerCommand("file-tree.openFocused", async () => {
     const hd = h(); if (!hd) return;
     const focusedUri = hd.getFocusedUri();
     if (!focusedUri) return;
@@ -87,7 +87,7 @@ export function registerNavigationCommands(): void {
   });
 
   // ── E4V#xx: removeFolder——关闭文件夹（从工作区移除根目录） ──
-  lk.commands.registerCommand("explorer.removeFolder", async (...args) => {
+  lk.commands.registerCommand("file-tree.removeFolder", async (...args) => {
     const ctx = args[0] as FileMenuContext | undefined;
     if (ctx?.uri) {
       // 右键菜单调用——关闭指定文件夹
@@ -100,12 +100,12 @@ export function registerNavigationCommands(): void {
   });
 
   // ── E4V#xx: closeAllEditors——关闭所有编辑器标签页（委托 core.closeAllEditors） ──
-  lk.commands.registerCommand("explorer.closeAllEditors", async () => {
+  lk.commands.registerCommand("file-tree.closeAllEditors", async () => {
     await lk.commands.executeCommand("core.closeAllEditors");
   });
 
   // ── E4V#38: search——聚焦搜索面板输入框 ──
-  lk.commands.registerCommand("explorer.search", async () => {
+  lk.commands.registerCommand("file-tree.search", async () => {
     // 搜索面板始终可见（collapsed: false），只需聚焦
     requestAnimationFrame(() => {
       const input = document.querySelector<HTMLInputElement>(".file-tree-search-input");

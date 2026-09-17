@@ -35,11 +35,11 @@ export function useWorkspaceRoots({ model, filterRef, rerender }: UseWorkspaceRo
       await model.setRoots(folders.map((f: { uri: string }) => f.uri));
       // E4V#8a: filter 必须在 getChildren 之前设置——否则首次加载不过滤
       const filter = filterRef.current;
-      const excludeCfg = await lk.configuration.get("files.exclude") as Record<string, boolean> ?? {};
+      const excludeCfg = await lk.configuration.get("file-tree.exclude") as Record<string, boolean> ?? {};
       filter.configure(excludeCfg);
-      // E4V#34g1: explorer.excludeGitIgnore 开关——默认 true
+      // E4V#34g1: file-tree.excludeGitIgnore 开关——默认 true
       filter.clearGitignore();
-      if ((await lk.configuration.get("explorer.excludeGitIgnore") ?? true)) {
+      if ((await lk.configuration.get("file-tree.excludeGitIgnore") ?? true)) {
         for (const f of folders) {
           const gitignorePath = joinPath(f.uri, ".gitignore");
           if (await lk.filesystem.exists(gitignorePath)) {
@@ -66,8 +66,8 @@ export function useWorkspaceRoots({ model, filterRef, rerender }: UseWorkspaceRo
           if (item) await model.getChildren(item).catch((e) => { console.error("[file-tree] 刷新目录失败:", e); });
         }
       }
-      // E4V#34i: explorer.expandSingleFolderWorkspaces——单目录工作区自动展开根
-      if ((await lk.configuration.get("explorer.expandSingleFolderWorkspaces") ?? true)
+      // E4V#34i: file-tree.expandSingleFolderWorkspaces——单目录工作区自动展开根
+      if ((await lk.configuration.get("file-tree.expandSingleFolderWorkspaces") ?? true)
           && folders.length === 1) {
         const root = model.roots[0];
         if (root) {

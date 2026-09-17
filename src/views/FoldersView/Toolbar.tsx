@@ -12,16 +12,16 @@ export default function Toolbar() {
   const { t } = useTranslation();
   return (
     <div className="file-tree-toolbar">
-      <button className="file-tree-toolbar-btn" title={t("新建文件")} onClick={() => lk.commands.executeCommand("explorer.newFile")}>
+      <button className="file-tree-toolbar-btn" title={t("新建文件")} onClick={() => lk.commands.executeCommand("file-tree.newFile")}>
         <span className="codicon codicon-new-file" />
       </button>
-      <button className="file-tree-toolbar-btn" title={t("新建文件夹")} onClick={() => lk.commands.executeCommand("explorer.newFolder")}>
+      <button className="file-tree-toolbar-btn" title={t("新建文件夹")} onClick={() => lk.commands.executeCommand("file-tree.newFolder")}>
         <span className="codicon codicon-new-folder" />
       </button>
-      <button className="file-tree-toolbar-btn" title={t("刷新")} onClick={() => lk.commands.executeCommand("explorer.refresh")}>
+      <button className="file-tree-toolbar-btn" title={t("刷新")} onClick={() => lk.commands.executeCommand("file-tree.refresh")}>
         <span className="codicon codicon-refresh" />
       </button>
-      <button className="file-tree-toolbar-btn" title={t("收起全部")} onClick={() => lk.commands.executeCommand("explorer.collapseAll")}>
+      <button className="file-tree-toolbar-btn" title={t("收起全部")} onClick={() => lk.commands.executeCommand("file-tree.collapseAll")}>
         <span className="codicon codicon-collapse-all" />
       </button>
     </div>

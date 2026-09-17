@@ -22,27 +22,29 @@ const FileTreeContextMenu: React.FC<FileTreeContextMenuProps> = ({ item, anchor,
   // E4V#12: 瞬态 context key——菜单渲染前注入，关闭时清除
   useEffect(() => {
     const lk = window.linkdesk;
-    lk?.contextKey?.set("explorerItemIsFile", item?.isDirectory === false);
-    lk?.contextKey?.set("explorerItemIsDir", item?.isDirectory === true);
-    lk?.contextKey?.set("explorerItemIsRoot", item?.parent === null);
-    lk?.contextKey?.set("explorerResourceReadonly", item?.isReadonly === true);
+    lk?.contextKey?.set("file-tree.itemIsFile", item?.isDirectory === false);
+    lk?.contextKey?.set("file-tree.itemIsDir", item?.isDirectory === true);
+    lk?.contextKey?.set("file-tree.itemIsRoot", item?.parent === null);
+    lk?.contextKey?.set("file-tree.resourceReadonly", item?.isReadonly === true);
     return () => {
-      lk?.contextKey?.set("explorerItemIsFile", false);
-      lk?.contextKey?.set("explorerItemIsDir", false);
-      lk?.contextKey?.set("explorerItemIsRoot", false);
-      lk?.contextKey?.set("explorerResourceReadonly", false);
+      lk?.contextKey?.set("file-tree.itemIsFile", false);
+      lk?.contextKey?.set("file-tree.itemIsDir", false);
+      lk?.contextKey?.set("file-tree.itemIsRoot", false);
+      lk?.contextKey?.set("file-tree.resourceReadonly", false);
     };
   }, [item]);
 
   // 传给命令的上下文（handler 通过 args[0] 接收）
   // when 条件优先读此上下文——菜单渲染不等 IPC 异步的 contextKey.set
+  // ⚠️ 旗子名带 `.` ⇒ 作对象键**必须加引号**（裸标识符位写 `file-tree.x` 是语法错误）。
+  //    context 经 ContextMenu 以 `Record<string, unknown>` 按字符串键读取 ⇒ 加引号零语义变化。
   const context = item ? {
     uri: item.uri,
     isDirectory: item.isDirectory,
-    explorerItemIsFile: item.isDirectory === false,
-    explorerItemIsDir: item.isDirectory === true,
-    explorerItemIsRoot: item.parent === null,
-    explorerResourceReadonly: item.isReadonly === true,
+    "file-tree.itemIsFile": item.isDirectory === false,
+    "file-tree.itemIsDir": item.isDirectory === true,
+    "file-tree.itemIsRoot": item.parent === null,
+    "file-tree.resourceReadonly": item.isReadonly === true,
   } : undefined;
 
   return (

@@ -94,13 +94,13 @@ describe("FileTreeClipboard", () => {
 
   /* ── context key 同步 ── */
 
-  it("cut→explorerResourceCut=true; pull 后→false", () => {
+  it("cut→file-tree.resourceCut=true; pull 后→false", () => {
     clipboard.cut(["/a/1.txt"]);
-    expect(ctxKeys.get("explorerResourceCut")).toBe(true);
-    expect(ctxKeys.get("explorerClipboardEmpty")).toBe(false);
+    expect(ctxKeys.get("file-tree.resourceCut")).toBe(true);
+    expect(ctxKeys.get("file-tree.clipboardEmpty")).toBe(false);
 
     clipboard.pull();
-    expect(ctxKeys.get("explorerResourceCut")).toBe(false);
-    expect(ctxKeys.get("explorerClipboardEmpty")).toBe(true);
+    expect(ctxKeys.get("file-tree.resourceCut")).toBe(false);
+    expect(ctxKeys.get("file-tree.clipboardEmpty")).toBe(true);
   });
 });

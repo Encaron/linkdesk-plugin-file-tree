@@ -4,9 +4,9 @@
  * 订阅生命周期留在 React effect 里（硬约束 19），模块级只留一次性缓存：
  *   - `iconTheme:changed` → 重建 resolver + 触发节点重渲染
  *   - 活跃工作区（E4V#35e 根节点 accent 色）
- *   - `explorer.compactFolders` → 写 flatten 缓存 + rerender
+ *   - `file-tree.compactFolders` → 写 flatten 缓存 + rerender
  *   - `app.uiFontScale` → 行高运行时桥（E5.8 Phase 12 #172）
- *   - `explorer.expandOnClick` → 点击目录行是否 toggle
+ *   - `file-tree.expandOnClick` → 点击目录行是否 toggle
  */
 import { useEffect, useState } from "react";
 import { getScaledTreeItemHeight, setUiFontScale } from "../../utils/layoutTokens";
@@ -40,10 +40,10 @@ export function useTreeConfig(rerender: () => void) {
     return lk.workspace.onDidChangeActiveWorkspace((uri: string | null) => { setActiveWorkspaceUri(uri ?? ""); rerender(); });
   }, [rerender]);
 
-  // E4V#34b: 加载 explorer.compactFolders 配置并订阅变更
+  // E4V#34b: 加载 file-tree.compactFolders 配置并订阅变更
   useEffect(() => {
     loadCompactFolders().then(rerender);
-    return lk.configuration.onChange("explorer.compactFolders", (v: boolean) => {
+    return lk.configuration.onChange("file-tree.compactFolders", (v: boolean) => {
       setCompactFolders(v ?? true);
       rerender();
     });
@@ -64,8 +64,8 @@ export function useTreeConfig(rerender: () => void) {
   useEffect(() => {
     const cfg = window.linkdesk?.configuration;
     if (!cfg) return;
-    cfg.get("explorer.expandOnClick").then((v: unknown) => setExpandOnClick(Boolean(v)));
-    return cfg.onChange("explorer.expandOnClick", (v: unknown) => setExpandOnClick(Boolean(v)));
+    cfg.get("file-tree.expandOnClick").then((v: unknown) => setExpandOnClick(Boolean(v)));
+    return cfg.onChange("file-tree.expandOnClick", (v: unknown) => setExpandOnClick(Boolean(v)));
   }, []);
 
   return { activeWorkspaceUri, iconThemeId, itemHeight, expandOnClick };

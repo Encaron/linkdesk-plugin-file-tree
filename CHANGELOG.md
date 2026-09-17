@@ -1,5 +1,13 @@
 # 更新日志
 
+## v1.0.11（2026-09-17）
+
+- **命名空间归一（E6#111n-1）**：本仓所有贡献点名字收进 `file-tree.` 前缀——**21 条声明命令 id ＋ 25 处运行时注册 ＋ 18 个设置键 ＋ 11 个上下文旗子**，共 75 项。旧名（`explorer.*` / 裸名旗子）一律去掉第一段换成 `file-tree`，**词干一个字母没动**（`explorer.newFile → file-tree.newFile`、`explorerFocus → file-tree.focus`），改名形状经机械证明：把工作区内容按逆映射还原回旧名，与改名前的 git blob **逐字节相等**（93 文件比对，差异全部有据）。
+- **还回两处借用的名字**：`editor.selectForCompare` / `editor.compareWithSelected` 由本仓注册却占着 `editor.*` 命名空间——卸载本仓时它们永不被清理、卸载 `editor` 时反被误删，本版还回 `file-tree.*`；旗子 `inputFocus`（共享组件的名字）同样还回 `file-tree.inputFocus`。
+- **快捷键的 `when` 条件同笔跟改**：`plugin.json` 里 6 条键位是**双重命中区**——同一行既有命令 id 又有旗子名（`Enter` → `file-tree.openFocused`，`when: file-tree.focus && !file-tree.inputFocus`）。这类字符串**没有编译期检查**，改漏只会静默失效，逐条核过。
+- **上位约束 = 操作体验零变化**：设置项取值、快捷键行为、右键菜单逐项显隐**全部逐条实测比对，与升级前一致**（设置项 18/18 取值不变；键位 6 条默认 ＋ 3 条自定义全部照旧生效、零冲突；右键菜单在文件/文件夹/根节点/空白 4 种场景下条目数与顺序、快捷键提示、禁用态逐字节相同）。
+- **无功能变化、无视觉变化**。宿主侧配套发布 1.42，老用户的设置键与自定义快捷键**由宿主自动搬家**，无需手工处理。
+
 ## v1.0.10（2026-09-16）
 
 - **适配宿主 E6#109l-b 的共享组件类名归一（`@linkdesk/ui` 0.3.0）**：共享组件余下的 52 个类名一律收进 `ldk-` 前缀——`colorpicker-*` / `ctx-*` / `form-row` / `inline-input*` / `number-input*` / `segmented-radio*` / `sidebar-section*` / `theme-picker*` / `theme-card` / `theme-preview` / `.tbadge` / `.tname` / `.pv-*`，外加关键帧 `selectbox-in → ldk-selectbox-in`。至此**宿主与共享组件自己定义的类名 100% 是 `ldk-` 开头**（258 ＋ 89 个独立定义，零例外），规则只剩一句、不再有任何登记表。

@@ -25,9 +25,9 @@ function resolveDirUri(ctx?: FileMenuContext): string {
   return model.roots[0]?.uri ?? "";
 }
 
-/** E4V#34j: explorer.incrementalNaming——"smart"=编号（默认），"disabled"=不编号 */
+/** E4V#34j: file-tree.incrementalNaming——"smart"=编号（默认），"disabled"=不编号 */
 async function nextName(dirUri: string, base: string): Promise<string> {
-  const naming = await lk.configuration.get("explorer.incrementalNaming") ?? "smart";
+  const naming = await lk.configuration.get("file-tree.incrementalNaming") ?? "smart";
   let name = base;
   if (naming === "disabled") return name;
   const probe = (n: string) => joinPath(dirUri, n);
@@ -39,7 +39,7 @@ async function nextName(dirUri: string, base: string): Promise<string> {
 }
 
 export function registerFileCommands(): void {
-  lk.commands.registerCommand("explorer.newFile", async (...args) => {
+  lk.commands.registerCommand("file-tree.newFile", async (...args) => {
     const hd = h(); if (!hd) return;
     const model = hd.getModel();
     const dirUri = resolveDirUri(args[0] as FileMenuContext | undefined);
@@ -51,7 +51,7 @@ export function registerFileCommands(): void {
     if (parent && model.isExpanded(parent.uri)) await model.getChildren(parent).catch((e) => { console.error("[file-tree] 刷新目录失败:", e); });
   });
 
-  lk.commands.registerCommand("explorer.newFolder", async (...args) => {
+  lk.commands.registerCommand("file-tree.newFolder", async (...args) => {
     const hd = h(); if (!hd) return;
     const model = hd.getModel();
     const dirUri = resolveDirUri(args[0] as FileMenuContext | undefined);
@@ -63,7 +63,7 @@ export function registerFileCommands(): void {
     if (parent && model.isExpanded(parent.uri)) await model.getChildren(parent).catch((e) => { console.error("[file-tree] 刷新目录失败:", e); });
   });
 
-  lk.commands.registerCommand("explorer.refresh", async () => {
+  lk.commands.registerCommand("file-tree.refresh", async () => {
     const hd = h(); if (!hd) return;
     const model = hd.getModel();
     await model.refresh();
@@ -73,17 +73,17 @@ export function registerFileCommands(): void {
     }
   });
 
-  lk.commands.registerCommand("explorer.collapseAll", async () => {
+  lk.commands.registerCommand("file-tree.collapseAll", async () => {
     h()?.getModel().collapseAll();
   });
 
   // ── E4V#27: F2 行内重命名 ──
-  lk.commands.registerCommand("explorer.rename", async () => {
+  lk.commands.registerCommand("file-tree.rename", async () => {
     h()?.startRename();
   });
 
   // ── E4V#24: delete ──
-  lk.commands.registerCommand("explorer.delete", async (...args) => {
+  lk.commands.registerCommand("file-tree.delete", async (...args) => {
     const hd = h(); if (!hd) return;
     const model = hd.getModel();
     const ctx = args[0] as FileMenuContext | undefined;
@@ -91,7 +91,7 @@ export function registerFileCommands(): void {
     const focused = hd.getFocusedUri();
     const uris: string[] = selection.length > 0 ? selection : ctx ? [ctx.uri] : focused ? [focused] : [];
     if (uris.length === 0) return;
-    const confirmDelete = await lk.configuration.get("explorer.confirmDelete") ?? true;
+    const confirmDelete = await lk.configuration.get("file-tree.confirmDelete") ?? true;
     if (confirmDelete) {
       const nameList = uris.map((u) => `"${u.split("/").pop() ?? u}"`).join(", ");
       const confirmed = await window.linkdesk?.dialog?.confirm?.(`确定删除 ${nameList}？`);
