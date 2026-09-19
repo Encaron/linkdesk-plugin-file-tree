@@ -1,5 +1,5 @@
 /**
- * 文件树侧栏——设计 Token + 侧栏外壳（头部/面包屑/工具栏/滚动容器）。
+ * 文件树侧栏——设计 Token + 侧栏外壳（工具栏/滚动容器）。
  * E4a #95a：对标 marketplace 的侧栏样式（原 MarketplaceSidebar.css；E6#86d 后拆为
  * styles/sidebar/ 下的 sidebar-shell.css · sidebar-list.css · sidebar-explore.css，本文件对标的是其中的 shell 件）。
  *
@@ -23,52 +23,6 @@
   --tree-bg-selected: color-mix(in srgb, var(--accent) 15%, transparent);
   /* E4b #99k: 悬停——比选中更轻 */
   --tree-bg-hover: color-mix(in srgb, var(--text-primary) 6%, transparent);
-}
-
-/* ═══ 侧栏布局 ═══ */
-
-.file-tree-sidebar {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  overflow: hidden;
-}
-
-.file-tree-header {
-  height: calc(28px * var(--ui-scale)); /* E5.8 Phase 12 #172：容器乘 scale（F11） */
-  display: flex;
-  align-items: center;
-  padding: 0 12px;
-  font-size: var(--font-size-xs); /* header 11→xs */
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: var(--text-secondary);
-  flex-shrink: 0;
-}
-
-/* ── 路径面包屑 ── */
-
-.file-tree-breadcrumb {
-  height: calc(28px * var(--ui-scale)); /* E5.8 Phase 12 #172：容器乘 scale */
-  display: flex;
-  align-items: center;
-  padding: 0 12px;
-  font-size: var(--font-size-sm); /* breadcrumb 12→sm */
-  color: var(--text-secondary);
-  flex-shrink: 0;
-  border-bottom: 1px solid var(--border);
-}
-
-.file-tree-breadcrumb-icon {
-  margin-right: 6px;
-  font-size: var(--font-size-lg); /* 14→lg */
-}
-
-.file-tree-breadcrumb-path {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 /* ── 工具栏 ── */

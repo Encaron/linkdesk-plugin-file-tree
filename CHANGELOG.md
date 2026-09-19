@@ -1,5 +1,9 @@
 # 更新日志
 
+## v1.0.14（2026-09-19）
+
+- **删 5 处「有规则、无渲染方」的 CSS 死类**（E6#113）：`.file-tree-sidebar`／`.file-tree-header`／`.file-tree-breadcrumb`／`.file-tree-breadcrumb-icon`／`.file-tree-breadcrumb-path`——旧 `sidebar.tsx` 的容器／头部／面包屑（E36#10 拆除后侧栏外壳由壳的 `SidePanel`／`SidebarSection` 接管，插件侧 JSX 不再画那些节点，当年为其写的 CSS 未同笔删）。删前实机 CDP 普查：三仓视图真开状态下候选类名在 DOM **零存在** ⇒ 删除像素级零视觉变化；删后仓内 src 零残留、`verify`／`test` 全绿。无功能变化。
+
 ## v1.0.13（2026-09-19）
 
 - **声明最低壳版本 `minAppVersion: "0.2.13"`**（E6#128 · L9 收尾补正）：本仓自上一版起改由**壳池集中供给** `@linkdesk/ui`（构建时 external、运行时向壳要同一份实例）⇒ 需要 **≥ 0.2.13** 的壳（该版本起池里才有 `@linkdesk/ui` 这件货）。此前本清单**没写这个字段** ⇒ 市场与加载期都拦不住「新插件 × 旧壳」的组合（旧壳上插件视图打不开，壳被 ErrorBoundary 兜住、不崩）。本版**只加这一行清单字段 + 版本 PATCH**，源码与产物行为零变化。
