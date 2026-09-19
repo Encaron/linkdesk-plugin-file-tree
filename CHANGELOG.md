@@ -1,5 +1,9 @@
 # 更新日志
 
+## v1.0.15（2026-09-19）
+
+- **重打可复现**：@linkdesk/plugin-sdk 0.1.42 起 zip 目录条目时间戳钉死，同一份源码重打逐字节一致。插件内容零变化（仅 plugin.json 版本号随包更新）。
+
 ## v1.0.14（2026-09-19）
 
 - **删 5 处「有规则、无渲染方」的 CSS 死类**（E6#113）：`.file-tree-sidebar`／`.file-tree-header`／`.file-tree-breadcrumb`／`.file-tree-breadcrumb-icon`／`.file-tree-breadcrumb-path`——旧 `sidebar.tsx` 的容器／头部／面包屑（E36#10 拆除后侧栏外壳由壳的 `SidePanel`／`SidebarSection` 接管，插件侧 JSX 不再画那些节点，当年为其写的 CSS 未同笔删）。删前实机 CDP 普查：三仓视图真开状态下候选类名在 DOM **零存在** ⇒ 删除像素级零视觉变化；删后仓内 src 零残留、`verify`／`test` 全绿。无功能变化。
