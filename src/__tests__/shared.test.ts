@@ -9,7 +9,11 @@
  * 替身（⛔ 不动共享地基）：
  *   1. `window.linkdesk.notifications.show` 是**共享 mock 里没有的命名空间**（六通用面里没有铃铛）——
  *      本文件 `vi.fn()` 补上，用来断言「失败真的报了」；
- *   2. model 用最小桩（只实现被调到的四个成员）——正是「插件专属桩住本仓测试文件」的写法。
+ *   2. model 用最小桩（只实现被调到的成员）——正是「插件专属桩住本仓测试文件」的写法。
+ *
+ * ⚠️ 本文件随后被同一任务的 **`fix:` 笔**动过（⛔ 与补测笔不同笔）：补测读数读出真 bug——原
+ * `refreshDirSafe` 漏 `await` 又补一次 `getChildren` ⇒ 同一目录并发读两遍盘。原「已展开 → 再拉
+ * 一次子项」那条断言正是把这个 bug 当成了预期，故被替换成两条钉子（等 refresh 做完 / 不读第二遍）。
  */
 
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -20,7 +24,7 @@ type Notification = { message: string; opts?: Record<string, unknown> };
 let show: ReturnType<typeof vi.fn>;
 let warnSpy: ReturnType<typeof vi.spyOn>;
 
-/** 最小 model 桩——只实现 refreshDirSafe 真正调到的四个成员 */
+/** 最小 model 桩——只实现 `refresh`（修根后 refreshDirSafe 只调它）；另三个成员留作「不许被调到」的探针 */
 function modelStub(over: Partial<Record<"refresh" | "findClosest" | "isExpanded" | "getChildren", unknown>> = {}) {
   return {
     refresh: vi.fn(),
@@ -61,17 +65,35 @@ describe("refreshDirSafe（刷新目录——唯一失败出口接线点）", ()
     expect(model.refresh).toHaveBeenCalledWith("/root/src");
   });
 
-  it("目标在模型中且**已展开** → 再拉一次子项（展开着的目录刷新后要看得见新内容）", async () => {
+  it("🔴 等 refresh 做完才算完——refresh 还挂着时不许提前返回（原写法漏 await，正是并发读两遍盘的根因）", async () => {
+    let release!: () => void;
+    const model = modelStub({ refresh: vi.fn(() => new Promise<void>((r) => { release = r; })) });
+    let done = false;
+    const running = refreshDirSafe(model, "/root/src").then(() => { done = true; });
+
+    await Promise.resolve();
+    expect(done).toBe(false); // refresh 未完成 ⇒ 调用方必须还在等
+
+    release();
+    await running;
+    expect(done).toBe(true);
+  });
+
+  it("🔴 同一目录不读第二遍——已展开目录也不补 getChildren（refresh 自己会重读子项并 fire）", async () => {
     const item = { uri: "/root/src", isDirectory: true };
     const model = modelStub({ findClosest: vi.fn(() => item), isExpanded: vi.fn(() => true) });
 
     await refreshDirSafe(model, "/root/src");
 
-    expect(model.getChildren).toHaveBeenCalledTimes(1);
-    expect(model.getChildren).toHaveBeenCalledWith(item);
+    expect(model.refresh).toHaveBeenCalledTimes(1);
+    // 三个成员零调用 = 没有第二条读盘路径。补一次 `getChildren` 就是「同一目录并发读两遍盘」
+    // （refresh → reloadItem 先把 children 清 null，补的那次见 null 又读一次）。
+    expect(model.getChildren).not.toHaveBeenCalled();
+    expect(model.findClosest).not.toHaveBeenCalled();
+    expect(model.isExpanded).not.toHaveBeenCalled();
   });
 
-  it("目标不在模型里 / 未展开 → 不拉子项（懒加载边界不被刷新越过）", async () => {
+  it("目标不在模型里 / 未展开 → 没有任何补读（懒加载边界不被刷新越过）", async () => {
     const missing = modelStub({ findClosest: vi.fn(() => null) });
     await refreshDirSafe(missing, "/root/gone");
     expect(missing.getChildren).not.toHaveBeenCalled();
@@ -99,6 +121,18 @@ describe("refreshDirSafe（刷新目录——唯一失败出口接线点）", ()
     //    本文件的判据是「失败有没有走到那个唯一出口、出口参数对不对」。
     const [, opts] = show.mock.calls[0] as [unknown, Record<string, unknown>];
     expect(opts).toEqual({ type: "error", source: "file-tree", persistent: true });
+  });
+
+  it("刷新以**拒绝**失败（refresh 内部 async 抛）→ 同样落进那个出口（补 await 之前这里是无人接的拒绝）", async () => {
+    const model = modelStub({
+      refresh: vi.fn(async () => {
+        throw new Error("EPERM: operation not permitted");
+      }),
+    });
+
+    await expect(refreshDirSafe(model, "/root/src")).resolves.toBeUndefined();
+
+    expect(show).toHaveBeenCalledTimes(1);
   });
 
   it("一切正常时**不出声**——成功路径不许弹通知（show 零调用）", async () => {
