@@ -52,10 +52,10 @@ export function SearchToolbar({
       <div className="file-tree-search-toolbar">
         <span className="file-tree-search-stats">{statsText}</span>
         <div className="file-tree-search-toolbar-actions">
-          <button className="file-tree-search-option-btn" title={t("替换")}
+          <button className="file-tree-search-option-btn" data-hint={t("替换")}
             onClick={() => setShowReplace((v) => !v)}>{t("替换")}</button>
           {state === "hasResults" && (
-            <button className="file-tree-search-option-btn" title={t("折叠全部")}
+            <button className="file-tree-search-option-btn" data-hint={t("折叠全部")}
               onClick={() => setExpandedFiles(new Set())}>{t("折叠全部")}</button>
           )}
         </div>

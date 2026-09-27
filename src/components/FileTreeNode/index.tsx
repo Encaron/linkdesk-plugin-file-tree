@@ -104,7 +104,7 @@ const FileTreeNode: React.FC<FileTreeNodeProps> = ({
       {decoration?.badge && (
         <span
           className="file-tree-badge"
-          title={decoration.tooltip}
+          data-hint={decoration.tooltip}
           style={{ color: decoration.color ?? undefined }}
         >
           {decoration.badge}

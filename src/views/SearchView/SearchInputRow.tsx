@@ -62,11 +62,11 @@ export function SearchInputRow({
       )}
       <div className="file-tree-search-input-actions">
         <button className={`file-tree-search-option-btn ${caseSensitive ? "file-tree-search-option-btn--active" : ""}`}
-          title={t("区分大小写")} onClick={() => setCaseSensitive((v) => !v)}>Aa</button>
+          data-hint={t("区分大小写")} onClick={() => setCaseSensitive((v) => !v)}>Aa</button>
         <button className={`file-tree-search-option-btn ${wholeWord ? "file-tree-search-option-btn--active" : ""}`}
-          title={t("全词匹配")} onClick={() => setWholeWord((v) => !v)}>ab</button>
+          data-hint={t("全词匹配")} onClick={() => setWholeWord((v) => !v)}>ab</button>
         <button className={`file-tree-search-option-btn ${useRegex ? "file-tree-search-option-btn--active" : ""}`}
-          title={t("正则表达式")} onClick={() => setUseRegex((v) => !v)}>.*</button>
+          data-hint={t("正则表达式")} onClick={() => setUseRegex((v) => !v)}>.*</button>
       </div>
     </div>
   );

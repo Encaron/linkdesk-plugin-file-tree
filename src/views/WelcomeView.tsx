@@ -100,7 +100,7 @@ const WelcomeView: React.FC = () => {
             <button
               key={folderPath}
               className="file-tree-recent-item"
-              title={folderPath}
+              data-hint={folderPath} data-hint-delay="0"
               onClick={() => handleOpenRecent(folderPath)}
             >
               <span className="codicon codicon-root-folder file-tree-recent-item-icon" />
