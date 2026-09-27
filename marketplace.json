@@ -1,25 +1,31 @@
 {
   "version": "1",
-  "updatedAt": "2026-09-25T18:01:12.399Z",
+  "updatedAt": "2026-09-27T07:10:18.178Z",
   "plugins": [
     {
       "id": "file-tree",
       "name": "文件树",
-      "version": "1.0.16",
+      "version": "1.0.17",
       "description": "浏览和管理文件——对标 VS Code 资源管理器",
       "author": {
         "name": "官方"
       },
-      "icon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.16/resources/icon-bar.svg",
+      "icon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.17/resources/icon-bar.svg",
       "iconSource": "url",
-      "marketIcon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.16/resources/icon.svg",
+      "marketIcon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.17/resources/icon.svg",
       "marketIconSource": "url",
-      "minAppVersion": "0.2.13",
-      "readmeUrl": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.16/README.md",
-      "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.16/file-tree.linkdesk-plugin",
-      "size": 68330,
-      "publishedAt": "2026-09-25T18:01:12.399Z",
+      "minAppVersion": "0.2.20",
+      "readmeUrl": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.17/README.md",
+      "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.17/file-tree.linkdesk-plugin",
+      "size": 68977,
+      "publishedAt": "2026-09-27T07:10:18.178Z",
       "versions": [
+        {
+          "version": "1.0.17",
+          "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.17/file-tree.linkdesk-plugin",
+          "publishedAt": "2026-09-27T07:10:18.178Z",
+          "changelog": "- **悬停提示收编（04「悬停提示系统」件 4）**：本仓 **15 处**小写标签上的原生 `title=` 全部换成壳的 `data-hint` 属性式提示（14 处说明类 ＋ 1 处揭示类另加 `data-hint-delay=\"0\"`）；其中 **8 枚图标钮**（子代只有一枚 codicon 字形）同笔补 `aria-label`——它们原本唯一的名字来源就是那个 `title`，只换属性会让按钮变成「没名字的按钮」。\n- **为什么换**：原生 tooltip 是 Chromium 的系统 UI，壳的 CSS 碰不到——不跟主题、不跟字号；`data-hint` 走壳自绘的提示条，并自动带出该命令的快捷键（与右键菜单同一份映射）。DOM 结构、类名、可见文字零变化。\n- **`minAppVersion` 0.2.13 → 0.2.20**：提示条本体（`HintTipRenderer`）由壳提供，0.2.20 起才有——在旧壳上 `data-hint` 是惰性属性，那批按钮会**没有任何提示**（比原生 tooltip 更糟），故此版起要求应用 ≥0.2.20。\n- **`@linkdesk/plugin-sdk` ^0.1.41 → ^0.1.49**：新腿 `check-native-title` 判红原生 `title=`（本仓现为 **0 处**）——本仓的 `ci-verify` 严格档自动吃这条腿。"
+        },
         {
           "version": "1.0.16",
           "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.16/file-tree.linkdesk-plugin",
