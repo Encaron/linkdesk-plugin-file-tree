@@ -7,6 +7,7 @@ import { useState, useRef, useCallback, useEffect, useMemo } from "react";
 // E5.8#20-c：契约化——搜索走 lk.search.searchFiles，返回面 = 契约 wire 形状（FileSearcher 语义型是壳内泄漏）
 import type { SearchWireResult } from "@linkdesk/contracts";
 import { useSearchHistory } from "./useSearchHistory";
+import { recordSearchSession, resetSearchSession } from "./searchSession";
 
 const lk = window.linkdesk;
 
@@ -37,6 +38,13 @@ export function useSearch() {
 
   // 展平所有匹配——F4 导航用
   const flatMatches = useMemo(() => results.flatMap((f) => f.matches), [results]);
+
+  // M2 AI#24：把「本次搜索结果 + 当前高亮」投影进模块级快照——命令 handler（非 React 上下文）
+  // 靠它才算得出「要打开哪一条」。视图卸载即清空（搜索结果面没了，命令如实报没结果，不给陈旧目标）。
+  useEffect(() => {
+    recordSearchSession(flatMatches, navIndex);
+  }, [flatMatches, navIndex]);
+  useEffect(() => () => resetSearchSession(), []);
 
   /* ── 搜索逻辑 ── */
   const abortRef = useRef<AbortController | null>(null);

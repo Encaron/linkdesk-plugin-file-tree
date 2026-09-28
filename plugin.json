@@ -2,7 +2,7 @@
   "$schema": "./node_modules/@linkdesk/plugin-sdk/schemas/plugin.schema.json",
   "pluginId": "file-tree",
   "name": "文件树",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "minAppVersion": "0.2.20",
   "icon": "resources/icon-bar.svg",
   "marketIcon": "resources/icon.svg",
@@ -47,87 +47,120 @@
     "commands": [
       {
         "id": "file-tree.revealInExplorer",
-        "title": "在文件树中显示"
+        "title": "在文件树中显示",
+        "description": "在文件树里展开目录链并选中目标项，把它滚进视野。参数给 filePath 或 uri；不给就用当前聚焦项。目标不在任何已打开的工作区里时无效果。"
       },
       {
         "id": "file-tree.newFile",
-        "title": "新建文件"
+        "title": "新建文件",
+        "description": "在目标目录里新建一个空文件。重名时按 file-tree.incrementalNaming（默认 smart）自动加数字后缀（test.txt → test-1.txt）。目标目录取右键项（目录本身或文件所在目录），没有右键项时回退到聚焦项/第一个工作区根。"
       },
       {
         "id": "file-tree.newFolder",
-        "title": "新建文件夹"
+        "title": "新建文件夹",
+        "description": "在目标目录里新建一个文件夹，命名规则与目标目录回退同「新建文件」。"
       },
       {
         "id": "file-tree.openFile",
-        "title": "打开"
+        "title": "打开",
+        "description": "按扩展名找属主插件开一个标签页（固定标签）。传右键项（FileMenuContext），目录项不处理。"
       },
       {
         "id": "file-tree.openToSide",
-        "title": "在侧边打开"
+        "title": "在侧边打开",
+        "description": "在编辑器里打开文件（固定标签）。当前与「打开」走同一条开标签页链路，不保证落在另一分屏。目录项不处理。"
       },
       {
         "id": "file-tree.openWith",
-        "title": "打开方式…"
+        "title": "打开方式…",
+        "description": "占位命令——未接实现，调用无效果。"
       },
       {
         "id": "file-tree.openFocused",
-        "title": "打开聚焦项"
+        "title": "打开聚焦项",
+        "description": "对当前聚焦项逐情处理：目录→展开/折叠，文件→开标签页。等于在文件树上按 Enter。无聚焦项时无效果。"
       },
       {
         "id": "file-tree.openInTerminal",
-        "title": "在终端中打开"
+        "title": "在终端中打开",
+        "description": "用外部终端打开目标目录（文件取其所在目录）。终端类型读配置 file-tree.external.windowsExec；选 custom 时启动命令读 file-tree.external.customCommand（{{dirPath}} 是目录占位）。"
       },
       {
         "id": "file-tree.revealInOS",
-        "title": "在文件管理器中显示"
+        "title": "在文件管理器中显示",
+        "description": "在系统文件管理器（Windows 资源管理器）里定位并选中该项。参数必须是右键项（FileMenuContext），不给 uri 时无效果。"
       },
       {
         "id": "file-tree.copyPath",
-        "title": "复制路径"
+        "title": "复制路径",
+        "description": "把该项的完整路径写进系统剪贴板。参数必须是右键项（FileMenuContext），不给 uri 时无效果。"
       },
       {
         "id": "file-tree.copyRelativePath",
-        "title": "复制相对路径"
+        "title": "复制相对路径",
+        "description": "把相对于所属工作区根的路径写进系统剪贴板；没有匹配的根时退回完整路径。参数必须是右键项（FileMenuContext）。"
       },
       {
         "id": "file-tree.cut",
-        "title": "剪切"
+        "title": "剪切",
+        "description": "剪切——记进插件内剪贴板，同时把路径写进系统剪贴板文件列表（可直接在系统资源管理器里粘贴）。作用于当前多选；无多选时取右键项，再回退聚焦项。"
       },
       {
         "id": "file-tree.copy",
-        "title": "复制"
+        "title": "复制",
+        "description": "复制——同「剪切」的双写（插件内剪贴板 ＋ 系统剪贴板），但粘贴时是复制而非移动。作用对象解析同「剪切」。"
       },
       {
         "id": "file-tree.paste",
-        "title": "粘贴"
+        "title": "粘贴",
+        "description": "把剪贴板里的路径落到目标目录：剪切来的移动、复制来的复制，重名冲突走与拖放同一套安全流程。目标目录取右键项的目录或聚焦项所在目录，最后回退第一个工作区根。"
       },
       {
         "id": "file-tree.rename",
-        "title": "重命名"
+        "title": "重命名",
+        "description": "在当前聚焦行进入行内重命名（等于按 F2）。无聚焦项时无效果。"
       },
       {
         "id": "file-tree.delete",
-        "title": "删除"
+        "title": "删除",
+        "description": "删除当前选中集；无多选时取右键项，再回退聚焦项。file-tree.confirmDelete 为真（默认）时先弹确认框。逐项删除、逐项报告失败，只有真删掉的项才刷新其父目录。"
       },
       {
         "id": "file-tree.findInFolder",
-        "title": "在文件夹中查找…"
+        "title": "在文件夹中查找…",
+        "description": "占位命令——未接实现，调用无效果。"
       },
       {
         "id": "file-tree.refresh",
-        "title": "刷新资源管理器"
+        "title": "刷新资源管理器",
+        "description": "重读所有工作区根，并把已展开目录的子节点重新拉一遍（未展开的层不动）。"
       },
       {
         "id": "file-tree.collapseAll",
-        "title": "收起所有文件夹"
+        "title": "收起所有文件夹",
+        "description": "把文件树里所有展开的目录折起来。只影响视图展开状态，不动磁盘。"
       },
       {
         "id": "file-tree.openFolder",
-        "title": "打开文件夹…"
+        "title": "打开文件夹…",
+        "description": "弹系统目录选择框，把选中的目录加进工作区。"
       },
       {
         "id": "file-tree.search",
-        "title": "搜索"
+        "title": "搜索",
+        "description": "把焦点挪到搜索面板的输入框（搜索面板常驻在文件树侧栏，本命令不切视图、不执行搜索——搜什么由使用者输入）。"
+      },
+      {
+        "id": "file-tree.openSearchResult",
+        "title": "打开搜索结果",
+        "description": "打开一条搜索匹配行（等于在结果列表里双击那条）：按扩展名找属主插件开标签页。参数缺省打开当前高亮那条；也可给 filePath（可再带 lineNumber）指定。需先搜出结果，否则报错。",
+        "params": [
+          {
+            "name": "args",
+            "type": "object",
+            "description": "{ filePath?, lineNumber? }——缺省为当前高亮那条"
+          }
+        ]
       }
     ],
     "keybindings": [
