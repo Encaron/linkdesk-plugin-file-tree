@@ -30,13 +30,16 @@
   cursor: pointer;
 }
 
+/* 两个 tree 背景 token 定义在 `.file-tree-root`（file-tree-shell.css）——本 section 不在那个作用域内，
+   `var()` 取到空串 ⇒ 声明在计算值期为非法 ⇒ 落到 unset（按钮**丢掉** `--bg-card` 底、最近项零反馈）。
+   故作必须带 fallback；写法与 SearchView.css 两处一致。 */
 .file-tree-open-folder-btn:hover {
-  background: var(--tree-bg-hover);
+  background: var(--tree-bg-hover, color-mix(in srgb, var(--text-primary) 6%, transparent));
   border-color: var(--accent);
 }
 
 .file-tree-open-folder-btn:active {
-  background: var(--tree-bg-selected);
+  background: var(--tree-bg-selected, color-mix(in srgb, var(--accent) 15%, transparent));
 }
 
 /* ── 最近 ── */
@@ -69,7 +72,7 @@
 }
 
 .file-tree-open-folder-recent-item:hover {
-  background: var(--tree-bg-hover);
+  background: var(--tree-bg-hover, color-mix(in srgb, var(--text-primary) 6%, transparent));
 }
 
 .file-tree-open-folder-recent-icon {

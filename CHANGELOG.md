@@ -1,5 +1,12 @@
 # 更新日志
 
+## v1.0.20（2026-09-29）
+
+- **修：侧栏「打开文件夹」section 的悬停/按下态落到 `unset`——悬停时主按钮把底丢掉、最近项零反馈。** 起因是 FT#4 的 216px 视觉走查：`OpenFolderView.css` 的 `:hover`/`:active` 用了 `var(--tree-bg-hover)` / `var(--tree-bg-selected)`，而这两个 token 定义在 `.file-tree-root`（`file-tree-shell.css` §设计 Token）——本 section 挂在 `ldk-sidebar-section-body` 下，**祖先链里没有 `.file-tree-root`**（实测链：`file-tree-open-folder-btn → file-tree-open-folder → ldk-sidebar-section-body → …`）。`var()` 在这种作用域取到空串 ⇒ 该声明在**计算值期**非法 ⇒ 落 `unset`。
+  - **实测（`CSS.forcePseudoState` 强制 `:hover`，非目测）**：主按钮 `background-color` `rgb(45,45,45)`（`--bg-card`）→ **`rgba(0,0,0,0)`**，即不是「叠一层悬停底色」而是**把底清空**；最近项背景恒 `rgba(0,0,0,0)` ⇒ **悬停毫无反馈**。`border-color: var(--accent)` 不受影响（`--accent` 全局定义）⇒ 悬停时只剩边框变色、底反被抹掉。
+  - **修法**：三处声明带 fallback（`var(--tree-bg-hover, color-mix(in srgb, var(--text-primary) 6%, transparent))`、selected 为 15% accent）——与同仓 `SearchView.css` 四处**既有写法一致**。⛔ 不动 token 定义位置（那是树节点的作用域）、不动骨架与类名。
+  - **读数**：`npx tsc --noEmit` 零错误 · `npm run verify` 六段全绿（lint 严格腿 75 文件零偏离）· `vitest run` 16 文件 **149 例** · `npm run build` **4/4 表面 / 74.9 KB**。
+
 ## v1.0.19（2026-09-29）
 
 - **修：文件菜单里的 5 项 file-tree 贡献「从来没有过」**（用户 2026-08-11 起就发现菜单项不见了，一直以为是自己误删——**不是**）。真因可指认到具体一行：`af2ef5712`（E5.6#11.5 Path B 池核心隔离）为切断插件对 `@src/core` 的 import，把 `MenuId` 内联成字符串字面量时，**把枚举的「成员名」当成了「值」**——写成 `MenuId = { FileContext: "FileContext", MenuBar: "MenuBar" }`，而壳侧 `MENU_SLOTS.MenuBar` 的值当时已经是 `"menuBar"`（小驼峰）。壳的菜单表是精确字符串键、零归一化，只按 `MENU_SLOTS.*` 的值取 ⇒ 贡献落进**另一个键**，无消费者、无报错、无日志，界面表现就是「这条菜单不存在」。历次重构只把这两处死键原样搬家，因为**没有一条判据看菜单槽位 id 的大小写**。
