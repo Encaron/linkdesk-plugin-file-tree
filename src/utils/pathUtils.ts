@@ -1,6 +1,8 @@
 /**
  * 路径工具函数——跨文件复用，避免重复 split+pop。
  * E4 品质加固：FileTreeModel + WelcomeView 共用。
+ *   ⚠️ WelcomeView 已于 2026-09-29 整删（孤儿死代码）；`basename` 现由 FileTreeModel 与
+ *   OpenFolderView/useRecentFolders 共用，本文件仍是全插件唯一的路径工具出口。
  * E4b #99d：dirname / joinPath / FlatItem 归一化收口——全插件从这一个文件导入。
  */
 

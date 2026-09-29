@@ -2,7 +2,9 @@
  * Menu——文件树右键菜单消费组件本体。
  *
  * 对标 VS Code：右键之前先选中（sidebar.tsx 在调用前处理）。
- * ContextMenu 内部从 MenuRegistry 读取 "FileContext" 的菜单项，
+ * ContextMenu 内部从 MenuRegistry 读取 `fileContext` 槽位的菜单项（条目本身 2026-09-29 起由
+ * `plugin.json` 的声明式 `contributes.menus.fileContext` 注册——槽位 id 是**壳 MENU_SLOTS 的值**，
+ * 小驼峰；旧写法 `"FileContext"` 是枚举成员名，读写同一个错键只是自洽、不是正确），
  * 通过 ContextKeyService 求值 when 条件。
  */
 import React, { useEffect } from "react";
@@ -49,7 +51,7 @@ const FileTreeContextMenu: React.FC<FileTreeContextMenuProps> = ({ item, anchor,
 
   return (
     <ContextMenu
-      menuId={"FileContext"}
+      menuId={"fileContext"}
       anchor={anchor}
       context={context}
       onClose={onClose}

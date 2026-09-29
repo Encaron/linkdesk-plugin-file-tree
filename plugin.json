@@ -2,7 +2,7 @@
   "$schema": "./node_modules/@linkdesk/plugin-sdk/schemas/plugin.schema.json",
   "pluginId": "file-tree",
   "name": "文件树",
-  "version": "1.0.18",
+  "version": "1.0.19",
   "minAppVersion": "0.2.20",
   "icon": "resources/icon-bar.svg",
   "marketIcon": "resources/icon.svg",
@@ -41,7 +41,53 @@
           "title": "搜索",
           "render": "src/views/SearchView.tsx",
           "order": 1
+        },
+        {
+          "id": "open-folder",
+          "title": "打开文件夹",
+          "render": "src/views/OpenFolderView.tsx",
+          "order": 2
         }
+      ]
+    },
+    "menus": {
+      "menuBar": [
+        { "command": "file-tree.newFile", "group": "file", "label": "新建文件" },
+        { "command": "file-tree.newFolder", "group": "file", "label": "新建文件夹" },
+        { "command": "file-tree.openFolder", "group": "file", "label": "打开文件夹…" },
+        { "command": "file-tree.closeAllEditors", "group": "file", "label": "关闭所有编辑器" },
+        { "command": "file-tree.removeFolder", "group": "file", "label": "关闭文件夹" },
+        {
+          "command": "",
+          "label": "编辑",
+          "group": "file",
+          "children": [
+            { "command": "file-tree.cut", "group": "edit" },
+            { "command": "file-tree.copy", "group": "edit" },
+            { "command": "file-tree.paste", "group": "edit" },
+            { "command": "file-tree.search", "group": "edit", "label": "搜索" }
+          ]
+        }
+      ],
+      "fileContext": [
+        { "command": "file-tree.openFile", "group": "1_navigation", "when": "file-tree.itemIsFile" },
+        { "command": "file-tree.openToSide", "group": "1_navigation", "when": "file-tree.itemIsFile" },
+        { "command": "file-tree.selectForCompare", "group": "1_navigation", "when": "file-tree.itemIsFile", "label": "选择以比较" },
+        { "command": "file-tree.compareWithSelected", "group": "1_navigation", "when": "file-tree.itemIsFile", "label": "与已选项比较" },
+        { "command": "file-tree.openWith", "group": "1_navigation", "when": "file-tree.itemIsFile" },
+        { "command": "file-tree.revealInOS", "group": "1_navigation" },
+        { "command": "file-tree.openInTerminal", "group": "1_navigation", "when": "file-tree.itemIsDir" },
+        { "command": "file-tree.cut", "group": "2_editing", "when": "!file-tree.itemIsRoot" },
+        { "command": "file-tree.copy", "group": "2_editing", "when": "!file-tree.itemIsRoot" },
+        { "command": "file-tree.copyPath", "group": "2_editing" },
+        { "command": "file-tree.copyRelativePath", "group": "2_editing" },
+        { "command": "file-tree.paste", "group": "2_editing", "when": "file-tree.itemIsDir && !file-tree.clipboardEmpty" },
+        { "command": "file-tree.newFile", "group": "3_creation", "when": "file-tree.itemIsDir || file-tree.itemIsRoot" },
+        { "command": "file-tree.newFolder", "group": "3_creation", "when": "file-tree.itemIsDir || file-tree.itemIsRoot" },
+        { "command": "file-tree.rename", "group": "4_modify", "when": "!file-tree.itemIsRoot" },
+        { "command": "file-tree.delete", "group": "4_modify", "when": "!file-tree.itemIsRoot" },
+        { "command": "file-tree.findInFolder", "group": "5_search", "when": "file-tree.itemIsDir" },
+        { "command": "file-tree.removeFolder", "group": "6_workspace", "when": "file-tree.itemIsRoot", "label": "关闭文件夹" }
       ]
     },
     "commands": [
@@ -139,6 +185,11 @@
         "id": "file-tree.collapseAll",
         "title": "收起所有文件夹",
         "description": "把文件树里所有展开的目录折起来。只影响视图展开状态，不动磁盘。"
+      },
+      {
+        "id": "file-tree.closeAllEditors",
+        "title": "关闭所有编辑器",
+        "description": "关掉全部分组里的所有编辑器标签页（转发壳命令 core.closeAllEditors）。文件树的展开状态与选中项都不动。"
       },
       {
         "id": "file-tree.openFolder",

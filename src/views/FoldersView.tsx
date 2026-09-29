@@ -14,9 +14,15 @@
  *   - `useExplorerConfig.ts`  三项 explorer 配置订阅
  *   - `useExpandPersistence.ts` 展开状态持久化
  *   - `useViewRegistration.tsx` FOLDERS 标题 + SEARCH 视图注册
+ *
+ * ⚠️ 本视图**空态**（无工作区根）= 组件内部条件渲染一行 muted 占位文案——⛔ 不是外部替换
+ * 整个组件（`registerViewEmptyContent` 形态 2026-08-03 造成过 E4V#44 死锁：本视图被整替换 ⇒
+ * `onDidChangeFolders` 订阅随 unmount 注销 ⇒ 用户点「打开文件夹」后无人听广播 ⇒ 永久空白）。
+ * 打开文件夹的**按钮**不在这里——职责归常驻 section `views/OpenFolderView.tsx`。
  */
 
 import { useState, useRef, useCallback, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 // E5.6#11.5i：ViewContainerService → lk.viewContainer（#11.5g3 遗漏）
 import FileTree from "../components/FileTree";
 import FileTreeContextMenu, { activateFileTreeContextMenu, setFileTreeHandleRef, clearFileTreeHandle, setOpenFileFn } from "../components/FileTreeContextMenu";
@@ -38,6 +44,7 @@ import "../styles/file-tree-node.css";
 const lk = window.linkdesk;
 
 const FoldersView: React.FC = () => {
+  const { t } = useTranslation();
   const tabs = window.linkdesk?.tabs;
   const modelRef = useRef<FileTreeModel>(new FileTreeModel());
   const model = modelRef.current;
@@ -140,8 +147,13 @@ const FoldersView: React.FC = () => {
       {/* E5.6#11：工具栏从 header actions (ReactNode→不可IPC序列化) 迁移到组件内自渲染 */}
       {roots.length > 0 && <Toolbar />}
       <div className="file-tree-body">
-        {roots.length > 0 && (
+        {roots.length > 0 ? (
           <FileTree ref={fileTreeRef} model={model} onOpenFile={handleOpenFile} onContextMenu={handleContextMenu} />
+        ) : (
+          /* 空态占位——消灭纯空白反模式（C 版精华，对标 VS Code「您尚未打开文件夹」）。
+             只做「内部条件渲染」，组件本体（含 useWorkspaceRoots 的订阅）始终挂载；
+             ⛔ 不带按钮——「打开文件夹」的职责归常驻 section OpenFolderView。 */
+          <div className="file-tree-empty-hint">{t("你没有打开文件夹。")}</div>
         )}
       </div>
 

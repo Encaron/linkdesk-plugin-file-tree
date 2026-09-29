@@ -3,7 +3,7 @@
  *
  * 原 536 行单文件按职责拆三件（E6#87a）：
  *   - `host-bridge.ts`  宿主桥接（`_handleRef` / `_openFileFn` 模块级 mutable 单一属主）
- *   - `commands.ts`     命令 + 菜单项注册（`_registered` / `_selectedForCompare` 单一属主）
+ *   - `commands.ts`     命令注册（`_registered` / `_selectedForCompare` 单一属主；菜单项 2026-09-29 起改声明式，见该文件头注）
  *   - `Menu.tsx`        菜单组件本体
  *
  * 消费方（FoldersView）import 路径零变更——`"../components/FileTreeContextMenu"` 命中本文件。

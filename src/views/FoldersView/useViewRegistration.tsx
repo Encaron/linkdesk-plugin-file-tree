@@ -1,13 +1,21 @@
 /**
- * useViewRegistration——FOLDERS 动态标题 + SEARCH 视图注册（E6#87a 从 FoldersView.tsx 拆出）。
+ * useViewRegistration——FOLDERS 动态标题 + SEARCH / 打开文件夹 视图注册（E6#87a 从 FoldersView.tsx 拆出）。
  *
  * E3.6 TB6：FOLDERS view 动态标题 = 工作区文件夹名。
  * E36#ROLE：role 字段保证始终 sectionViews——title 可安全为空，不再需要 " " 占位。
  * E4V#35：多根时标题走 workspace name。
  * E4V#56+P2：pinnedContent——sticky scroll 已移除（E4V#57 放弃）。
+ *
+ * ⚠️ 本 hook 里的运行时注册**不是**这两个 section 的唯一注册点：`plugin.json` 的
+ * `contributes.views.explorer` 才是（加载器在插件装载时注册、与视图是否 mount 无关）。
+ * 运行时这一笔只补两件声明面表达不了的事——① 标题的**译文**（`contributes.views[].title`
+ * 是原样下发的，加载器不翻）；② FOLDERS 的**动态**标题与 header actions。
+ * `registerView` 是 Object.assign 式更新（壳 ViewContainerService），声明面那份 desc 上的
+ * `_renderPath`（池侧据此 import 视图包）不在本笔 descriptor 里 ⇒ 原样保留。
  */
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import OpenFolderView from "../OpenFolderView";
 import SearchView from "../SearchView";
 
 const lk = window.linkdesk;
@@ -60,6 +68,16 @@ export function useViewRegistration() {
       title: t("搜索"),
       order: 1,
       render: () => <SearchView />,
+    });
+  }, [t]);
+
+  /** FT#1: 注册「打开文件夹」常驻 section——搜索下方 order 2，与欢迎页开关无关 */
+  useEffect(() => {
+    window.linkdesk?.viewContainer?.registerView("file-tree", "explorer", {
+      id: "open-folder",
+      title: t("打开文件夹"),
+      order: 2,
+      render: () => <OpenFolderView />,
     });
   }, [t]);
 }

@@ -1,0 +1,97 @@
+/**
+ * OpenFolderView 样式——侧栏常驻 section「打开文件夹」。
+ *
+ * 颜色/字号/圆角一律走 CSS 变量（硬约束 1：亮暗主题自适应）；容器尺寸乘 `--ui-scale`
+ * （E5.8 Phase 12 #172 起容器与字号同步缩放）。类名一律 `file-tree-` 前缀（SDK 自有类前缀腿）。
+ */
+
+.file-tree-open-folder {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 4px 8px;
+}
+
+/* ── 主按钮 ── */
+
+.file-tree-open-folder-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  height: calc(26px * var(--ui-scale));
+  padding: 0 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+}
+
+.file-tree-open-folder-btn:hover {
+  background: var(--tree-bg-hover);
+  border-color: var(--accent);
+}
+
+.file-tree-open-folder-btn:active {
+  background: var(--tree-bg-selected);
+}
+
+/* ── 最近 ── */
+
+.file-tree-open-folder-recent {
+  display: flex;
+  flex-direction: column;
+}
+
+.file-tree-open-folder-recent-label {
+  padding: 4px 4px 2px;
+  color: var(--text-muted);
+  font-size: var(--font-size-xs);
+}
+
+.file-tree-open-folder-recent-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  height: calc(24px * var(--ui-scale));
+  padding: 0 4px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  text-align: left;
+  cursor: pointer;
+}
+
+.file-tree-open-folder-recent-item:hover {
+  background: var(--tree-bg-hover);
+}
+
+.file-tree-open-folder-recent-icon {
+  flex-shrink: 0;
+  color: var(--text-secondary);
+}
+
+/* 名字不被路径挤走：名字最多占一半，路径吃掉剩下的并省略（216px 窄栏下两段都能读） */
+.file-tree-open-folder-recent-name {
+  flex-shrink: 0;
+  max-width: 50%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.file-tree-open-folder-recent-path {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-muted);
+  font-size: var(--font-size-2xs);
+}

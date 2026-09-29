@@ -121,97 +121,17 @@
   font-weight: normal;
 }
 
-/* ═══ 欢迎视图 ═══ */
+/* ═══ 空态占位（FT#3） ═══ */
 
-.file-tree-welcome {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  padding: 24px;
-  color: var(--text-secondary);
-  font-size: var(--font-size-md); /* E5.8 Phase 12 #172：welcome 13→md */
-  text-align: center;
-  gap: 12px;
-  border: 2px solid transparent;
-  border-radius: 4px;
-  transition: border-color 100ms ease-out;
-}
-
-.file-tree-welcome--dragover {
-  border-color: var(--accent);
-}
-
-.file-tree-welcome p {
-  margin: 0;
-}
-
-.file-tree-welcome-btn {
-  padding: 6px 16px;
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  background: var(--bg-card);
-  color: var(--text-primary);
-  cursor: pointer;
-  font-size: var(--font-size-sm); /* E5.8 Phase 12 #172：12→sm */
-}
-
-/* ── 最近文件夹 ── */
-
-.file-tree-recent {
-  margin-top: 16px;
-  width: 100%;
-  max-width: 320px;
-}
-
-.file-tree-recent-title {
-  font-size: var(--font-size-xs); /* E5.8 Phase 12 #172：11→xs */
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 8px;
-  text-align: left;
-}
-
-.file-tree-recent-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-  padding: 6px 8px;
-  border: none;
-  border-radius: 4px;
-  background: transparent;
-  color: var(--text-secondary);
-  cursor: pointer;
-  font-size: var(--font-size-sm); /* E5.8 Phase 12 #172：recent 12→sm */
-  text-align: left;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.file-tree-recent-item:hover {
-  background: var(--bg-card);
-}
-
-.file-tree-recent-item-icon {
-  font-size: var(--font-size-lg); /* E5.8 Phase 12 #172：14→lg */
-  flex-shrink: 0;
-}
-
-.file-tree-recent-item-path {
-  font-size: var(--font-size-xs); /* E5.8 Phase 12 #172：11→xs */
-  opacity: 0.5;
-  margin-left: auto;
-  flex-shrink: 0;
-}
-
-.file-tree-dragover-hint {
-  margin: 0;
-  color: var(--accent);
-  font-size: var(--font-size-sm); /* E5.8 Phase 12 #172：12→sm */
+/* 无工作区根时 FoldersView 就地渲染这一行——消灭纯空白反模式。
+   2026-09-29：原「欢迎视图」整段（`.file-tree-welcome*` / `.file-tree-recent*` /
+   `.file-tree-dragover-hint`，共 12 条规则）随孤儿 `src/views/WelcomeView.tsx` 一起删除——
+   那份实现自 2026-08-03 `231257d16` 起无人 import，最近列表素材已折进常驻 section
+   `src/views/OpenFolderView.tsx`（样式在 `styles/OpenFolderView.css`）。 */
+.file-tree-empty-hint {
+  padding: 8px;
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
 }
 
 /* ═══ 缩进引导线（E4b #99k） ═══ */
