@@ -5,7 +5,7 @@
  * 打开文件夹的**唯一 UI 入口**原本只在欢迎页（`WelcomePoolView` 的「文件夹」区）。欢迎页是
  * 可关闭的标签页保底 ⇒ 关掉它、或把文件树目录清空之后，全软件再没有一处 UI 能打开文件夹。
  * 本 section 常驻在 explorer 容器内（FOLDERS 0 / SEARCH 1 / 本件 2），与欢迎页开关无关。
- * 立项与竞标见壳仓 `docs/05-插件更新/文件树/01-打开文件夹入口-设计.md`（A 版定稿）。
+ * 立项与竞标见本仓 `docs/01-打开文件夹入口-设计.md`（A 版定稿；原立案于壳仓 05-插件更新，2026-09-30 归还本仓）。
  *
  * 🔴 `contributes.views[].render = "src/views/OpenFolderView.tsx"`——basename 是 SDK bundle key，
  * 门面必须留在本路径本文件名。子件在同名夹 `OpenFolderView/`：
