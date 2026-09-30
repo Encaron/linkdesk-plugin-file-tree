@@ -1,25 +1,31 @@
 {
   "version": "1",
-  "updatedAt": "2026-09-30T03:47:25.364Z",
+  "updatedAt": "2026-09-30T21:43:22.088Z",
   "plugins": [
     {
       "id": "file-tree",
       "name": "文件树",
-      "version": "1.0.21",
+      "version": "1.0.22",
       "description": "浏览和管理文件——对标 VS Code 资源管理器",
       "author": {
         "name": "官方"
       },
-      "icon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.21/resources/icon-bar.svg",
+      "icon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.22/resources/icon-bar.svg",
       "iconSource": "url",
-      "marketIcon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.21/resources/icon.svg",
+      "marketIcon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.22/resources/icon.svg",
       "marketIconSource": "url",
       "minAppVersion": "0.2.20",
-      "readmeUrl": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.21/README.md",
-      "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.21/file-tree.linkdesk-plugin",
-      "size": 52545,
-      "publishedAt": "2026-09-30T03:47:25.364Z",
+      "readmeUrl": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.22/README.md",
+      "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.22/file-tree.linkdesk-plugin",
+      "size": 47346,
+      "publishedAt": "2026-09-30T21:43:22.088Z",
       "versions": [
+        {
+          "version": "1.0.22",
+          "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.22/file-tree.linkdesk-plugin",
+          "publishedAt": "2026-09-30T21:43:22.088Z",
+          "changelog": "- **安装包瘦身**：包内更新日志只带最近 5 版（更早的更新记录仍在本插件仓库里）——由 SDK 自动施加，用户无需任何操作。"
+        },
         {
           "version": "1.0.21",
           "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.21/file-tree.linkdesk-plugin",
@@ -47,68 +53,57 @@
         {
           "version": "1.0.17",
           "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.17/file-tree.linkdesk-plugin",
-          "publishedAt": "2026-09-27T07:10:18.178Z",
-          "changelog": "- **悬停提示收编（04「悬停提示系统」件 4）**：本仓 **15 处**小写标签上的原生 `title=` 全部换成壳的 `data-hint` 属性式提示（14 处说明类 ＋ 1 处揭示类另加 `data-hint-delay=\"0\"`）；其中 **8 枚图标钮**（子代只有一枚 codicon 字形）同笔补 `aria-label`——它们原本唯一的名字来源就是那个 `title`，只换属性会让按钮变成「没名字的按钮」。\n- **为什么换**：原生 tooltip 是 Chromium 的系统 UI，壳的 CSS 碰不到——不跟主题、不跟字号；`data-hint` 走壳自绘的提示条，并自动带出该命令的快捷键（与右键菜单同一份映射）。DOM 结构、类名、可见文字零变化。\n- **`minAppVersion` 0.2.13 → 0.2.20**：提示条本体（`HintTipRenderer`）由壳提供，0.2.20 起才有——在旧壳上 `data-hint` 是惰性属性，那批按钮会**没有任何提示**（比原生 tooltip 更糟），故此版起要求应用 ≥0.2.20。\n- **`@linkdesk/plugin-sdk` ^0.1.41 → ^0.1.49**：新腿 `check-native-title` 判红原生 `title=`（本仓现为 **0 处**）——本仓的 `ci-verify` 严格档自动吃这条腿。"
+          "publishedAt": "2026-09-27T07:10:18.178Z"
         },
         {
           "version": "1.0.16",
           "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.16/file-tree.linkdesk-plugin",
-          "publishedAt": "2026-09-25T18:01:12.399Z",
-          "changelog": "- **修：刷新目录时同一个文件夹被并发读两遍盘**（E6#149 补测读出的真 bug）。`refreshDirSafe` 原写法调用 `model.refresh(dir)` **没写 `await`**，紧接着又按「子项缓存是空的」补了一次 `getChildren`——而 `refresh` 在它前面刚把该目录的子项清空并起了读盘，于是同一目录**同时读两遍**，两份结果写同一个字段、并多触发一轮界面刷新。`refresh` 对**已展开**目录本来就会重读子项并触发变更（折叠目录不需要子项）⇒ 那次补读是纯重复劳动，已删；`await` 顺带让刷新失败（含异步拒绝）真正落进失败通知出口，而不是变成无人接的拒绝。\n- 用户可见差异：右键对已展开目录做删除 / 粘贴这类会刷新目录的操作时，**少一次磁盘读、少一轮重绘**；目录内容显示不变。大目录或慢盘上更容易察觉。\n- 无新能力、无接口变化。"
+          "publishedAt": "2026-09-25T18:01:12.399Z"
         },
         {
           "version": "1.0.15",
           "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.15/file-tree.linkdesk-plugin",
-          "publishedAt": "2026-09-19T12:46:22.862Z",
-          "changelog": "- **重打可复现**：@linkdesk/plugin-sdk 0.1.42 起 zip 目录条目时间戳钉死，同一份源码重打逐字节一致。插件内容零变化（仅 plugin.json 版本号随包更新）。"
+          "publishedAt": "2026-09-19T12:46:22.862Z"
         },
         {
           "version": "1.0.14",
           "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.14/file-tree.linkdesk-plugin",
-          "publishedAt": "2026-09-19T10:12:13.191Z",
-          "changelog": "- **删 5 处「有规则、无渲染方」的 CSS 死类**（E6#113）：`.file-tree-sidebar`／`.file-tree-header`／`.file-tree-breadcrumb`／`.file-tree-breadcrumb-icon`／`.file-tree-breadcrumb-path`——旧 `sidebar.tsx` 的容器／头部／面包屑（E36#10 拆除后侧栏外壳由壳的 `SidePanel`／`SidebarSection` 接管，插件侧 JSX 不再画那些节点，当年为其写的 CSS 未同笔删）。删前实机 CDP 普查：三仓视图真开状态下候选类名在 DOM **零存在** ⇒ 删除像素级零视觉变化；删后仓内 src 零残留、`verify`／`test` 全绿。无功能变化。"
+          "publishedAt": "2026-09-19T10:12:13.191Z"
         },
         {
           "version": "1.0.13",
           "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.13/file-tree.linkdesk-plugin",
-          "publishedAt": "2026-09-19T06:01:37.801Z",
-          "changelog": "- **声明最低壳版本 `minAppVersion: \"0.2.13\"`**（E6#128 · L9 收尾补正）：本仓自上一版起改由**壳池集中供给** `@linkdesk/ui`（构建时 external、运行时向壳要同一份实例）⇒ 需要 **≥ 0.2.13** 的壳（该版本起池里才有 `@linkdesk/ui` 这件货）。此前本清单**没写这个字段** ⇒ 市场与加载期都拦不住「新插件 × 旧壳」的组合（旧壳上插件视图打不开，壳被 ErrorBoundary 兜住、不崩）。本版**只加这一行清单字段 + 版本 PATCH**，源码与产物行为零变化。"
+          "publishedAt": "2026-09-19T06:01:37.801Z"
         },
         {
           "version": "1.0.12",
           "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.12/file-tree.linkdesk-plugin",
-          "publishedAt": "2026-09-19T01:46:53.643Z",
-          "changelog": "- **换轨到「壳池集中供给」（E6#125 · L9 第 9.4 轮）**：`@linkdesk/ui` 不再编译进本插件 bundle——构建时 external，运行时由壳池供给同一份实例。本仓源码 `import` 一行未改，只把依赖从 `^0.3.0` 换到重锚号 `^0.2.13`（`@linkdesk/ui` 自此与壳同号锁步）＋ `@linkdesk/plugin-sdk` `^0.1.19 → ^0.1.41`，重新构建发布。\n- **读数（产物前后对照）**：包 **345,169 → 66,744 字节（−80.7%）**；根 bundle JS **622,881 → 83,967 字节**。产物里组件实现痕迹（`data-overlay-wrapper` / `overlay-root` / `ldk-*` 类名）grep **零命中**，只剩 `from \"@linkdesk/ui\"` 裸 specifier 交给壳解析。\n- **行为零变化**：组件与样式改由壳统一供给 ⇒ 以后壳改共享件样式，本插件**自动跟随**，不必为此重发。"
+          "publishedAt": "2026-09-19T01:46:53.643Z"
         },
         {
           "version": "1.0.11",
           "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.11/file-tree.linkdesk-plugin",
-          "publishedAt": "2026-09-17T12:31:06.122Z",
-          "changelog": "- **命名空间归一（E6#111n-1）**：本仓所有贡献点名字收进 `file-tree.` 前缀——**21 条声明命令 id ＋ 25 处运行时注册 ＋ 18 个设置键 ＋ 11 个上下文旗子**，共 75 项。旧名（`explorer.*` / 裸名旗子）一律去掉第一段换成 `file-tree`，**词干一个字母没动**（`explorer.newFile → file-tree.newFile`、`explorerFocus → file-tree.focus`），改名形状经机械证明：把工作区内容按逆映射还原回旧名，与改名前的 git blob **逐字节相等**（93 文件比对，差异全部有据）。\n- **还回两处借用的名字**：`editor.selectForCompare` / `editor.compareWithSelected` 由本仓注册却占着 `editor.*` 命名空间——卸载本仓时它们永不被清理、卸载 `editor` 时反被误删，本版还回 `file-tree.*`；旗子 `inputFocus`（共享组件的名字）同样还回 `file-tree.inputFocus`。\n- **快捷键的 `when` 条件同笔跟改**：`plugin.json` 里 6 条键位是**双重命中区**——同一行既有命令 id 又有旗子名（`Enter` → `file-tree.openFocused`，`when: file-tree.focus && !file-tree.inputFocus`）。这类字符串**没有编译期检查**，改漏只会静默失效，逐条核过。\n- **上位约束 = 操作体验零变化**：设置项取值、快捷键行为、右键菜单逐项显隐**全部逐条实测比对，与升级前一致**（设置项 18/18 取值不变；键位 6 条默认 ＋ 3 条自定义全部照旧生效、零冲突；右键菜单在文件/文件夹/根节点/空白 4 种场景下条目数与顺序、快捷键提示、禁用态逐字节相同）。\n- **无功能变化、无视觉变化**。宿主侧配套发布 1.42，老用户的设置键与自定义快捷键**由宿主自动搬家**，无需手工处理。"
+          "publishedAt": "2026-09-17T12:31:06.122Z"
         },
         {
           "version": "1.0.10",
           "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.10/file-tree.linkdesk-plugin",
-          "publishedAt": "2026-09-16T03:01:16.383Z",
-          "changelog": "- **适配宿主 E6#109l-b 的共享组件类名归一（`@linkdesk/ui` 0.3.0）**：共享组件余下的 52 个类名一律收进 `ldk-` 前缀——`colorpicker-*` / `ctx-*` / `form-row` / `inline-input*` / `number-input*` / `segmented-radio*` / `sidebar-section*` / `theme-picker*` / `theme-card` / `theme-preview` / `.tbadge` / `.tname` / `.pv-*`，外加关键帧 `selectbox-in → ldk-selectbox-in`。至此**宿主与共享组件自己定义的类名 100% 是 `ldk-` 开头**（258 ＋ 89 个独立定义，零例外），规则只剩一句、不再有任何登记表。\n- **本仓源码零改动**：本仓自己的 CSS 与 TSX 对这批共享组件类名的引用逐条核过 = **0 处**（本仓用组件本身，没有用后代选择器去微调它们）。\n- **依赖**：`@linkdesk/ui` `^0.2.0 → ^0.3.0`（**必须手动放宽区间**——0.x 的 caret 只在上界之内挑版本，`^0.2.0` 永远够不到 0.3.0）＋ 随包 `@linkdesk/plugin-sdk` `0.1.23 → 0.1.25`。\n- **解包复核（真产物）**：解开本版的 `file-tree.linkdesk-plugin` ⇒ 本仓自己的 CSS/JS **旧名 0 命中**；随包 `@linkdesk/ui` 的 CSS 里新名有命中。\n- 无功能变化、无视觉变化。"
+          "publishedAt": "2026-09-16T03:01:16.383Z"
         },
         {
           "version": "1.0.9",
           "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.9/file-tree.linkdesk-plugin",
-          "publishedAt": "2026-09-15T14:31:25.431Z",
-          "changelog": "- **CSS 类名带插件前缀**（E6#109h-b③ 件 2 落地）：搜索视图那 28 个裸类名（`.search-view` / `.search-input` / `.search-match`…）一律改成 `file-tree-` 前缀（`.file-tree-search-view` / `.file-tree-search-input`…）——CSS 定义点、TSX 渲染点、`querySelector` 一处不落。裸类名在「宿主 ＋ 共享组件 ＋ 所有已加载插件」同一张样式表里是**全局标识符**，跨插件撞名会静默改掉外观（不报错、只是长得不对）\n- 顺带清掉一处**活体撞车**：`.search-input` 此前与 `serial-monitor` 的同类名**双方各定义一份、规则体还不一样**，级联合并后谁后加载谁赢一半——加前缀后该撞车自然消失\n- **`@linkdesk/ui` 抬到 `^0.2.0`**（^0.1.4 → ^0.2.0）：旧版随包注入的 8 个共享组件裸类名（`badge` / `slider` / `toggle`…）仍在池样式表里占全局名；0.2.0 起这些名字已带 `ldk-` 前缀\n- 无功能变化——类名是标识符，视觉**逐字节等价**（改名形状 = 只插入前缀，机械证明见交接档）"
+          "publishedAt": "2026-09-15T14:31:25.431Z"
         },
         {
           "version": "1.0.8",
           "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.8/file-tree.linkdesk-plugin",
-          "publishedAt": "2026-09-14T18:08:49.245Z",
-          "changelog": "- **分发件补上 MIT LICENSE**：`LICENSE` 早就在本仓里（E6#108g 那批加的），但**已发布的那版产物比它早** ⇒ 用户手上那份 zip 里一直没有版权声明。MIT 要求「副本里带声明」，而 zip 才是用户真正拿到的那份\n- **不再夹带仓库面文件**：`@linkdesk/plugin-sdk` 升到 0.1.19（^0.1.14 → ^0.1.19）——旧 SDK 的打包通道会把 `marketplace.json` / `scripts/ci-verify.mjs` / `AGENTS.md` 这类**仓库面文件**一起装进 zip（那是给仓库看的，不是给用户看的），0.1.19 的排除表已覆盖\n- 无功能变化——本版只为让「用户拿到的产物」与仓库对齐"
+          "publishedAt": "2026-09-14T18:08:49.245Z"
         },
         {
           "version": "1.0.7",
           "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.7/file-tree.linkdesk-plugin",
-          "publishedAt": "2026-09-14T02:35:58.751Z",
-          "changelog": "- 源码迁入独立仓（E6#99，L7 第 7.2 轮）——从壳仓 `Encaron/linkdesk` 抽出本插件子树，历史全保（hash 变）\n- 随包 `plugin.json` 显式声明 `pluginId`（E6#98g）：插件身份不再靠目录名兜底，独立仓构建出的包名与身份稳定\n- `$schema` 改指本仓 `node_modules/@linkdesk/plugin-sdk`（脱离壳仓后原相对路径指到仓外，编辑器补全/校验会失效）"
+          "publishedAt": "2026-09-14T02:35:58.751Z"
         }
       ]
     }
