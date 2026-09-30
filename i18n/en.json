@@ -72,5 +72,11 @@
   "移动": "Move",
   "{{op}}「{{name}}」失败：{{detail}}": "{{op}} \"{{name}}\" failed: {{detail}}",
   "{{op}} {{count}} 项失败：{{names}}": "{{op}} failed for {{count}} items: {{names}}",
-  "替换中… {{done}}/{{total}}": "Replacing... {{done}}/{{total}}"
+  "替换中… {{done}}/{{total}}": "Replacing... {{done}}/{{total}}",
+  "文件树": "File Tree",
+  "浏览和管理文件——对标 VS Code 资源管理器": "Browse and manage files — modeled on the VS Code Explorer",
+  "编辑": "Edit",
+  "显示": "Display",
+  "个文件": "files",
+  "个匹配": "matches"
 }
