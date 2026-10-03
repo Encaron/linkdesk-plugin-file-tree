@@ -102,17 +102,21 @@
 
 .file-tree-search-filter-input {
   flex: 1;
+  min-width: 0;
   height: calc(22px * var(--ui-scale)); /* E5.8 Phase 12 #173：容器乘 scale */
   padding: 0 4px;
   border: 1px solid var(--border); /* E5.8#128.8：幽灵链 → 真实 border */
-  background: var(--bg-card); /* E5.8#128.8：幽灵 --input-bg/--bg-primary → 真实 bg-card（同行 file-tree-search-input 先例） */
+  border-radius: var(--radius-sm); /* 1.0.24：原先连 radius 声明都没有（恒直角）→ 对齐 .ldk-input 契约跟主题走 */
+  background: var(--bg-input); /* E5.8#128.8：幽灵 --input-bg/--bg-primary → 真实 bg-card（同行 file-tree-search-input 先例） */
   color: var(--text-secondary);
   font-size: var(--font-size-xs); /* E5.8 Phase 12 #173：11→xs */
   outline: none;
+  transition: border-color 150ms, box-shadow 150ms;
 }
 
 .file-tree-search-filter-input:focus {
   border-color: var(--accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 22%, transparent); /* 1.0.24：对齐字段壳的焦点环 */
 }
 
 /* ── 工具栏 ── */
