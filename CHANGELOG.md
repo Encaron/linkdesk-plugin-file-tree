@@ -1,5 +1,16 @@
 # 更新日志
 
+## v1.0.23（2026-10-03）
+
+- **侧栏「搜索」section UI 重设计（案A · 零件版）**——病灶是 SearchView 全部自绘、不吃主题 token：「输入框不随圆角变化」「替换钮没有按钮边缘、看着不像按钮」。设计档案住壳仓 `docs/05-插件更新/文件树-搜索重设计/`（2026-10-03 拍板：案A ＋ 四项细化）。
+  - **「全部替换」换共享 `Button`**（`@linkdesk/ui`，实心 accent——按钮双轨约定「做什么用实心钮」）：四态齐了（禁用 / 可用 / hover / 替换中进度文案），本地 `.file-tree-search-replace-btn` 样式整块退休。
+  - **输入壳契约对齐壳侧 `.ldk-input`**：`--bg-input` / `--border` / `--radius-sm` / 聚焦 accent 边＋2px accent 环——圆角跟主题走了。高度改内容驱动（竖 padding 4px 与 `.ldk-input` 同），与共享 Button 同一条自然高公式 ⇒ 同行等高，--ui-scale 由字号 token 自带（原 28px 死值退休）。
+  - **Aa/ab/.* 选项钮收进输入框内右端**（VS Code 同款）：ghost 态＋激活 accent 淡底，~80px 还给输入框，170px 最小侧栏宽下仍可用。
+  - **替换字段幽灵降级**：常显但透明底无框、聚焦才现框——治「两框贴在一起」（拍板 D6＝常显＋幽灵降级）。
+  - **行距 4px→8px**（触点间距 ≥8px 节奏）＋ 结果行匹配段高亮（`<mark>` accent 淡底，切片用 wire 契约自带的 `matchStart/matchEnd` 列区间——纯视图，零搜索逻辑）。
+  - ⛔ 搜索纯逻辑（useSearch / useReplaceAll / searchCommands 等）零接触；⛔ 壳仓与 `@linkdesk/ui` 零改动。
+- **读数**：`npx tsc --noEmit` 零错误 · `npm run verify` 八段全绿 · `vitest run` 16 文件 149 例全绿 · `npm run build` 4/4 表面 46.5 KB。
+
 ## v1.0.22（2026-10-01）
 
 - **安装包瘦身**：包内更新日志只带最近 5 版（更早的更新记录仍在本插件仓库里）——由 SDK 自动施加，用户无需任何操作。

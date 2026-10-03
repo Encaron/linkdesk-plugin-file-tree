@@ -6,7 +6,7 @@
 .file-tree-search-view {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px; /* 05-搜索重设计：行距 4px→8px（触点间距 ≥8px 节奏） */
   padding: 4px 8px;
   height: 100%;
   overflow-y: auto;
@@ -16,69 +16,81 @@
 
 .file-tree-search-input-row {
   display: flex;
-  gap: 4px;
+  gap: 8px;
   align-items: center;
   position: relative;
 }
 
+/* 字段壳——契约对齐壳侧 .ldk-input（index.css:252）：bg-input / border / radius-sm / focus accent＋环。
+   高度不写死（D5 的 26/28 之争就此消解）：竖向 padding 与 .ldk-input 同为 4px，
+   与共享 Button 同一条「字号＋竖 padding＋边框」自然高公式 ⇒ 同行天然等高，--ui-scale 由字号 token 自带。 */
+.file-tree-search-field {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-input);
+  transition: border-color 150ms, box-shadow 150ms;
+}
+
+.file-tree-search-field:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+/* 替换字段幽灵降级：常显但透明底、无框——聚焦才现框，治「两框贴在一起」（2026-10-03 拍板 D6） */
+.file-tree-search-field--ghost {
+  border-color: transparent;
+  background: transparent;
+}
+
+.file-tree-search-field--ghost:focus-within {
+  border-color: var(--border);
+  background: var(--bg-input);
+}
+
 .file-tree-search-input {
   flex: 1;
-  height: calc(28px * var(--ui-scale)); /* E5.8 Phase 12 #173：容器乘 scale（§三.3） */
-  padding: 0 8px;
-  border: 1px solid var(--border); /* E5.8#128.8：幽灵 --input-border/--border-color（无效值=无边框）→ 真实 border */
-  border-radius: 4px;
-  background: var(--bg-card);
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
   color: var(--text-primary);
-  font-size: var(--font-size-sm); /* E5.8 Phase 12 #173：input 12→sm */
+  font-size: var(--font-size-sm);
   outline: none;
 }
 
-.file-tree-search-input:focus {
-  border-color: var(--accent);
-}
-
+/* 选项钮收进字段内右端（VS Code 同款，省 ~80px 还给输入框） */
 .file-tree-search-input-actions {
   display: flex;
-  gap: 2px;
+  gap: 4px;
+  margin-left: 4px;
+  flex-shrink: 0;
 }
 
 .file-tree-search-option-btn {
-  height: calc(22px * var(--ui-scale)); /* E5.8 Phase 12 #173：容器乘 scale */
   padding: 0 4px;
-  border: 1px solid transparent;
+  border: 0;
   background: transparent;
   color: var(--text-secondary);
-  font-size: var(--font-size-2xs); /* E5.8 Phase 12 #173：option 10→2xs */
+  font-size: var(--font-size-2xs);
   cursor: pointer;
-  border-radius: 3px;
+  border-radius: calc(var(--radius-sm) - 1px);
+  transition: color 120ms, background 120ms;
 }
 
 .file-tree-search-option-btn:hover {
-  background: var(--tree-bg-hover, color-mix(in srgb, var(--text-primary) 6%, transparent));
+  background: var(--tree-bg-hover, color-mix(in srgb, var(--text-primary) 8%, transparent));
+  color: var(--text-primary);
 }
 
 .file-tree-search-option-btn--active {
   color: var(--accent);
-  border-color: var(--accent);
-}
-
-/* ── 替换 ── */
-
-.file-tree-search-replace-btn {
-  height: calc(24px * var(--ui-scale)); /* E5.8 Phase 12 #173：容器乘 scale */
-  padding: 0 8px;
-  border: 1px solid var(--border); /* E5.8#128.8：幽灵 --border-color → 真实 border */
-  background: var(--bg-card); /* E5.8#128.8：幽灵 --bg-secondary → 真实 bg-card */
-  color: var(--text-primary);
-  font-size: var(--font-size-xs); /* E5.8 Phase 12 #173：replace 11→xs */
-  cursor: pointer;
-  border-radius: 3px;
-  white-space: nowrap;
-}
-
-.file-tree-search-replace-btn:disabled {
-  opacity: 0.4;
-  cursor: default;
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+  font-weight: 600;
 }
 
 /* ── 过滤行 ── */
@@ -148,7 +160,7 @@
   height: calc(22px * var(--ui-scale)); /* E5.8 Phase 12 #173：容器乘 scale */
   padding: 0 4px;
   cursor: pointer;
-  border-radius: 3px;
+  border-radius: var(--radius-sm);
 }
 
 .file-tree-search-file-header:hover {
@@ -204,7 +216,7 @@
   height: calc(22px * var(--ui-scale)); /* E5.8 Phase 12 #173：容器乘 scale */
   padding: 0 8px;
   cursor: pointer;
-  border-radius: 3px;
+  border-radius: var(--radius-sm);
 }
 
 .file-tree-search-match:hover {
@@ -227,6 +239,14 @@
   text-overflow: ellipsis;
 }
 
+/* 匹配段高亮（D4）：accent 淡底，压掉 <mark> 的 UA 默认黄 */
+.file-tree-search-match-mark {
+  background: color-mix(in srgb, var(--accent) 32%, transparent);
+  color: inherit;
+  border-radius: 2px;
+  padding: 0 1px;
+}
+
 /* ── 空状态 ── */
 
 .file-tree-search-empty {
@@ -240,12 +260,12 @@
 
 .file-tree-search-history {
   position: absolute;
-  top: calc(28px * var(--ui-scale)); /* E5.8 Phase 12 #173：锚定缩放后 input 高 */
+  top: calc(100% + 4px); /* 锚定字段壳下缘——字段高改内容驱动后不再能用 28px 死值 */
   left: 0;
   right: 0;
   background: var(--bg-card); /* E5.8#128.8：幽灵链 --bg-primary fallback 是死路径 → 精简 */
   border: 1px solid var(--border); /* E5.8#128.8：幽灵 --border-color → 真实 border */
-  border-radius: 3px;
+  border-radius: var(--radius-sm);
   z-index: 10;
   max-height: 220px;
   overflow-y: auto;

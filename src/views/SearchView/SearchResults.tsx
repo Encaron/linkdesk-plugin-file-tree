@@ -11,6 +11,20 @@ export interface SearchResultsProps {
   handleOpenMatch: (match: SearchWireMatch) => void;
 }
 
+/** 匹配行高亮：wire 契约自带行内列区间（matchStart/matchEnd，0-based 不含 end）——纯视图切片，零搜索逻辑。 */
+function renderMatchText(m: SearchWireMatch) {
+  const text = m.lineText;
+  const start = Math.min(Math.max(m.matchStart, 0), text.length);
+  const end = Math.min(Math.max(m.matchEnd, start), text.length);
+  return (
+    <>
+      {text.slice(0, start)}
+      <mark className="file-tree-search-match-mark">{text.slice(start, end)}</mark>
+      {text.slice(end)}
+    </>
+  );
+}
+
 export function SearchResults({ results, expandedFiles, toggleFile, handleOpenMatch }: SearchResultsProps) {
   return (
     <div className="file-tree-search-results">
@@ -28,7 +42,7 @@ export function SearchResults({ results, expandedFiles, toggleFile, handleOpenMa
               {file.matches.map((m, i) => (
                 <div key={i} className="file-tree-search-match" onDoubleClick={() => handleOpenMatch(m)}>
                   <span className="file-tree-search-match-line">{m.lineNumber}</span>
-                  <span className="file-tree-search-match-text">{m.lineText}</span>
+                  <span className="file-tree-search-match-text">{renderMatchText(m)}</span>
                 </div>
               ))}
             </div>

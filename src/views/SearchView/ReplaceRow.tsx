@@ -3,6 +3,7 @@
  */
 
 import type { TFunction } from "i18next";
+import { Button } from "@linkdesk/ui";
 import type { SearchState } from "./useSearch";
 
 export interface ReplaceRowProps {
@@ -24,19 +25,21 @@ export function ReplaceRow({
 }: ReplaceRowProps) {
   return (
     <div className="file-tree-search-input-row">
-      <input
-        className="file-tree-search-input"
-        type="text"
-        placeholder={t("替换")}
-        value={replaceText}
-        onChange={(e) => setReplaceText(e.target.value)}
-      />
-      <button className="file-tree-search-replace-btn" onClick={handleReplaceAll}
+      <div className="file-tree-search-field file-tree-search-field--ghost">
+        <input
+          className="file-tree-search-input"
+          type="text"
+          placeholder={t("替换")}
+          value={replaceText}
+          onChange={(e) => setReplaceText(e.target.value)}
+        />
+      </div>
+      <Button onClick={handleReplaceAll}
         disabled={state !== "hasResults" || !replaceText || replacing !== null}>
         {replacing
           ? t("替换中… {{done}}/{{total}}", { done: replacing.done, total: replacing.total })
           : t("全部替换")}
-      </button>
+      </Button>
     </div>
   );
 }

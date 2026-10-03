@@ -39,17 +39,27 @@ export function SearchInputRow({
 }: SearchInputRowProps) {
   return (
     <div className="file-tree-search-input-row">
-      <input
-        ref={inputRef}
-        className="file-tree-search-input"
-        type="text"
-        placeholder={t("搜索")}
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        onKeyDown={handleKeyDown}
-        onFocus={() => setShowHistory(true)}
-        onBlur={() => requestAnimationFrame(() => setShowHistory(false))}
-      />
+      <div className="file-tree-search-field">
+        <input
+          ref={inputRef}
+          className="file-tree-search-input"
+          type="text"
+          placeholder={t("搜索")}
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          onKeyDown={handleKeyDown}
+          onFocus={() => setShowHistory(true)}
+          onBlur={() => requestAnimationFrame(() => setShowHistory(false))}
+        />
+        <div className="file-tree-search-input-actions">
+          <button className={`file-tree-search-option-btn ${caseSensitive ? "file-tree-search-option-btn--active" : ""}`}
+            data-hint={t("区分大小写")} onClick={() => setCaseSensitive((v) => !v)}>Aa</button>
+          <button className={`file-tree-search-option-btn ${wholeWord ? "file-tree-search-option-btn--active" : ""}`}
+            data-hint={t("全词匹配")} onClick={() => setWholeWord((v) => !v)}>ab</button>
+          <button className={`file-tree-search-option-btn ${useRegex ? "file-tree-search-option-btn--active" : ""}`}
+            data-hint={t("正则表达式")} onClick={() => setUseRegex((v) => !v)}>.*</button>
+        </div>
+      </div>
       {showHistory && searchHistory.length > 0 && !query && (
         <div className="file-tree-search-history">
           {searchHistory.map((h, i) => (
@@ -60,14 +70,6 @@ export function SearchInputRow({
           ))}
         </div>
       )}
-      <div className="file-tree-search-input-actions">
-        <button className={`file-tree-search-option-btn ${caseSensitive ? "file-tree-search-option-btn--active" : ""}`}
-          data-hint={t("区分大小写")} onClick={() => setCaseSensitive((v) => !v)}>Aa</button>
-        <button className={`file-tree-search-option-btn ${wholeWord ? "file-tree-search-option-btn--active" : ""}`}
-          data-hint={t("全词匹配")} onClick={() => setWholeWord((v) => !v)}>ab</button>
-        <button className={`file-tree-search-option-btn ${useRegex ? "file-tree-search-option-btn--active" : ""}`}
-          data-hint={t("正则表达式")} onClick={() => setUseRegex((v) => !v)}>.*</button>
-      </div>
     </div>
   );
 }
