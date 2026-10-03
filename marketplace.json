@@ -1,25 +1,31 @@
 {
   "version": "1",
-  "updatedAt": "2026-09-30T21:43:22.088Z",
+  "updatedAt": "2026-10-03T12:50:12.622Z",
   "plugins": [
     {
       "id": "file-tree",
       "name": "文件树",
-      "version": "1.0.22",
+      "version": "1.0.23",
       "description": "浏览和管理文件——对标 VS Code 资源管理器",
       "author": {
         "name": "官方"
       },
-      "icon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.22/resources/icon-bar.svg",
+      "icon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.23/resources/icon-bar.svg",
       "iconSource": "url",
-      "marketIcon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.22/resources/icon.svg",
+      "marketIcon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.23/resources/icon.svg",
       "marketIconSource": "url",
       "minAppVersion": "0.2.20",
-      "readmeUrl": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.22/README.md",
-      "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.22/file-tree.linkdesk-plugin",
-      "size": 47346,
-      "publishedAt": "2026-09-30T21:43:22.088Z",
+      "readmeUrl": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.23/README.md",
+      "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.23/file-tree.linkdesk-plugin",
+      "size": 46983,
+      "publishedAt": "2026-10-03T12:50:12.622Z",
       "versions": [
+        {
+          "version": "1.0.23",
+          "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.23/file-tree.linkdesk-plugin",
+          "publishedAt": "2026-10-03T12:50:12.622Z",
+          "changelog": "- **侧栏「搜索」section UI 重设计（案A · 零件版）**——病灶是 SearchView 全部自绘、不吃主题 token：「输入框不随圆角变化」「替换钮没有按钮边缘、看着不像按钮」。设计档案住壳仓 `docs/05-插件更新/文件树-搜索重设计/`（2026-10-03 拍板：案A ＋ 四项细化）。\n  - **「全部替换」换共享 `Button`**（`@linkdesk/ui`，实心 accent——按钮双轨约定「做什么用实心钮」）：四态齐了（禁用 / 可用 / hover / 替换中进度文案），本地 `.file-tree-search-replace-btn` 样式整块退休。\n  - **输入壳契约对齐壳侧 `.ldk-input`**：`--bg-input` / `--border` / `--radius-sm` / 聚焦 accent 边＋2px accent 环——圆角跟主题走了。高度改内容驱动（竖 padding 4px 与 `.ldk-input` 同），与共享 Button 同一条自然高公式 ⇒ 同行等高，--ui-scale 由字号 token 自带（原 28px 死值退休）。\n  - **Aa/ab/.* 选项钮收进输入框内右端**（VS Code 同款）：ghost 态＋激活 accent 淡底，~80px 还给输入框，170px 最小侧栏宽下仍可用。\n  - **替换字段幽灵降级**：常显但透明底无框、聚焦才现框——治「两框贴在一起」（拍板 D6＝常显＋幽灵降级）。\n  - **行距 4px→8px**（触点间距 ≥8px 节奏）＋ 结果行匹配段高亮（`<mark>` accent 淡底，切片用 wire 契约自带的 `matchStart/matchEnd` 列区间——纯视图，零搜索逻辑）。\n  - ⛔ 搜索纯逻辑（useSearch / useReplaceAll / searchCommands 等）零接触；⛔ 壳仓与 `@linkdesk/ui` 零改动。\n- **读数**：`npx tsc --noEmit` 零错误 · `npm run verify` 八段全绿 · `vitest run` 16 文件 149 例全绿 · `npm run build` 4/4 表面 46.5 KB。"
+        },
         {
           "version": "1.0.22",
           "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.22/file-tree.linkdesk-plugin",
@@ -47,8 +53,7 @@
         {
           "version": "1.0.18",
           "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.18/file-tree.linkdesk-plugin",
-          "publishedAt": "2026-09-28T17:17:00.464Z",
-          "changelog": "- **新增命令 `file-tree.openSearchResult`（打开搜索结果）**——把「打开一条搜索匹配」这条**原本只有鼠标**的动作接进命令面：界面上它只能靠**双击结果行**（`SearchResults.tsx` 的 `onDoubleClick`），F4 那条键盘路要先让搜索框拿到焦点、且本身不是命令 ⇒ AI、快捷键、命令面板都够不着它。判定目标这一半（`searchSession.ts` 解析规则）与开标签页那一半（走与双击**同一个** `openMatch`，不另写第二份 `tabs.create`）都是纯逻辑/复用，故无并行实现。\n- **目标从哪来**：搜索结果本体住在 `useSearch` 的 React state 里，命令 handler 不在 React 上下文——现在搜索/导航变化时把 `(matches, index)` 投影进模块级快照，命令缺省打开**当前高亮那一条**，也可按 `filePath`（可再带 `lineNumber`）点名要哪条。视图卸载即清空 ⇒ 命令如实回「没有搜索结果」，⛔ 不给一个界面上早已不存在的陈旧目标。\n  - 注册点在**入口顶层**（`src/index.tsx`）而非视图 `useEffect`：无视图时 AI 经 `exec` 打进来靠池的 on-command 激活 `import()` 入口，顶层的副作用才是唯一注册时机。右键菜单那批既有命令仍由 `FoldersView` mount 时注册——本笔**只加不减**。\n- **补齐 21 条既有命令的说明（`description`）**：本仓命令只声明了 `title`，命令索引里一行说明都没有。检查命令清单的使用者（AI、未来的命令面板检索）只能看到名字。21 条按各自 handler 的**真实行为**逐条写（含「占位、未接实现」两条与「与『打开』走同一条链路」这类**如实**读数），并给新命令补 `params`。\n- **说明与参数只写在声明面**：`title` / `description` / `params` 一律只进 `plugin.json` 的 `contributes.commands[]`；运行时 `registerCommand` **不带 meta**（本仓既有惯例——两处各写一份文案迟早分叉）。壳加载器会把声明面的说明与参数注册进命令索引，池侧不带这两项时不会抹掉声明面那份。\n- **新命令不进运行时 meta 面**，命令面板的可见性由 `when` 管；本命令不设 `when`（无门）。若面板列出它而当前没有搜索结果，如实在面板里报「没有搜索结果」，不静默。\n- **`i18n/en.json` 补 1 键**（`打开搜索结果` → `Open Search Result`，字典 72 → 73）。其余 21 条标题的英文键此前已在。\n- **测试**：新增 `src/__tests__/searchSession.test.ts`（16 例）——解析规则 9 例（空会话／缺省高亮／索引 `-1` 与越界的兜底／反斜杠与正斜杠等价／同行号唯一确定／点名不存在的文件为 `null`／卸载即清空）＋ 命令面 7 例（注册 1 条且 id 正确／`commands` 面缺失时返回 0 而不抛／缺省打开的是高亮那条并回报 `index`+`total`／点名优先于高亮／两条负控「不存在的文件」「扩展名没有属主插件」都必须**不碰** `tabs.create`）。\n- **既有读数**：`vitest run` 16 文件 149 例全绿；`npm run verify` 六段全绿（声明面 22 名 / 运行时面 25 名，命令归属零偏离；字典 73 键；纯逻辑单元 14 个全部有测试）。`npx tsc --noEmit` 零错误。无用户可见的既有行为变化。"
+          "publishedAt": "2026-09-28T17:17:00.464Z"
         },
         {
           "version": "1.0.17",
