@@ -1,25 +1,31 @@
 {
   "version": "1",
-  "updatedAt": "2026-10-03T13:33:40.796Z",
+  "updatedAt": "2026-10-04T15:14:06.503Z",
   "plugins": [
     {
       "id": "file-tree",
       "name": "文件树",
-      "version": "1.0.24",
+      "version": "1.0.25",
       "description": "浏览和管理文件——对标 VS Code 资源管理器",
       "author": {
         "name": "官方"
       },
-      "icon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.24/resources/icon-bar.svg",
+      "icon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.25/resources/icon-bar.svg",
       "iconSource": "url",
-      "marketIcon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.24/resources/icon.svg",
+      "marketIcon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.25/resources/icon.svg",
       "marketIconSource": "url",
       "minAppVersion": "0.2.20",
-      "readmeUrl": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.24/README.md",
-      "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.24/file-tree.linkdesk-plugin",
-      "size": 44388,
-      "publishedAt": "2026-10-03T13:33:40.796Z",
+      "readmeUrl": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.25/README.md",
+      "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.25/file-tree.linkdesk-plugin",
+      "size": 44484,
+      "publishedAt": "2026-10-04T15:14:06.503Z",
       "versions": [
+        {
+          "version": "1.0.25",
+          "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.25/file-tree.linkdesk-plugin",
+          "publishedAt": "2026-10-04T15:14:06.503Z",
+          "changelog": "- **配置项行名短名**（配置项短名案）：设置页「资源管理器」组 18 条设置此前行名只能裸显英文配置键，现补声明式短名（如 `sortOrder` → 「排序方式」、`compactFolders` → 「紧凑文件夹」、`external.windowsExec` → 「外部终端」），中文原文即 i18n key，英文界面走本仓 i18n 译名。\n- **枚举下拉不裸显英文值**：`sortOrder`（6 档）与 `incrementalNaming`（2 档）此前无 `enumDescriptions`，下拉直接显 `foldersNestsFiles` / `disabled` 这类英文值——现补对象形态显示名（「文件优先」「重名自动编号」等），并补英译。\n- 第三方存量声明不受影响：无短名者照旧回退显配置键。"
+        },
         {
           "version": "1.0.24",
           "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.24/file-tree.linkdesk-plugin",
@@ -47,8 +53,7 @@
         {
           "version": "1.0.20",
           "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.20/file-tree.linkdesk-plugin",
-          "publishedAt": "2026-09-29T15:14:27.100Z",
-          "changelog": "- **修：侧栏「打开文件夹」section 的悬停/按下态落到 `unset`——悬停时主按钮把底丢掉、最近项零反馈。** 起因是 FT#4 的 216px 视觉走查：`OpenFolderView.css` 的 `:hover`/`:active` 用了 `var(--tree-bg-hover)` / `var(--tree-bg-selected)`，而这两个 token 定义在 `.file-tree-root`（`file-tree-shell.css` §设计 Token）——本 section 挂在 `ldk-sidebar-section-body` 下，**祖先链里没有 `.file-tree-root`**（实测链：`file-tree-open-folder-btn → file-tree-open-folder → ldk-sidebar-section-body → …`）。`var()` 在这种作用域取到空串 ⇒ 该声明在**计算值期**非法 ⇒ 落 `unset`。\n  - **实测（`CSS.forcePseudoState` 强制 `:hover`，非目测）**：主按钮 `background-color` `rgb(45,45,45)`（`--bg-card`）→ **`rgba(0,0,0,0)`**，即不是「叠一层悬停底色」而是**把底清空**；最近项背景恒 `rgba(0,0,0,0)` ⇒ **悬停毫无反馈**。`border-color: var(--accent)` 不受影响（`--accent` 全局定义）⇒ 悬停时只剩边框变色、底反被抹掉。\n  - **修法**：三处声明带 fallback（`var(--tree-bg-hover, color-mix(in srgb, var(--text-primary) 6%, transparent))`、selected 为 15% accent）——与同仓 `SearchView.css` 四处**既有写法一致**。⛔ 不动 token 定义位置（那是树节点的作用域）、不动骨架与类名。\n  - **读数**：`npx tsc --noEmit` 零错误 · `npm run verify` 六段全绿（lint 严格腿 75 文件零偏离）· `vitest run` 16 文件 **149 例** · `npm run build` **4/4 表面 / 74.9 KB**。"
+          "publishedAt": "2026-09-29T15:14:27.100Z"
         },
         {
           "version": "1.0.19",
