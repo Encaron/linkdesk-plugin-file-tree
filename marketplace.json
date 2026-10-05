@@ -1,25 +1,31 @@
 {
   "version": "1",
-  "updatedAt": "2026-10-04T19:44:14.807Z",
+  "updatedAt": "2026-10-05T02:01:35.248Z",
   "plugins": [
     {
       "id": "file-tree",
       "name": "文件树",
-      "version": "1.0.26",
+      "version": "1.0.27",
       "description": "浏览和管理文件——对标 VS Code 资源管理器",
       "author": {
         "name": "官方"
       },
-      "icon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.26/resources/icon-bar.svg",
+      "icon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.27/resources/icon-bar.svg",
       "iconSource": "url",
-      "marketIcon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.26/resources/icon.svg",
+      "marketIcon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.27/resources/icon.svg",
       "marketIconSource": "url",
       "minAppVersion": "0.2.20",
-      "readmeUrl": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.26/README.md",
-      "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.26/file-tree.linkdesk-plugin",
-      "size": 44352,
-      "publishedAt": "2026-10-04T19:44:14.807Z",
+      "readmeUrl": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.27/README.md",
+      "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.27/file-tree.linkdesk-plugin",
+      "size": 48093,
+      "publishedAt": "2026-10-05T02:01:35.248Z",
       "versions": [
+        {
+          "version": "1.0.27",
+          "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.27/file-tree.linkdesk-plugin",
+          "publishedAt": "2026-10-05T02:01:35.248Z",
+          "changelog": "- **「打开方式…」从占位转正为真选择器（T2/F1 · 文件打开方式与贡献点案第 3 波）**：右键文件 →「打开方式…」现列出声明了该扩展名的**全部**插件（含官方与第三方），每行「打开（仅此一次）」（不落盘）与「设为默认」（写用户覆盖表 `workbench.fileAssociations`，重启仍生效）；有用户覆盖时顶部出现「当前默认」行与「恢复自动」。空态（该扩展名无任何声明者，命令面板直调可达）提供「在市场搜索阅读器」。设置页「默认打开方式」管理器（第 4 波）与本选择器同写一个真相源，改动即时互见（E31）。\n- **菜单项收敛（E12/E13）**：无 handler、目录、根节点上不显示该项（`when` 增 `file-tree.hasHandler`，右键时刻现读宿主）；**旧宿主特性降级**——宿主缺 `listHandlersFor` 面时命令 no-op、菜单项不出现，不留「点了就报错」的面（07 §六）。\n- **打开行为归一（F3）由宿主侧完成**：`getPluginFor` 升级为覆盖表感知解析（覆盖 → 声明 → 角色），本仓单击/搜索双击两个入口零改动即吃到同一解析（旧宿主行为不变）。\n- 依赖随宿主契约升级：`@linkdesk/contracts` 0.1.36 / `@linkdesk/plugin-sdk` 0.1.75。\n- **读数**：`npm run verify` 九段全绿 · `vitest run` 17 文件 152 例全绿（新增 openWithStore 3 例）· `npx tsc --noEmit` 零错误。"
+        },
         {
           "version": "1.0.26",
           "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.26/file-tree.linkdesk-plugin",
@@ -47,8 +53,7 @@
         {
           "version": "1.0.22",
           "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.22/file-tree.linkdesk-plugin",
-          "publishedAt": "2026-09-30T21:43:22.088Z",
-          "changelog": "- **安装包瘦身**：包内更新日志只带最近 5 版（更早的更新记录仍在本插件仓库里）——由 SDK 自动施加，用户无需任何操作。"
+          "publishedAt": "2026-09-30T21:43:22.088Z"
         },
         {
           "version": "1.0.21",
