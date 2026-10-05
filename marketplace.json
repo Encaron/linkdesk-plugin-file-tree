@@ -1,25 +1,31 @@
 {
   "version": "1",
-  "updatedAt": "2026-10-05T13:56:25.064Z",
+  "updatedAt": "2026-10-05T16:48:23.816Z",
   "plugins": [
     {
       "id": "file-tree",
       "name": "文件树",
-      "version": "1.0.28",
+      "version": "1.0.29",
       "description": "浏览和管理文件——对标 VS Code 资源管理器",
       "author": {
         "name": "官方"
       },
-      "icon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.28/resources/icon-bar.svg",
+      "icon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.29/resources/icon-bar.svg",
       "iconSource": "url",
-      "marketIcon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.28/resources/icon.svg",
+      "marketIcon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.29/resources/icon.svg",
       "marketIconSource": "url",
       "minAppVersion": "0.2.20",
-      "readmeUrl": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.28/README.md",
-      "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.28/file-tree.linkdesk-plugin",
-      "size": 46569,
-      "publishedAt": "2026-10-05T13:56:25.064Z",
+      "readmeUrl": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.29/README.md",
+      "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.29/file-tree.linkdesk-plugin",
+      "size": 46718,
+      "publishedAt": "2026-10-05T16:48:23.816Z",
       "versions": [
+        {
+          "version": "1.0.29",
+          "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.29/file-tree.linkdesk-plugin",
+          "publishedAt": "2026-10-05T16:48:23.816Z",
+          "changelog": "- **清掉 `anchor` 死参（随宿主面板归一）**：宿主「打开方式」面板自 2026-10-05 起**一律居中＋遮罩**（锚定态废止，`OpenWithRequest.anchor` 已标 `@deprecated`、宿主侧不再消费）⇒ 本仓转发时不再计算、也不再传 `anchor`（右键菜单上下文与 `file-tree.openWith` 命令各清一处）。**零可见变化**——面板本来就已经恒居中，此前传了也被宿主忽略；右键菜单自身的定位不受影响（仍按 `event.clientX / clientY` 落在指针处）。契约字段宿主侧仍保留（禁减已发布面），故本仓只是**不再使用**，⛔ 不是删了别人的东西。\n- **订正一处失效引用**：右键菜单里「该扩展名无人认领 ⇒ 整项隐藏」的原注释引作 `E13`，但案 02 现行的 E13 是另一件事（「handler 很多·列表滚动」）；改指**不留死钮律**（案 02 E17 的同一条律，只是触发条件换成「该扩展名无 handler」）。\n- **读数**：`npx tsc --noEmit` 零错误 · `npm run verify` 九段全绿（lint 严格腿 75 文件零偏离 / 跨插件 import 73 文件零互引 / 字典 117 key 全覆盖）· `npm run test` **16 文件 149 例**全绿 · `npm run build` 产出 **45.6 KB**（4 表面）· `grep -rn \"anchor\" src` 只剩菜单自身定位三处（组件 props／`<ContextMenu anchor>`／`FoldersView` 传入），**命令侧零残留**。"
+        },
         {
           "version": "1.0.28",
           "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.28/file-tree.linkdesk-plugin",
@@ -47,8 +53,7 @@
         {
           "version": "1.0.24",
           "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.24/file-tree.linkdesk-plugin",
-          "publishedAt": "2026-10-03T13:33:40.796Z",
-          "changelog": "- **补刀：筛选输入框（「要包含的文件」／「要排除的文件」）对齐 `.ldk-input` 契约**——1.0.23 治了搜索/替换两行，这两个筛选框是同 section 的漏网之鱼：原先**连 `border-radius` 声明都没有**（恒直角，`app.surfaceRadius` 调多大都不动）。补 `--radius-sm`（跟主题圆角走）＋ 底色 `--bg-card` → `--bg-input`（与搜索/替换字段同源）＋ 聚焦 accent 边＋2px 焦点环。仅 CSS，零逻辑、零结构改动。\n- **读数**：`npm run verify` 八段全绿 · `vitest run` 16 文件 149 例全绿 · `npm run build` 4/4 表面。"
+          "publishedAt": "2026-10-03T13:33:40.796Z"
         },
         {
           "version": "1.0.23",
