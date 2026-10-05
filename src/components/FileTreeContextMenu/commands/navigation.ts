@@ -69,21 +69,21 @@ export function registerNavigationCommands(): void {
   //   （它们届时传裸路径字符串）。新调用方一律走壳命令 `SHELL_COMMANDS.openWith`
   //   （`@linkdesk/plugin-sdk/shell-commands`——子路径，不是根入口，见本文件顶部 import 处的说明）。
   //   到期条件＝官方目录中所有插件的最低支持版本 ≥ 本版；届时整条注册删除（尾账记在主案 04-任务清单.md）。
-  // 入参三形（老 editor 传裸 filePath 字符串；右键菜单传 FileMenuContext＋anchor；老设置页无载荷）。
+  // 入参三形（老 editor 传裸 filePath 字符串；右键菜单传 FileMenuContext；老设置页无载荷）。
   // E17：无载荷且无活动文件（命令面板空调）⇒ no-op＋toast，不留死响应。
   // 数据组装（ext 归一 / 处理器表 / 图标）全在壳命令里——本插件只把入参**收敛成唯一形状**再转发。
+  // 🔴 本版起**不再转发 `anchor`**：宿主面板自 2026-10-05 起一律居中＋遮罩（锚定态废止，
+  //    `OpenWithRequest.anchor` 已标 `@deprecated`、宿主侧不再消费）⇒ 传它是死参，故本仓清掉。
   lk.commands.registerCommand("file-tree.openWith", async (...args) => {
     const arg = args[0];
     let uri: string | null = null;
     let ext: string | null = null;
-    let anchor: { x: number; y: number } | null = null;
     if (typeof arg === "string") {
       uri = normalizePath(arg);
     } else if (arg && typeof arg === "object") {
-      const ctx = arg as FileMenuContext & { anchor?: { x: number; y: number }; ext?: string; filePath?: string };
+      const ctx = arg as FileMenuContext & { ext?: string; filePath?: string };
       uri = normalizePath(ctx.uri ?? ctx.filePath ?? "");
       ext = typeof ctx.ext === "string" ? ctx.ext : null;
-      anchor = ctx.anchor ?? null;
     }
     if (!uri && !ext) {
       // 命令面板 / 老设置页入口——作用于聚焦项（若为文件）
@@ -96,11 +96,11 @@ export function registerNavigationCommands(): void {
     }
     if (!uri) {
       // 按类型载荷（无文件）——直接转给壳命令；归一化由壳侧 `normalizeExt` 单一真相源负责
-      openWith({ ext: ext ?? undefined, anchor: anchor ?? undefined });
+      openWith({ ext: ext ?? undefined });
       return;
     }
     const name = uri.split("/").pop() ?? uri;
-    openWith({ uri, name, ext: ext ?? extension(name), anchor: anchor ?? undefined });
+    openWith({ uri, name, ext: ext ?? extension(name) });
   });
   lk.commands.registerCommand("file-tree.findInFolder", placeholder("file-tree.findInFolder"));
   // ── E4V#33: openFolder —— 打开工作区文件夹（MenuBar 文件菜单） ──

@@ -34,7 +34,8 @@ const FileTreeContextMenu: React.FC<FileTreeContextMenuProps> = ({ item, anchor,
       ? extensionWithDot(item.name).toLowerCase() || undefined // 无扩展名/点开头 ⇒ undefined
       : undefined;
 
-  // F1（T2 · 第 3 波）E13：「打开方式…」在无 handler 时隐藏——右键时刻现读一次 handler 数。
+  // F1（T2 · 第 3 波）**不留死钮律**（案 02 E17 的同一条律，此处适用于「该扩展名无人认领」这一触发）：
+  //   「打开方式…」在无 handler 时隐藏——右键时刻现读一次 handler 数。
   // undefined = 未定（IPC 未回）/旧壳缺面/无扩展名 ⇒ `when` 判假、项隐藏（降级口径 = 不显示该项）。
   // 纠正案 4.5：面板与数据组装转正到壳后，本项还多一个前置——**宿主命令在册**。0.2.47 的壳有
   // `listHandlersFor` 面、却没有 `workbench.action.openWith` ⇒ 只查 handler 会留下「点了没反应」
@@ -100,11 +101,11 @@ const FileTreeContextMenu: React.FC<FileTreeContextMenuProps> = ({ item, anchor,
     "file-tree.resourceReadonly": item.isReadonly === true,
     resourceExtname,
     resourceIsFile,
-    // F1（T2 · 第 3 波）E13/E12：无 handler 时「打开方式…」不可达——`when` 收敛旗子。
+    // F1（T2 · 第 3 波）不留死钮律（案 02 E17 同律）：无 handler 时「打开方式…」不可达——`when` 收敛旗子。
     // 现读（右键时刻查 listHandlersFor，命中即现）；undefined = 未定/旧壳 ⇒ 项隐藏（降级口径）。
     "file-tree.hasHandler": hasHandler,
-    // 选择器面板锚点（命令 handler 经 args[0].anchor 接收）——右键就近弹出
-    anchor,
+    // 注：本版起**不再往上下文里塞 `anchor`**——宿主面板自 2026-10-05 起一律居中＋遮罩（锚定态
+    // 废止），命令侧已无处消费它；菜单自身定位仍用下面传给 `<ContextMenu>` 的 `anchor` 属性。
   } : undefined;
 
   return (
