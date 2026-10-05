@@ -7,7 +7,7 @@
  * 小驼峰；旧写法 `"FileContext"` 是枚举成员名，读写同一个错键只是自洽、不是正确），
  * 通过 ContextKeyService 求值 when 条件。
  */
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { ContextMenu } from "@linkdesk/ui"; // E6#54c：共享控件走 @linkdesk/ui
 import type { ExplorerItem } from "../../services/FileTreeModel";
 import { extensionWithDot } from "../../utils/pathUtils";
@@ -31,6 +31,28 @@ const FileTreeContextMenu: React.FC<FileTreeContextMenuProps> = ({ item, anchor,
     item && item.parent !== null && !item.isDirectory
       ? extensionWithDot(item.name).toLowerCase() || undefined // 无扩展名/点开头 ⇒ undefined
       : undefined;
+
+  // F1（T2 · 第 3 波）E13：「打开方式…」在无 handler 时隐藏——右键时刻现读一次 handler 数。
+  // undefined = 未定（IPC 未回）/旧壳缺面/无扩展名 ⇒ `when` 判假、项隐藏（降级口径 = 不显示该项）。
+  const [hasHandler, setHasHandler] = useState<boolean | undefined>(undefined);
+  useEffect(() => {
+    if (!resourceExtname || typeof window.linkdesk?.fileAssociation?.listHandlersFor !== "function") {
+      setHasHandler(undefined);
+      return;
+    }
+    let cancelled = false;
+    window.linkdesk.fileAssociation
+      .listHandlersFor(resourceExtname)
+      .then((rows: unknown) => {
+        if (!cancelled) setHasHandler(Array.isArray(rows) && rows.length > 0);
+      })
+      .catch(() => {
+        if (!cancelled) setHasHandler(undefined);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [resourceExtname, item]);
 
   // E4V#12: 瞬态 context key——菜单渲染前注入，关闭时清除
   useEffect(() => {
@@ -66,6 +88,11 @@ const FileTreeContextMenu: React.FC<FileTreeContextMenuProps> = ({ item, anchor,
     "file-tree.resourceReadonly": item.isReadonly === true,
     resourceExtname,
     resourceIsFile,
+    // F1（T2 · 第 3 波）E13/E12：无 handler 时「打开方式…」不可达——`when` 收敛旗子。
+    // 现读（右键时刻查 listHandlersFor，命中即现）；undefined = 未定/旧壳 ⇒ 项隐藏（降级口径）。
+    "file-tree.hasHandler": hasHandler,
+    // 选择器面板锚点（命令 handler 经 args[0].anchor 接收）——右键就近弹出
+    anchor,
   } : undefined;
 
   return (

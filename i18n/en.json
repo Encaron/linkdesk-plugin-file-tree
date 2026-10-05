@@ -103,5 +103,17 @@
   "编辑": "Edit",
   "显示": "Display",
   "个文件": "files",
-  "个匹配": "matches"
+  "个匹配": "matches",
+  "打开方式": "Open With",
+  "关闭选择器": "Close",
+  "加载中…": "Loading…",
+  "当前默认：{{name}}（来自你的设置）": "Current default: {{name}} (set by you)",
+  "恢复自动": "Restore automatic",
+  "打开（仅此一次）": "Open (just once)",
+  "设为默认": "Set as default",
+  "自动默认": "Automatic default",
+  "用户指定": "Set by user",
+  "没有任何已装插件声明 .{{ext}}": "No installed plugin declares .{{ext}}",
+  "在市场搜索阅读器": "Search marketplace for a reader",
+  "没有选中的文件——请先在文件树中选中一个文件": "No file selected — select a file in the file tree first"
 }

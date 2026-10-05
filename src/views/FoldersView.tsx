@@ -26,6 +26,8 @@ import { useTranslation } from "react-i18next";
 // E5.6#11.5i：ViewContainerService → lk.viewContainer（#11.5g3 遗漏）
 import FileTree from "../components/FileTree";
 import FileTreeContextMenu, { activateFileTreeContextMenu, setFileTreeHandleRef, clearFileTreeHandle, setOpenFileFn } from "../components/FileTreeContextMenu";
+import { OpenWithPanelHost } from "../openWith/OpenWithPanel";
+import "../openWith/open-with.css";
 import { FileTreeDecorationService } from "../services/FileTreeDecoration";
 import { FileTreeModel } from "../services/FileTreeModel";
 import type { FileTreeHandle } from "../components/FileTree";
@@ -165,6 +167,9 @@ const FoldersView: React.FC = () => {
           onClose={() => setContextMenu(null)}
         />
       )}
+
+      {/* F1（T2 · 第 3 波）：打开方式选择器——命令 handler 经 openWithStore 触发，OverlayPortal 渲染 */}
+      <OpenWithPanelHost />
     </div>
   );
 };

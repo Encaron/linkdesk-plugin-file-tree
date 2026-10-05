@@ -2,7 +2,7 @@
   "$schema": "./node_modules/@linkdesk/plugin-sdk/schemas/plugin.schema.json",
   "pluginId": "file-tree",
   "name": "文件树",
-  "version": "1.0.26",
+  "version": "1.0.27",
   "minAppVersion": "0.2.20",
   "icon": "resources/icon-bar.svg",
   "marketIcon": "resources/icon.svg",
@@ -128,7 +128,7 @@
         {
           "command": "file-tree.openWith",
           "group": "1_navigation",
-          "when": "file-tree.itemIsFile"
+          "when": "file-tree.itemIsFile && file-tree.hasHandler"
         },
         {
           "command": "file-tree.revealInOS",
@@ -224,7 +224,7 @@
       {
         "id": "file-tree.openWith",
         "title": "打开方式…",
-        "description": "占位命令——未接实现，调用无效果。"
+        "description": "打开方式选择器：列出声明了当前文件扩展名的全部插件，可「打开（仅此一次）」或「设为默认」（写用户覆盖表）；有覆盖时可「恢复自动」。首参可传文件路径字符串或 { uri, anchor } 上下文。"
       },
       {
         "id": "file-tree.openFocused",
