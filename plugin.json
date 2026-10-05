@@ -2,7 +2,7 @@
   "$schema": "./node_modules/@linkdesk/plugin-sdk/schemas/plugin.schema.json",
   "pluginId": "file-tree",
   "name": "文件树",
-  "version": "1.0.27",
+  "version": "1.0.28",
   "minAppVersion": "0.2.20",
   "icon": "resources/icon-bar.svg",
   "marketIcon": "resources/icon.svg",
@@ -224,7 +224,7 @@
       {
         "id": "file-tree.openWith",
         "title": "打开方式…",
-        "description": "打开方式选择器：列出声明了当前文件扩展名的全部插件，可「打开（仅此一次）」或「设为默认」（写用户覆盖表）；有覆盖时可「恢复自动」。首参可传文件路径字符串或 { uri, anchor } 上下文。"
+        "description": "已由宿主命令 `workbench.action.openWith` 承接（面板与数据组装都在宿主编）。本命令仅为过渡期兼容保留：把入参（裸文件路径字符串 / { uri, anchor } 上下文 / { uri, ext } / { ext }）收敛成宿主请求再转发，扩展名归一由宿主负责。新代码请直接调宿主命令（插件 SDK 子路径 `@linkdesk/plugin-sdk/shell-commands` 的 `SHELL_COMMANDS.openWith` / `openWith()`）。"
       },
       {
         "id": "file-tree.openFocused",
