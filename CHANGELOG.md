@@ -4,8 +4,9 @@
 
 - **「打开方式…」面板移交宿主（文件打开方式与贡献点案 4.5 纠正案 · 住错层纠正）**：选择器面板与它的数据组装（扩展名归一、处理器表、图标裁决）整体搬到宿主侧——新宿主命令 `workbench.action.openWith` 承接；本仓删除私有面板、私有 store 与配套 CSS，右键「打开方式…」改为**转发**该宿主命令。外观与行为不变（锚定弹出、就近定位），但**数据来源归一**：行主标签是插件名、行图标与设置页同源、宿主不再依赖本插件也能升起面板。
 - **兼容过渡（⛔ 有到期日）**：`file-tree.openWith` 仍注册，仅把老调用方（旧版 editor/settings 传裸文件路径字符串）的入参收敛成宿主请求再转发；到期条件＝官方目录中所有插件的最低支持版本 ≥ 本版，届时整条删除（尾账记在主案任务清单）。
+- **右键这一项的前置条件多了一条**：除了「这个扩展名确实有人认领」（旧口径），还要**宿主命令 `workbench.action.openWith` 在册**——中间那版软件（有处理器查询面、还没有这条命令）上，本项**整条不显示**，不会出现一颗点下去没反应的项（与编辑器按钮同一律：探测不到就隐藏，⛔ 不留死钮）。
 - 依赖随宿主契约升级：`@linkdesk/contracts` ^0.1.39 / `@linkdesk/plugin-sdk` ^0.1.81（新增 `SHELL_COMMANDS` / `openWith()` 宿主命令调用面）。🔴 运行时代码从 SDK **子路径** `@linkdesk/plugin-sdk/shell-commands` 取这两个值——从根入口取会把 SDK 的构建工具链（vite → rollup）一起打进插件包，Windows 上直接 build 不过（SDK 0.1.81 的更正；0.1.80 的根入口写法是死路）。
-- **读数**：`npx tsc --noEmit` 零错误 · `npm run build` 出一个 45.0 KB 的 `.linkdesk-plugin`（4 表面）· 自有九段自检全过 · 149 测试全过 · 私有面板 3 个文件 ＋ 2 个测试文件删除（`grep -rn "OpenWithPanel\|open-with.css" src` = 0）。
+- **读数**：`npx tsc --noEmit` 零错误 · `npm run build` 出一个 ≈45 KB 的 `.linkdesk-plugin`（4 表面）· 自有九段自检全过 · 149 测试全过 · 私有面板 3 个文件 ＋ 2 个测试文件删除（`grep -rn "OpenWithPanel\|open-with.css" src` = 0）。
 
 ## v1.0.27（2026-10-05）
 

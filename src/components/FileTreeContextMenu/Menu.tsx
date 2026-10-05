@@ -9,6 +9,8 @@
  */
 import React, { useEffect, useState } from "react";
 import { ContextMenu } from "@linkdesk/ui"; // E6#54c：共享控件走 @linkdesk/ui
+// 子路径取常量（根入口会把构建工具链 vite/rollup 一起打进插件包）——见 navigation.ts 同处说明
+import { SHELL_COMMANDS } from "@linkdesk/plugin-sdk/shell-commands";
 import type { ExplorerItem } from "../../services/FileTreeModel";
 import { extensionWithDot } from "../../utils/pathUtils";
 
@@ -34,6 +36,9 @@ const FileTreeContextMenu: React.FC<FileTreeContextMenuProps> = ({ item, anchor,
 
   // F1（T2 · 第 3 波）E13：「打开方式…」在无 handler 时隐藏——右键时刻现读一次 handler 数。
   // undefined = 未定（IPC 未回）/旧壳缺面/无扩展名 ⇒ `when` 判假、项隐藏（降级口径 = 不显示该项）。
+  // 纠正案 4.5：面板与数据组装转正到壳后，本项还多一个前置——**宿主命令在册**。0.2.47 的壳有
+  // `listHandlersFor` 面、却没有 `workbench.action.openWith` ⇒ 只查 handler 会留下「点了没反应」
+  // 的死钮（E17/E39）。命令注册面是运行时事实，⛔ 不用版本号硬编码顶替（同 02 C1.6 的编辑器口径）。
   const [hasHandler, setHasHandler] = useState<boolean | undefined>(undefined);
   useEffect(() => {
     if (!resourceExtname || typeof window.linkdesk?.fileAssociation?.listHandlersFor !== "function") {
@@ -41,14 +46,21 @@ const FileTreeContextMenu: React.FC<FileTreeContextMenuProps> = ({ item, anchor,
       return;
     }
     let cancelled = false;
-    window.linkdesk.fileAssociation
+    const handlersReady = window.linkdesk.fileAssociation
       .listHandlersFor(resourceExtname)
-      .then((rows: unknown) => {
-        if (!cancelled) setHasHandler(Array.isArray(rows) && rows.length > 0);
-      })
-      .catch(() => {
-        if (!cancelled) setHasHandler(undefined);
-      });
+      .then((rows: unknown) => Array.isArray(rows) && rows.length > 0)
+      .catch(() => false);
+    const hostCommandReady = (async () => {
+      try {
+        const list = await window.linkdesk.commands?.getCommands?.();
+        return Array.isArray(list) && list.some((c) => c?.id === SHELL_COMMANDS.openWith);
+      } catch {
+        return false;
+      }
+    })();
+    void Promise.all([handlersReady, hostCommandReady]).then(([hasRows, hasCommand]) => {
+      if (!cancelled) setHasHandler(hasRows && hasCommand);
+    });
     return () => {
       cancelled = true;
     };
