@@ -1,25 +1,31 @@
 {
   "version": "1",
-  "updatedAt": "2026-10-05T16:48:23.816Z",
+  "updatedAt": "2026-10-06T18:05:22.736Z",
   "plugins": [
     {
       "id": "file-tree",
       "name": "文件树",
-      "version": "1.0.29",
+      "version": "1.0.30",
       "description": "浏览和管理文件——对标 VS Code 资源管理器",
       "author": {
         "name": "官方"
       },
-      "icon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.29/resources/icon-bar.svg",
+      "icon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.30/resources/icon-bar.svg",
       "iconSource": "url",
-      "marketIcon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.29/resources/icon.svg",
+      "marketIcon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.30/resources/icon.svg",
       "marketIconSource": "url",
       "minAppVersion": "0.2.20",
-      "readmeUrl": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.29/README.md",
-      "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.29/file-tree.linkdesk-plugin",
-      "size": 46718,
-      "publishedAt": "2026-10-05T16:48:23.816Z",
+      "readmeUrl": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.30/README.md",
+      "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.30/file-tree.linkdesk-plugin",
+      "size": 48489,
+      "publishedAt": "2026-10-06T18:05:22.736Z",
       "versions": [
+        {
+          "version": "1.0.30",
+          "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.30/file-tree.linkdesk-plugin",
+          "publishedAt": "2026-10-06T18:05:22.736Z",
+          "changelog": "- **两个筛选框改用共享件 `InlineInput`（D1 翻案 · 判据 A）**：「要包含的文件」／「要排除的文件」原是本仓自绘 `<input>`——外观、22px 紧凑高、焦点环、底色全在 `SearchView.css` 里自己维护（1.0.24 还在给它补圆角）。现整只换共享件：**外观／尺寸／焦点环／`aria-label` 归 `@linkdesk/ui`，壳升一次所有插件跟随**；本仓 CSS 只剩一句「兄弟等分」（`flex:1 ＋ min-width:0`——input 的 min-content 是 `size` 属性宽度，不给 0 会撑破侧栏），自绘那五条声明整段删除。接线照同族既有写法（C5 卡内过滤框）：`onChange` 即时回灌 ＋ `syncValue`（Esc → `onCancel` 清父侧值时框里跟着**真清空**）＋ `onConfirm` 空实现（blur 那一下与 `onChange` 是同一笔）。顺带补上此前**完全没有**的无障碍名——过滤框没有可见 label，只有 placeholder。\n- **搜索历史下拉改走共享浮层 `OverlayPortal`——与右键菜单／通知面板同一套磨砂**：下拉原是本行内 `position:absolute` 的自绘面板，**不进 `#ld-float-layer`**；玻璃模式下 `--bg-card` 被合成半透明、又没有 `backdrop-filter` 兜底 ⇒ 背后内容直接透出、前后字叠成一片。现 portal 进池侧浮层：**结构隔离地板按 DOM 深度发磨砂**（`#ld-float-layer > * > [data-overlay-wrapper] > 表面`），**插件侧零私有磨砂配方**。定位改按字段壳 `getBoundingClientRect()` 算 fixed 坐标（顶边留 30px 拖拽区下限）；补 `--shadow-pop`（浮层族契约，选择框下拉同款）。交互零改动：聚焦开／失焦关／Esc 与外部点击关（`onClose` ＋ `triggerRef`）／点选历史项回填。\n- **壳侧同笔（另仓，随壳批次下发）**：`InlineInput` 的 `isActive` 是一次性 latch，此前只支持「挂载即编辑、确认即卸载」（rename 语义）；**常驻**过滤框二次聚焦后 blur 不进确认分支、退出清理 effect 也不再跑 ⇒ `inputFocus` ＋ `keybindingCapture` 永久卡 `true`，而 `captureActive=true` 会让 `KeybindingRegistry` 吞掉**全部**全局快捷键。壳仓已在聚焦时复位 latch ＋ 补回归测试（去掉那一行，新测试即红）。⚠️ 该缺陷在**同族既有用法上就存在**（设置页「默认打开方式」卡内过滤框），本笔一并治好。\n- 依赖随共享件升级：`@linkdesk/ui` ^0.2.13 → **^0.2.53**（`syncValue` ／ `ariaLabel` ／ `OverlayPortal` 的承载版本）。\n- **读数**：`npx tsc --noEmit` 零错误 · `npm run verify` 九段全绿 · `npm run test` 16 文件 149 例全绿 · `npm run build` 产出 **46.2 KB**（4 表面）· 自绘残留 0（`grep -rn \"file-tree-search-filter-input\" src` = 0）· 浮层深度选择器 jsdom `matches()` 实测：深度 3 = `true` ／ 深度 2 = `false` ／ 包装盒 = `false`——磨砂确实落在下拉表面上。"
+        },
         {
           "version": "1.0.29",
           "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.29/file-tree.linkdesk-plugin",
@@ -47,8 +53,7 @@
         {
           "version": "1.0.25",
           "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.25/file-tree.linkdesk-plugin",
-          "publishedAt": "2026-10-04T15:14:06.503Z",
-          "changelog": "- **配置项行名短名**（配置项短名案）：设置页「资源管理器」组 18 条设置此前行名只能裸显英文配置键，现补声明式短名（如 `sortOrder` → 「排序方式」、`compactFolders` → 「紧凑文件夹」、`external.windowsExec` → 「外部终端」），中文原文即 i18n key，英文界面走本仓 i18n 译名。\n- **枚举下拉不裸显英文值**：`sortOrder`（6 档）与 `incrementalNaming`（2 档）此前无 `enumDescriptions`，下拉直接显 `foldersNestsFiles` / `disabled` 这类英文值——现补对象形态显示名（「文件优先」「重名自动编号」等），并补英译。\n- 第三方存量声明不受影响：无短名者照旧回退显配置键。"
+          "publishedAt": "2026-10-04T15:14:06.503Z"
         },
         {
           "version": "1.0.24",
