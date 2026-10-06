@@ -1,5 +1,13 @@
 # 更新日志
 
+## v1.0.30（2026-10-07）
+
+- **两个筛选框改用共享件 `InlineInput`（D1 翻案 · 判据 A）**：「要包含的文件」／「要排除的文件」原是本仓自绘 `<input>`——外观、22px 紧凑高、焦点环、底色全在 `SearchView.css` 里自己维护（1.0.24 还在给它补圆角）。现整只换共享件：**外观／尺寸／焦点环／`aria-label` 归 `@linkdesk/ui`，壳升一次所有插件跟随**；本仓 CSS 只剩一句「兄弟等分」（`flex:1 ＋ min-width:0`——input 的 min-content 是 `size` 属性宽度，不给 0 会撑破侧栏），自绘那五条声明整段删除。接线照同族既有写法（C5 卡内过滤框）：`onChange` 即时回灌 ＋ `syncValue`（Esc → `onCancel` 清父侧值时框里跟着**真清空**）＋ `onConfirm` 空实现（blur 那一下与 `onChange` 是同一笔）。顺带补上此前**完全没有**的无障碍名——过滤框没有可见 label，只有 placeholder。
+- **搜索历史下拉改走共享浮层 `OverlayPortal`——与右键菜单／通知面板同一套磨砂**：下拉原是本行内 `position:absolute` 的自绘面板，**不进 `#ld-float-layer`**；玻璃模式下 `--bg-card` 被合成半透明、又没有 `backdrop-filter` 兜底 ⇒ 背后内容直接透出、前后字叠成一片。现 portal 进池侧浮层：**结构隔离地板按 DOM 深度发磨砂**（`#ld-float-layer > * > [data-overlay-wrapper] > 表面`），**插件侧零私有磨砂配方**。定位改按字段壳 `getBoundingClientRect()` 算 fixed 坐标（顶边留 30px 拖拽区下限）；补 `--shadow-pop`（浮层族契约，选择框下拉同款）。交互零改动：聚焦开／失焦关／Esc 与外部点击关（`onClose` ＋ `triggerRef`）／点选历史项回填。
+- **壳侧同笔（另仓，随壳批次下发）**：`InlineInput` 的 `isActive` 是一次性 latch，此前只支持「挂载即编辑、确认即卸载」（rename 语义）；**常驻**过滤框二次聚焦后 blur 不进确认分支、退出清理 effect 也不再跑 ⇒ `inputFocus` ＋ `keybindingCapture` 永久卡 `true`，而 `captureActive=true` 会让 `KeybindingRegistry` 吞掉**全部**全局快捷键。壳仓已在聚焦时复位 latch ＋ 补回归测试（去掉那一行，新测试即红）。⚠️ 该缺陷在**同族既有用法上就存在**（设置页「默认打开方式」卡内过滤框），本笔一并治好。
+- 依赖随共享件升级：`@linkdesk/ui` ^0.2.13 → **^0.2.53**（`syncValue` ／ `ariaLabel` ／ `OverlayPortal` 的承载版本）。
+- **读数**：`npx tsc --noEmit` 零错误 · `npm run verify` 九段全绿 · `npm run test` 16 文件 149 例全绿 · `npm run build` 产出 **46.2 KB**（4 表面）· 自绘残留 0（`grep -rn "file-tree-search-filter-input" src` = 0）· 浮层深度选择器 jsdom `matches()` 实测：深度 3 = `true` ／ 深度 2 = `false` ／ 包装盒 = `false`——磨砂确实落在下拉表面上。
+
 ## v1.0.29（2026-10-05）
 
 - **清掉 `anchor` 死参（随宿主面板归一）**：宿主「打开方式」面板自 2026-10-05 起**一律居中＋遮罩**（锚定态废止，`OpenWithRequest.anchor` 已标 `@deprecated`、宿主侧不再消费）⇒ 本仓转发时不再计算、也不再传 `anchor`（右键菜单上下文与 `file-tree.openWith` 命令各清一处）。**零可见变化**——面板本来就已经恒居中，此前传了也被宿主忽略；右键菜单自身的定位不受影响（仍按 `event.clientX / clientY` 落在指针处）。契约字段宿主侧仍保留（禁减已发布面），故本仓只是**不再使用**，⛔ 不是删了别人的东西。

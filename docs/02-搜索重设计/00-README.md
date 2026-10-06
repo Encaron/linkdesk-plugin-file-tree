@@ -5,6 +5,8 @@
 > **状态：✅ 已落地＋实机验证成功（2026-10-03）——file-tree **1.0.24**（案A 零件版全落＋筛选框补刀）：插件仓 `5598f83` 已推 · [GitHub Release v1.0.24](https://github.com/Encaron/linkdesk-plugin-file-tree/releases/tag/v1.0.24) · 官方目录已收录（3c3f682）· 出厂种子已刷新（`sync:bundled --latest`）· **用户实机验证成功**（进软件「插件市场 → 检查更新」装 1.0.24 后走查通过）。壳仓零接触。**
 > 病灶已定位到可核对的 file:line 证据；改案两案见 [01-设计图](01-设计图.html) §③，决策点 D1–D4 摘在本文 §五。
 
+> **后续（2026-10-07，file-tree 1.0.30）：§五 D1 已翻案**——两个筛选框收共享件 `InlineInput`、搜索历史下拉进共享浮层 `OverlayPortal`（拿右键菜单那套磨砂）。判据与读数接在本文 **§六.6**。
+
 ## 一、你令的原话（2026-10-03）
 
 > 「1. 这个应该放入 05-插件更新，这个你同意与否？ 2. 文件树插件在侧栏的第二个注册 section"搜索"，它的 ui 展示并不好——2.1 它是不是插件自己画的输入框之类的？没有使用软件共享组件？我看它不随着圆角之类的变化；2.2 使用 ui 引导、易用性非常差，举个例子，替换没有按钮边缘，看着不像按钮，反正很别扭。3. 其次，侧栏的控件本身就不宽。」
@@ -75,6 +77,24 @@
 - **发版链**：插件仓 `6eeed79` 已推（代理）→ SDK publish `--yes`（LINKDESK_GITHUB_TOKEN=gh auth token）→ [Release v1.0.23](https://github.com/Encaron/linkdesk-plugin-file-tree/releases/tag/v1.0.23)（asset 46,983 字节）→ 官方目录收录 `323f569` 已推 → 壳仓 `sync:bundled --latest` 种子刷新（「出厂种子与账一致」）。
 - **档案归宿**：2026-10-03 用户实机验证成功 ⇒ **同日已归还本插件仓 `docs/02-搜索重设计/`**（本夹）；旧档 `01-打开文件夹入口/` 已归整为子夹、`docs/` 不再平铺（归整记录见 [../00-README.md](../00-README.md) 顶部）。
 - **补刀 1.0.24（同日）**：实机走查发现**筛选输入框（「要包含的文件」／「要排除的文件」）仍未接圆角**——病灶同源但当年不在证据清单（它们不是「写死圆角」而是**连 `border-radius` 声明都没有**，恒直角；`SearchToolbar.tsx` 也整只在「三件 tsx」授权面外）。修＝纯 CSS：`.file-tree-search-filter-input` 补 `var(--radius-sm)` ＋ 底色 `--bg-card`→`--bg-input` ＋ 聚焦 accent 边＋2px 焦点环（[1.0.24 Release](https://github.com/Encaron/linkdesk-plugin-file-tree/releases/tag/v1.0.24)，收录 `3c3f682`）。同文件「替换／折叠全部」小按钮复用 `.file-tree-search-option-btn`，1.0.23 已随选项钮 token 化。
+
+## 六.6 D1 翻案：过滤框收共享件 ＋ 历史下拉进浮层（2026-10-07，file-tree 1.0.30）
+
+**判定变了，结论就得跟着变**——§五 D1「输入框本地对齐 `.ldk-input` 契约、不新增壳零件」与 §六「⛔ 不动壳仓」在本笔翻案（§六 自己写了例外条件：**D1 若翻案才例外**）。翻案靠三条新事实，不是靠心情：
+
+| # | 新事实 | 对 D1 的作用 |
+|:--:|:--|:--|
+| 1 | **判据 A（硬约束 28）现行**：消费**宿主声明**的控件住壳或 `@linkdesk/ui`；「先放插件、等第二个再共享」已废止 | 当年「本地对齐契约」的写法**现在本身就不合规**——不是「收益薄」的问题，是**归属**问题 |
+| 2 | 共享件真身已在位，且**同族用法已跑通**：`InlineInput` 就是通用文本输入（本插件 rename 早在用）；C5 卡内过滤框已把「常驻过滤框」这条用法走通（`syncValue` ＋ `ariaLabel` 两件加性 prop 正是为它加的） | **不需要「另立壳侧件」**——用现成共享件即可：成本从「造件」降到「换用」 |
+| 3 | 1.0.24 的补刀只把**症状**压回去（本地补圆角）；病灶照旧——同一份输入框外观在插件与共享层各维护一份 | 共享件接住圆角后，「本地各画一份」的**最后一个理由**也消失了 |
+
+**落地两面**：
+
+- **两个筛选框 → 共享 `InlineInput`（`size="compact"`）**：外观／尺寸／焦点环／`aria-label` 全归共享件；本仓 CSS 从 5 条自绘声明（`border`／`radius`／`background`／`outline`／focus 环）降到 1 条「兄弟等分」（`flex:1 ＋ min-width:0`）。接线照 C5 同一写法：`onChange` 即时回灌 ＋ `syncValue`（Esc → `onCancel` 清父侧值时框里**真清空**）＋ `onConfirm` 空实现（blur 与 `onChange` 是同一笔）。顺带补上此前完全没有的无障碍名（过滤框没有可见 label，只有 placeholder）。**顶上的搜索框与替换框不换**——D2 的「选项钮在框内」与 D6 的「幽灵字段壳」都是共享件当前没有的形态，要换得先给共享件加变体，另案。
+- **搜索历史下拉 → 共享 `OverlayPortal`**：自绘 `position:absolute` 面板**不进 `#ld-float-layer`**，于是玻璃模式下 `--bg-card` 被合成半透明、又没有 `backdrop-filter` 兜底 ⇒ 背后内容直接透出、前后字叠成一片（用户 2026-10-07 实机报的就是这条）。改 portal 进浮层后，**结构隔离地板按 DOM 深度发磨砂**（`#ld-float-layer > * > [data-overlay-wrapper] > 表面`）——与右键菜单／通知面板／选择框下拉**同一套材料**，插件侧**零私有磨砂配方**。定位改按字段壳 `getBoundingClientRect()` 算 fixed 坐标（顶边留 30px 拖拽区下限，硬约束 18）；补 `--shadow-pop`（浮层族契约）。
+- **壳侧同笔（另仓，随壳批次下发）**：`InlineInput` 的 `isActive` 是一次性 latch——此前只支持「挂载即编辑、确认即卸载」（rename 语义）；**常驻**过滤框二次聚焦后 blur 不进确认分支、退出清理 effect 也不再跑 ⇒ `inputFocus` ＋ `keybindingCapture` 永久卡 `true`，而 `captureActive=true` 会让 `KeybindingRegistry` 吞掉**全部**全局快捷键（`dispatch.ts` `return false`）。壳仓已改「聚焦时复位 latch」＋ 补回归测试（去掉那一行新测试即红）。⚠️ 该缺陷在**同族既有用法（设置页「默认打开方式」卡内过滤框）上就已存在**，本笔一并治好。
+- **读数**：`npx tsc --noEmit` 零错误 · `npm run verify` 九段全绿 · `vitest run` 16 文件 **149 例**全绿 · `npm run build` **46.2 KB**（4 表面）· `grep -rn "file-tree-search-filter-input" src` = **0** · 浮层深度选择器 jsdom `matches()` 实测：深度 3 = `true` ／ 深度 2 = `false` ／ 包装盒 = `false`（磨砂确实落在下拉表面上）。
+- **遗留（另案，⛔ 不在本笔）**：① 搜索框／替换框若要共享件化，先给 `InlineInput` 加「内嵌动作位」与「幽灵态」两个变体；② 历史下拉的滚动条拖拽仍会因输入框失焦而收起（既有行为，滚轮可滚）。
 
 ## 七、本夹文件
 

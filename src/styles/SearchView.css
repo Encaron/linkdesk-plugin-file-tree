@@ -18,7 +18,7 @@
   display: flex;
   gap: 8px;
   align-items: center;
-  position: relative;
+  /* 原先挂 position: relative 只为给行内 absolute 的历史下拉当锚——下拉改走浮层后此声明无主，摘除 */
 }
 
 /* 字段壳——契约对齐壳侧 .ldk-input（index.css:252）：bg-input / border / radius-sm / focus accent＋环。
@@ -100,23 +100,13 @@
   gap: 4px;
 }
 
-.file-tree-search-filter-input {
+/* 过滤框＝共享件 InlineInput（外观/尺寸/焦点环全归 @linkdesk/ui，本件只摆位）。
+   1.0.24 那套自绘 border / radius / bg-input / focus 环一条不再需要——同一契约由共享件一份提供，
+   壳升一次全部跟随。这里只补「兄弟等分」：`.ldk-inline-input` 自带 width:100%，两个并排须
+   `flex:1 ＋ min-width:0` 才肯缩（input 的 min-content 是 size 属性宽度，不给 0 就撑破侧栏）。 */
+.file-tree-search-filter-row > .ldk-inline-input {
   flex: 1;
   min-width: 0;
-  height: calc(22px * var(--ui-scale)); /* E5.8 Phase 12 #173：容器乘 scale */
-  padding: 0 4px;
-  border: 1px solid var(--border); /* E5.8#128.8：幽灵链 → 真实 border */
-  border-radius: var(--radius-sm); /* 1.0.24：原先连 radius 声明都没有（恒直角）→ 对齐 .ldk-input 契约跟主题走 */
-  background: var(--bg-input); /* E5.8#128.8：幽灵 --input-bg/--bg-primary → 真实 bg-card（同行 file-tree-search-input 先例） */
-  color: var(--text-secondary);
-  font-size: var(--font-size-xs); /* E5.8 Phase 12 #173：11→xs */
-  outline: none;
-  transition: border-color 150ms, box-shadow 150ms;
-}
-
-.file-tree-search-filter-input:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 22%, transparent); /* 1.0.24：对齐字段壳的焦点环 */
 }
 
 /* ── 工具栏 ── */
@@ -262,15 +252,16 @@
 
 /* ── 搜索历史 ── */
 
+/* 历史下拉——表面进池侧 #ld-float-layer（OverlayPortal），fixed 坐标由工作件按字段壳矩形算成
+   inline style；磨砂不在本件：浮层「结构隔离地板」按 DOM 深度发（wrapper 内表面），进层即得，
+   与右键菜单／通知面板／选择框下拉同一套材料——插件侧零私有磨砂配方。 */
 .file-tree-search-history {
-  position: absolute;
-  top: calc(100% + 4px); /* 锚定字段壳下缘——字段高改内容驱动后不再能用 28px 死值 */
-  left: 0;
-  right: 0;
+  position: fixed;
   background: var(--bg-card); /* E5.8#128.8：幽灵链 --bg-primary fallback 是死路径 → 精简 */
   border: 1px solid var(--border); /* E5.8#128.8：幽灵 --border-color → 真实 border */
   border-radius: var(--radius-sm);
-  z-index: 10;
+  box-shadow: var(--shadow-pop); /* 浮层族契约（SelectBox 下拉同款）——磨砂面靠阴影与身后内容分层 */
+  z-index: var(--z-dropdown);
   max-height: 220px;
   overflow-y: auto;
 }
