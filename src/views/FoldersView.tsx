@@ -120,10 +120,13 @@ const FoldersView: React.FC = () => {
 
   /* ── 打开文件 ── */
   /** 核心逻辑：扩展名 → FileAssociationService → createTab。
-   *  E5#99：未知类型不拦截——交壳 tabs:create handler 统一 toast。 */
+   *  E5#99：未知类型不拦截——交壳 tabs:create handler 统一 toast。
+   *  兜底链修复（2026-10-07）：空扩展名（无后缀 / 点开头）也**照样问宿主**——主进程
+   *  resolveOpenTarget("") 直落角色兜底（text-fallback 挂牌者）。旧写法 `ext ? … : ""`
+   *  把这类文件短路进渲染层兜底 = welcome 欢迎页。 */
   const doOpenFile = useCallback(async (filePath: string, name: string, mode: "preview" | "pin") => {
     const ext = extension(name);
-    const pluginId = ext ? await lk.fileAssociation.getPluginFor(ext) : "";
+    const pluginId = await lk.fileAssociation.getPluginFor(ext);
     tabs?.create(pluginId || "", {
       filePath,
       sourceId: filePath,
