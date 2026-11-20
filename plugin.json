@@ -3,6 +3,8 @@
   "pluginId": "file-tree",
   "name": "文件树",
   "version": "1.0.31",
+  "category": "documents",
+  "categories": ["files"],
   "minAppVersion": "0.2.20",
   "icon": "resources/icon-bar.svg",
   "marketIcon": "resources/icon.svg",
