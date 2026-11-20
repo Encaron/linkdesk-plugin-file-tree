@@ -6,6 +6,10 @@
 
 # 更新日志
 
+## v1.0.32（2026-11-20）
+
+- **分类声明（R4-2.8/2.9）**：`plugin.json` 顶层补 `category: "documents"` ＋ `categories: ["files"]`——商店分类抽屉归位，随本次发版进入官方目录条目。
+
 ## v1.0.30（2026-10-07）
 
 - **两个筛选框改用共享件 `InlineInput`（D1 翻案 · 判据 A）**：「要包含的文件」／「要排除的文件」原是本仓自绘 `<input>`——外观、22px 紧凑高、焦点环、底色全在 `SearchView.css` 里自己维护（1.0.24 还在给它补圆角）。现整只换共享件：**外观／尺寸／焦点环／`aria-label` 归 `@linkdesk/ui`，壳升一次所有插件跟随**；本仓 CSS 只剩一句「兄弟等分」（`flex:1 ＋ min-width:0`——input 的 min-content 是 `size` 属性宽度，不给 0 会撑破侧栏），自绘那五条声明整段删除。接线照同族既有写法（C5 卡内过滤框）：`onChange` 即时回灌 ＋ `syncValue`（Esc → `onCancel` 清父侧值时框里跟着**真清空**）＋ `onConfirm` 空实现（blur 那一下与 `onChange` 是同一笔）。顺带补上此前**完全没有**的无障碍名——过滤框没有可见 label，只有 placeholder。
