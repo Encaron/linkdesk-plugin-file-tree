@@ -1,33 +1,39 @@
 {
   "version": "1",
-  "updatedAt": "2026-11-23T16:39:31.024Z",
+  "updatedAt": "2026-11-23T22:35:38.241Z",
   "plugins": [
     {
       "id": "file-tree",
       "name": "文件树",
-      "version": "1.0.35",
+      "version": "1.0.36",
       "description": "浏览和管理文件——对标 VS Code 资源管理器",
       "author": {
         "name": "Encaron"
       },
-      "icon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.35/resources/icon-bar.svg",
+      "icon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.36/resources/icon-bar.svg",
       "iconSource": "url",
-      "marketIcon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.35/resources/icon.svg",
+      "marketIcon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.36/resources/icon.svg",
       "marketIconSource": "url",
       "minAppVersion": "0.2.20",
       "category": "documents",
       "categories": [
         "files"
       ],
-      "readmeUrl": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.35/README.md",
+      "readmeUrl": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.36/README.md",
       "readmeLocales": {
-        "zh": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.35/README.md",
-        "en": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.35/docs/readme/en.md"
+        "zh": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.36/README.md",
+        "en": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.36/docs/readme/en.md"
       },
-      "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.35/file-tree.linkdesk-plugin",
-      "size": 51935,
-      "publishedAt": "2026-11-23T16:39:31.024Z",
+      "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.36/file-tree.linkdesk-plugin",
+      "size": 51638,
+      "publishedAt": "2026-11-23T22:35:38.241Z",
       "versions": [
+        {
+          "version": "1.0.36",
+          "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.36/file-tree.linkdesk-plugin",
+          "publishedAt": "2026-11-23T22:35:38.241Z",
+          "changelog": "- **路径工具归壳**：`basename/dirname/joinPath/extname/normalize` 全改走壳 `window.linkdesk.path.*`（`utils/hostPath.ts` 单向转入口，本仓零路径实现）；`pathUtils.ts` 只留结构类型与 `splitPath`。\n- **最近文件夹改宿主读取面**：不再跨属主读 `pluginState(\"app\",\"recentFolders\")`——改调 `workspace.getRecentFolders()` ＋ `onDidChangeRecentFolders`（归一化/去重/截断全在壳）。\n- **行高只吃宿主 token**：不再读 `app.uiFontScale` 配置键，改读 `:root` 的 `--ui-scale`，随 `theme:changed` 重算。"
+        },
         {
           "version": "1.0.35",
           "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.35/file-tree.linkdesk-plugin",
@@ -55,8 +61,7 @@
         {
           "version": "1.0.31",
           "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.31/file-tree.linkdesk-plugin",
-          "publishedAt": "2026-10-07T07:15:19.752Z",
-          "changelog": "- **修复：新建的无后缀文档（以及 Makefile 这类无扩展名文件）双击后打开的是「欢迎页」，而不是编辑器**——根因是文件树对「没有扩展名」的文件根本不去问系统该用谁打开，直接短路进了兜底欢迎页。现在一律照常询问，按系统裁决开标签（默认落到编辑器，直接可编辑）。\n- **修复：搜索结果里双击无后缀文件完全没有反应**（同一条短路的另一头）。顺手修了一个潜伏问题：搜索打开此前把**整条路径**（而非文件名）喂给扩展名判断，路径里的目录名带点时（如 `v1.2`）会算出错误的扩展名。\n- 要等软件本体下次发版后才看得到效果；在当前版本软件上行为与从前完全一致（不会更坏）。\n\n# 更新日志"
+          "publishedAt": "2026-10-07T07:15:19.752Z"
         },
         {
           "version": "1.0.30",
