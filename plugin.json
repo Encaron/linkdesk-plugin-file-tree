@@ -2,7 +2,7 @@
   "$schema": "./node_modules/@linkdesk/plugin-sdk/schemas/plugin.schema.json",
   "pluginId": "file-tree",
   "name": "文件树",
-  "version": "1.0.34",
+  "version": "1.0.35",
   "category": "documents",
   "categories": [
     "files"
@@ -524,6 +524,13 @@
           "title": "自定义终端命令"
         }
       }
+    }
+  },
+  "readme": {
+    "default": "README.md",
+    "locales": {
+      "zh": "README.md",
+      "en": "docs/readme/en.md"
     }
   }
 }
