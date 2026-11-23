@@ -61,3 +61,21 @@ export function notifyFailure(op: string, failures: FailureItem[]): void {
   // 常驻（E6#73j 定案：失败是待办，8 秒自灭等于没报）——用户可以看完再关
   void show(message, { type: "error", source: SOURCE, persistent: true });
 }
+
+/** 壳轻 Toast 的窄结构（只用到 show；旧壳无此面） */
+interface ToastsLike {
+  show(options: { message: string; severity?: "info" | "success" | "warning"; source?: string }): Promise<unknown>;
+}
+
+/**
+ * 路过型提示（**不是失败**）——引导句 / 一次性告知。优先轻 Toast，
+ * 旧壳（< 0.2.55）无 `toasts` 面 ⇒ 回退通知面板，保证提示不消失。
+ */
+export function notifyHint(message: string): void {
+  const toasts = (lk() as unknown as { toasts?: ToastsLike } | undefined)?.toasts;
+  if (toasts?.show) {
+    void toasts.show({ message, severity: "info", source: SOURCE });
+    return;
+  }
+  void lk()?.notifications?.show?.(message, { type: "info", source: SOURCE });
+}

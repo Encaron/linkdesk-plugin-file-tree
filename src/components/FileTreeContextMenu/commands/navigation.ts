@@ -7,6 +7,7 @@ import i18n from "i18next";
 // 宿主命令面走 SDK **子路径**：根入口 `@linkdesk/plugin-sdk` 还 re-export 构建工具（vite.config → vite），
 // 插件源码一旦从根入口取值，rollup 会把整条构建链打进 .linkdesk-plugin（Windows 上要解析 fsevents ⇒ build 红）。
 import { openWith } from "@linkdesk/plugin-sdk/shell-commands";
+import { notifyHint } from "../../../services/FileTreeNotify";
 import { placeholder, type FileMenuContext } from "./shared";
 
 const lk = window.linkdesk;
@@ -89,7 +90,7 @@ export function registerNavigationCommands(): void {
       // 命令面板 / 老设置页入口——作用于聚焦项（若为文件）
       const focused = h()?.getFocusedUri() ?? null;
       if (!focused) {
-        lk.notifications?.show?.(i18n.t("没有选中的文件——请先在文件树中选中一个文件"), { type: "info" });
+        notifyHint(i18n.t("没有选中的文件——请先在文件树中选中一个文件"));
         return;
       }
       uri = focused;
