@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from "react";
 import type { MutableRefObject } from "react";
 import type { FileTreeModel } from "../../services/FileTreeModel";
 import type { FileExcludeFilter } from "../../services/FileExcludeFilter";
-import { joinPath } from "../../utils/pathUtils";
+import { joinPath } from "../../utils/hostPath";
 
 const lk = window.linkdesk;
 

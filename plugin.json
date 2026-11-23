@@ -2,7 +2,7 @@
   "$schema": "./node_modules/@linkdesk/plugin-sdk/schemas/plugin.schema.json",
   "pluginId": "file-tree",
   "name": "文件树",
-  "version": "1.0.35",
+  "version": "1.0.36",
   "category": "documents",
   "categories": [
     "files"

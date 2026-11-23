@@ -1,7 +1,7 @@
 /**
  * clipboard 命令组——剪切 / 复制 / 粘贴 / 复制路径（E6#87a 二次拆分）。
  */
-import { dirname, normalizePath } from "../../../utils/pathUtils";
+import { dirname, normalizePath } from "../../../utils/hostPath";
 import { fileTreeClipboard } from "../../../services/FileTreeClipboard";
 import { executeSafeDrop } from "../../../services/FileTreeDnD";
 import { h } from "../host-bridge";

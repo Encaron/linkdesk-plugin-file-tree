@@ -3,7 +3,7 @@
  */
 
 import type { SearchWireMatch } from "@linkdesk/contracts";
-import { basename, extension } from "../../utils/pathUtils";
+import { basename, extension } from "../../utils/hostPath";
 
 const lk = window.linkdesk;
 

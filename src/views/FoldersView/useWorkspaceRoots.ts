@@ -5,7 +5,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { MutableRefObject } from "react";
 import { FileTreeModel } from "../../services/FileTreeModel";
 import { FileExcludeFilter } from "../../services/FileExcludeFilter";
-import { joinPath, normalizePath } from "../../utils/pathUtils";
+import { joinPath, normalizePath } from "../../utils/hostPath";
 import { expandedUrisStateKey } from "../../utils/expandedUrisStateKey"; // E6#47e 多窗维度
 import { fsEmitter } from "./fsWatcher";
 import type { WorkspaceFolderDto } from "./types";

@@ -31,7 +31,7 @@ import { FileTreeModel } from "../services/FileTreeModel";
 import type { FileTreeHandle } from "../components/FileTree";
 import type { ExplorerItem } from "../services/FileTreeModel";
 import { FileExcludeFilter } from "../services/FileExcludeFilter";
-import { extension } from "../utils/pathUtils";
+import { extension } from "../utils/hostPath";
 import { useWorkspaceRoots } from "./FoldersView/useWorkspaceRoots";
 import { useFsChangeRefresh } from "./FoldersView/useFsChangeRefresh";
 import { useExplorerConfig } from "./FoldersView/useExplorerConfig";

@@ -2,7 +2,7 @@
  * node——ExplorerItem 的构造与排序（E6#87a 从 FileTreeModel.ts 拆出）。
  */
 import type { FileEntry } from "@linkdesk/contracts";
-import { normalizePath, extension } from "../../utils/pathUtils";
+import { normalizePath, extension } from "../../utils/hostPath";
 import type { ExplorerItem, SortOrder } from "./types";
 
 /** E4V#7: 6 种排序——对标 VS Code SortOrder enum */

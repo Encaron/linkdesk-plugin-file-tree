@@ -1,7 +1,7 @@
 /**
  * navigation 命令组——打开 / 定位 / 搜索 / 工作区（E6#87a 二次拆分）。
  */
-import { dirname, extension, normalizePath } from "../../../utils/pathUtils";
+import { dirname, extension, normalizePath } from "../../../utils/hostPath";
 import { h, getOpenFileFn } from "../host-bridge";
 import i18n from "i18next";
 // 宿主命令面走 SDK **子路径**：根入口 `@linkdesk/plugin-sdk` 还 re-export 构建工具（vite.config → vite），

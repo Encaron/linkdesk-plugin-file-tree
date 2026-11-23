@@ -9,7 +9,7 @@ import { useState, useCallback, useRef } from "react";
 import type { ExplorerItem } from "../FileTreeModel";
 // E6#73m K2：失败出口——写操作的异常必须有用户可见的那一头（本插件唯一出口，别处别再开第二条）
 import i18n from "i18next";
-import { dirname } from "../../utils/pathUtils";
+import { dirname } from "../../utils/hostPath";
 import { notifyFailure, errText, nameOf } from "../FileTreeNotify";
 import { getDropTargetIndex, resolveDropTarget } from "./dropTarget";
 import { executeSafeDrop } from "./execute";

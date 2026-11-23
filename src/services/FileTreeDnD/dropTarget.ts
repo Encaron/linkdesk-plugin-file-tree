@@ -3,7 +3,7 @@
  */
 import type { ExplorerItem } from "../FileTreeModel";
 import { getScaledTreeItemHeight } from "../../utils/layoutTokens";
-import { dirname } from "../../utils/pathUtils";
+import { dirname } from "../../utils/hostPath";
 import type { FlatItem } from "../../utils/pathUtils";
 import type { DropTarget } from "./types";
 

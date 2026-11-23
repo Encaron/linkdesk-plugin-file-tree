@@ -3,7 +3,8 @@
  *
  * `_expanded` 集合按引用传入（见 host.ts）——读走 has，reveal 的故障回滚走 delete。
  */
-import { normalizePath, splitPath } from "../../utils/pathUtils";
+import { splitPath } from "../../utils/pathUtils";
+import { normalizePath } from "../../utils/hostPath";
 import { toExplorerItem } from "./node";
 import type { TreeHost } from "./host";
 import type { ExplorerItem } from "./types";

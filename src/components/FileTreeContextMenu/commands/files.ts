@@ -1,7 +1,7 @@
 /**
  * files 命令组——新建 / 刷新 / 重命名 / 删除（E6#87a 二次拆分）。
  */
-import { dirname, joinPath } from "../../../utils/pathUtils";
+import { dirname, joinPath } from "../../../utils/hostPath";
 import i18n from "i18next";
 import { notifyFailure, errText, nameOf, type FailureItem } from "../../../services/FileTreeNotify";
 import { h } from "../host-bridge";

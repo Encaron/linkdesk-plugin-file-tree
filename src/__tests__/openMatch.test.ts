@@ -20,6 +20,27 @@ function installWindow(answer: (ext: string) => Promise<string | undefined>): vo
   pluginFor = vi.fn(answer);
   (window as unknown as { linkdesk: unknown }).linkdesk = {
     fileAssociation: { getPluginFor: pluginFor },
+    // 2026-11-24 F1：openMatch 经 hostPath 调壳 path.*——夹具按宿主实现（buildPath）供最小面；
+    // 本用例只判 openMatch 的兜底链，不重复测 path 语义（壳侧另有对照用例）。
+    path: {
+      normalize: (p: string) => p.replace(/\\/g, "/"),
+      join: (...parts: string[]) =>
+        parts.map((p) => p.replace(/\\/g, "/")).join("/").replace(/\/+/g, "/"),
+      basename: (p: string) => {
+        const s = p.replace(/\\/g, "/").split("/");
+        return s[s.length - 1] || "";
+      },
+      dirname: (p: string) => {
+        const s = p.replace(/\\/g, "/").split("/");
+        s.pop();
+        return s.join("/") || ".";
+      },
+      extname: (p: string) => {
+        const b = p.replace(/\\/g, "/").split("/").pop() || "";
+        const i = b.lastIndexOf(".");
+        return i > 0 ? b.slice(i) : "";
+      },
+    },
     tabs: {
       create: (type: string, opts: { filePath: string }) => {
         created.push({ type, filePath: opts.filePath });

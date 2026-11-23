@@ -20,7 +20,8 @@
 import type { FileEntry } from "@linkdesk/contracts";
 import type { FileExcludeFilter } from "../FileExcludeFilter";
 import { CompactController } from "../CompactController";
-import { basename, splitPath, normalizePath } from "../../utils/pathUtils";
+import { splitPath } from "../../utils/pathUtils";
+import { basename, normalizePath } from "../../utils/hostPath";
 import { MiniEmitter } from "./emitter";
 import { toExplorerItem, sortItems } from "./node";
 import { getAncestorsOf, revealToUri } from "./locate";

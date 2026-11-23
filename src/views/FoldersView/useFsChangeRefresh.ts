@@ -8,7 +8,7 @@
  */
 import { useEffect, useRef } from "react";
 import type { FileTreeModel } from "../../services/FileTreeModel";
-import { normalizePath } from "../../utils/pathUtils";
+import { normalizePath } from "../../utils/hostPath";
 import { fsEmitter } from "./fsWatcher";
 
 const lk = window.linkdesk;

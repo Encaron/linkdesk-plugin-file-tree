@@ -5,7 +5,7 @@
  *   - `iconTheme:changed` → 重建 resolver + 触发节点重渲染
  *   - 活跃工作区（E4V#35e 根节点 accent 色）
  *   - `file-tree.compactFolders` → 写 flatten 缓存 + rerender
- *   - `app.uiFontScale` → 行高运行时桥（E5.8 Phase 12 #172）
+ *   - 宿主 CSS token `--ui-scale` → 行高（2026-11-24 F3：不再读 app.uiFontScale 配置键）
  *   - `file-tree.expandOnClick` → 点击目录行是否 toggle
  */
 import { useEffect, useState } from "react";
@@ -16,10 +16,20 @@ import type { IconThemeMappings } from "@linkdesk/contracts";
 
 const lk = window.linkdesk;
 
-/** E5.8 Phase 12 #172: 装载 app.uiFontScale 到 layoutTokens 缓存——行高运行时桥（F2），与 CSS calc(26px*var(--ui-scale)) 精确一致 */
-async function loadUiFontScale(): Promise<void> {
-  const v = await lk.configuration.get("app.uiFontScale");
-  setUiFontScale(typeof v === "number" && Number.isFinite(v) ? v : 100);
+/**
+ * 2026-11-24（F3）：行高比例只吃宿主 CSS 度量 token `--ui-scale`（`:root`，壳 commitTokens 写）。
+ * ⛔ 不再读 `app.uiFontScale` 配置键（那是宿主外观语义；插件读键 = 换宿主键名就静默断）。
+ * 虚拟滚动需要数值 → 从计算样式读 token；token 缺失/坏值 = 1（100%）。
+ */
+function readUiScalePercent(): number {
+  const raw = getComputedStyle(document.documentElement).getPropertyValue("--ui-scale");
+  const scale = Number.parseFloat(raw);
+  return Number.isFinite(scale) && scale > 0 ? Math.round(scale * 100) : 100;
+}
+
+/** 把当前 token 写入 layoutTokens 缓存（与 CSS calc(26px*var(--ui-scale)) 同一乘子） */
+function applyUiScale(): void {
+  setUiFontScale(readUiScalePercent());
 }
 
 export function useTreeConfig(rerender: () => void) {
@@ -52,9 +62,11 @@ export function useTreeConfig(rerender: () => void) {
   // E5.8 Phase 12 #172: 行高运行时桥——app.uiFontScale 变化 → 缓存 + state 更新 → 虚拟滚动按新行高重算
   const [itemHeight, setItemHeight] = useState(getScaledTreeItemHeight);
   useEffect(() => {
-    loadUiFontScale().then(() => setItemHeight(getScaledTreeItemHeight()));
-    return lk.configuration.onChange("app.uiFontScale", (v: unknown) => {
-      setUiFontScale(typeof v === "number" && Number.isFinite(v) ? v : 100);
+    // 初始：读宿主 token；变更：宿主题/字号提交后广播 theme:changed（payload.variables 含 --ui-scale）
+    applyUiScale();
+    setItemHeight(getScaledTreeItemHeight());
+    return lk.events.on("theme:changed", () => {
+      applyUiScale();
       setItemHeight(getScaledTreeItemHeight());
     });
   }, []);

@@ -12,7 +12,7 @@ import { ContextMenu } from "@linkdesk/ui"; // E6#54c：共享控件走 @linkdes
 // 子路径取常量（根入口会把构建工具链 vite/rollup 一起打进插件包）——见 navigation.ts 同处说明
 import { SHELL_COMMANDS } from "@linkdesk/plugin-sdk/shell-commands";
 import type { ExplorerItem } from "../../services/FileTreeModel";
-import { extensionWithDot } from "../../utils/pathUtils";
+import { extensionWithDot } from "../../utils/hostPath";
 
 interface FileTreeContextMenuProps {
   /** 右键的目标节点——null = 空白处右键（仅新建） */

@@ -1,3 +1,9 @@
+## v1.0.36（2026-11-24）
+
+- **路径工具归壳**：`basename/dirname/joinPath/extname/normalize` 全改走壳 `window.linkdesk.path.*`（`utils/hostPath.ts` 单向转入口，本仓零路径实现）；`pathUtils.ts` 只留结构类型与 `splitPath`。
+- **最近文件夹改宿主读取面**：不再跨属主读 `pluginState("app","recentFolders")`——改调 `workspace.getRecentFolders()` ＋ `onDidChangeRecentFolders`（归一化/去重/截断全在壳）。
+- **行高只吃宿主 token**：不再读 `app.uiFontScale` 配置键，改读 `:root` 的 `--ui-scale`，随 `theme:changed` 重算。
+
 ## v1.0.35（2026-11-24）
 
 - **i18n 收口**：命令/设置等 manifest 显示文本补齐英文；宿主按插件命名空间解析显示文本（市场/命令面板/菜单不再自己 t() 插件数据）。
