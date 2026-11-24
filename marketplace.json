@@ -1,33 +1,40 @@
 {
   "version": "1",
-  "updatedAt": "2026-11-23T22:35:38.241Z",
+  "updatedAt": "2026-11-24T21:59:32.290Z",
   "plugins": [
     {
       "id": "file-tree",
       "name": "文件树",
-      "version": "1.0.36",
+      "version": "1.0.37",
       "description": "浏览和管理文件——对标 VS Code 资源管理器",
       "author": {
         "name": "Encaron"
       },
-      "icon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.36/resources/icon-bar.svg",
+      "icon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.37/resources/icon-bar.svg",
       "iconSource": "url",
-      "marketIcon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.36/resources/icon.svg",
+      "marketIcon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.37/resources/icon.svg",
       "marketIconSource": "url",
       "minAppVersion": "0.2.20",
       "category": "documents",
       "categories": [
         "files"
       ],
-      "readmeUrl": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.36/README.md",
+      "readmeUrl": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.37/README.md",
       "readmeLocales": {
-        "zh": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.36/README.md",
-        "en": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.36/docs/readme/en.md"
+        "zh": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.37/README.md",
+        "en": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.37/docs/readme/en.md"
       },
-      "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.36/file-tree.linkdesk-plugin",
-      "size": 51638,
-      "publishedAt": "2026-11-23T22:35:38.241Z",
+      "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.37/file-tree.linkdesk-plugin",
+      "size": 52069,
+      "publishedAt": "2026-11-24T21:59:32.290Z",
       "versions": [
+        {
+          "version": "1.0.37",
+          "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.37/file-tree.linkdesk-plugin",
+          "publishedAt": "2026-11-24T21:59:32.290Z",
+          "changelog": "- AI 门外契约补齐：命令声明补 `risk`/`activation`/`returns`/`example`。",
+          "sha256": "0b2999de148804d4c187ba3e7684e9bb2f3ef6eeadbe0b6c61817713dee9f552"
+        },
         {
           "version": "1.0.36",
           "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.36/file-tree.linkdesk-plugin",
@@ -55,8 +62,7 @@
         {
           "version": "1.0.32",
           "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.32/file-tree.linkdesk-plugin",
-          "publishedAt": "2026-11-20T11:47:41.666Z",
-          "changelog": "- **分类声明（R4-2.8/2.9）**：`plugin.json` 顶层补 `category: \"documents\"` ＋ `categories: [\"files\"]`——商店分类抽屉归位，随本次发版进入官方目录条目。"
+          "publishedAt": "2026-11-20T11:47:41.666Z"
         },
         {
           "version": "1.0.31",
