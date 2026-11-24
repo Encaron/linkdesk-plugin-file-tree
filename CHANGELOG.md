@@ -1,3 +1,7 @@
+## v1.0.37（2026-11-25）
+
+- AI 门外契约补齐：命令声明补 `risk`/`activation`/`returns`/`example`。
+
 ## v1.0.36（2026-11-24）
 
 - **路径工具归壳**：`basename/dirname/joinPath/extname/normalize` 全改走壳 `window.linkdesk.path.*`（`utils/hostPath.ts` 单向转入口，本仓零路径实现）；`pathUtils.ts` 只留结构类型与 `splitPath`。
