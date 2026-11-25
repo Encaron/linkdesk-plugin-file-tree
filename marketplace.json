@@ -1,33 +1,40 @@
 {
   "version": "1",
-  "updatedAt": "2026-11-25T12:00:56.658Z",
+  "updatedAt": "2026-11-25T12:09:23.960Z",
   "plugins": [
     {
       "id": "file-tree",
       "name": "文件树",
-      "version": "1.0.38",
+      "version": "1.0.39",
       "description": "浏览和管理文件——对标 VS Code 资源管理器",
       "author": {
         "name": "Encaron"
       },
-      "icon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.38/resources/icon-bar.svg",
+      "icon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.39/resources/icon-bar.svg",
       "iconSource": "url",
-      "marketIcon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.38/resources/icon.svg",
+      "marketIcon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.39/resources/icon.svg",
       "marketIconSource": "url",
       "minAppVersion": "0.2.20",
       "category": "documents",
       "categories": [
         "files"
       ],
-      "readmeUrl": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.38/README.md",
+      "readmeUrl": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.39/README.md",
       "readmeLocales": {
-        "zh": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.38/README.md",
-        "en": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.38/docs/readme/en.md"
+        "zh": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.39/README.md",
+        "en": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.39/docs/readme/en.md"
       },
-      "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.38/file-tree.linkdesk-plugin",
-      "size": 55741,
-      "publishedAt": "2026-11-25T12:00:56.658Z",
+      "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.39/file-tree.linkdesk-plugin",
+      "size": 56467,
+      "publishedAt": "2026-11-25T12:09:23.960Z",
       "versions": [
+        {
+          "version": "1.0.39",
+          "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.39/file-tree.linkdesk-plugin",
+          "publishedAt": "2026-11-25T12:09:23.960Z",
+          "changelog": "- **rename 三态判据修正**（1.0.38 实测 bug）：只给 `uri` 或只给 `newName` 不再落入行内改名，改回 **EBADARGS**（返回式信封，零副作用）；两者都不给且**无视图**时不再返回可被当成成功的 `interactive:true`，改回 **ENOVIEW**（hint：传 uri+newName 程序化，或先 open-tab file-tree）。两者都不给且有视图仍进入行内改名。",
+          "sha256": "f3655b44dc71af3904c56472ee3c964fda5f637861507a67463567315cac0f15"
+        },
         {
           "version": "1.0.38",
           "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.38/file-tree.linkdesk-plugin",
@@ -57,8 +64,7 @@
         {
           "version": "1.0.34",
           "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.34/file-tree.linkdesk-plugin",
-          "publishedAt": "2026-11-23T13:50:16.740Z",
-          "changelog": "- 圆角改吃宿主 `--radius-*`（零视觉）"
+          "publishedAt": "2026-11-23T13:50:16.740Z"
         },
         {
           "version": "1.0.33",
