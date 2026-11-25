@@ -1,33 +1,40 @@
 {
   "version": "1",
-  "updatedAt": "2026-11-25T12:09:23.960Z",
+  "updatedAt": "2026-11-25T12:13:59.919Z",
   "plugins": [
     {
       "id": "file-tree",
       "name": "文件树",
-      "version": "1.0.39",
+      "version": "1.0.40",
       "description": "浏览和管理文件——对标 VS Code 资源管理器",
       "author": {
         "name": "Encaron"
       },
-      "icon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.39/resources/icon-bar.svg",
+      "icon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.40/resources/icon-bar.svg",
       "iconSource": "url",
-      "marketIcon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.39/resources/icon.svg",
+      "marketIcon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.40/resources/icon.svg",
       "marketIconSource": "url",
       "minAppVersion": "0.2.20",
       "category": "documents",
       "categories": [
         "files"
       ],
-      "readmeUrl": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.39/README.md",
+      "readmeUrl": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.40/README.md",
       "readmeLocales": {
-        "zh": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.39/README.md",
-        "en": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.39/docs/readme/en.md"
+        "zh": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.40/README.md",
+        "en": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.40/docs/readme/en.md"
       },
-      "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.39/file-tree.linkdesk-plugin",
-      "size": 56467,
-      "publishedAt": "2026-11-25T12:09:23.960Z",
+      "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.40/file-tree.linkdesk-plugin",
+      "size": 57739,
+      "publishedAt": "2026-11-25T12:13:59.919Z",
       "versions": [
+        {
+          "version": "1.0.40",
+          "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.40/file-tree.linkdesk-plugin",
+          "publishedAt": "2026-11-25T12:13:59.919Z",
+          "changelog": "- **错误码文档化**：README（中/英）新增「命令错误码」表（EBADARGS/EEXIST/EFS/ECONFLICT/ENOVIEW），逐条写语义与下一步；`rename` 的 describe 描述补 `ENOVIEW` 的 hint（传 uri+newName 程序化，或先 open-tab file-tree）。\n- 明确 `ENOVIEW` 是**插件语义码**，壳的 `EVIEWREQUIRED` 是另一条链路，二者不是同义词——⛔ 插件不抛壳保留码。",
+          "sha256": "a10a2e6a98a15d6b697a9c437c79c8512b2f7e8980cc27321202089227804a19"
+        },
         {
           "version": "1.0.39",
           "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.39/file-tree.linkdesk-plugin",
@@ -58,8 +65,7 @@
         {
           "version": "1.0.35",
           "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.35/file-tree.linkdesk-plugin",
-          "publishedAt": "2026-11-23T16:39:31.024Z",
-          "changelog": "- **i18n 收口**：命令/设置等 manifest 显示文本补齐英文；宿主按插件命名空间解析显示文本（市场/命令面板/菜单不再自己 t() 插件数据）。\n- **README 多语言**：新增 `docs/readme/en.md`，`plugin.json` 声明 `readme.locales`（zh→README.md，en→docs/readme/en.md）；共享图仍住 `resources/`。"
+          "publishedAt": "2026-11-23T16:39:31.024Z"
         },
         {
           "version": "1.0.34",
