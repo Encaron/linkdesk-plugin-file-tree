@@ -1,33 +1,40 @@
 {
   "version": "1",
-  "updatedAt": "2026-11-25T16:54:33.269Z",
+  "updatedAt": "2026-11-25T17:57:04.687Z",
   "plugins": [
     {
       "id": "file-tree",
       "name": "文件树",
-      "version": "1.0.42",
+      "version": "1.0.43",
       "description": "浏览和管理文件——对标 VS Code 资源管理器",
       "author": {
         "name": "Encaron"
       },
-      "icon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.42/resources/icon-bar.svg",
+      "icon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.43/resources/icon-bar.svg",
       "iconSource": "url",
-      "marketIcon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.42/resources/icon.svg",
+      "marketIcon": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.43/resources/icon.svg",
       "marketIconSource": "url",
       "minAppVersion": "0.2.20",
       "category": "documents",
       "categories": [
         "files"
       ],
-      "readmeUrl": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.42/README.md",
+      "readmeUrl": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.43/README.md",
       "readmeLocales": {
-        "zh": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.42/README.md",
-        "en": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.42/docs/readme/en.md"
+        "zh": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.43/README.md",
+        "en": "https://raw.githubusercontent.com/Encaron/linkdesk-plugin-file-tree/v1.0.43/docs/readme/en.md"
       },
-      "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.42/file-tree.linkdesk-plugin",
-      "size": 61480,
-      "publishedAt": "2026-11-25T16:54:33.269Z",
+      "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.43/file-tree.linkdesk-plugin",
+      "size": 61481,
+      "publishedAt": "2026-11-25T17:57:04.687Z",
       "versions": [
+        {
+          "version": "1.0.43",
+          "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.43/file-tree.linkdesk-plugin",
+          "publishedAt": "2026-11-25T17:57:04.687Z",
+          "changelog": "- **`core: true` → `essential: true`**（插件语义二分，硬切无兼容）：`essential` 只表示「UI 不显示卸载入口」，与「随包出厂」（lock `seed`）和「能否更新」（住所 `updatable`）彻底分家；旧 `core` 已退役。\n- 随 `@linkdesk/plugin-sdk` ^0.1.122（schema 删 core 加 essential）。\n- 行为零变化：本插件在详情/列表依旧不显示卸载按钮。",
+          "sha256": "8339ece18a6a72de08993206faa43d33a84dd9c85fd90e184e28820f692f62f6"
+        },
         {
           "version": "1.0.42",
           "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.42/file-tree.linkdesk-plugin",
@@ -60,7 +67,6 @@
           "version": "1.0.38",
           "downloadUrl": "https://github.com/Encaron/linkdesk-plugin-file-tree/releases/download/v1.0.38/file-tree.linkdesk-plugin",
           "publishedAt": "2026-11-25T12:00:56.658Z",
-          "changelog": "- **状态命令试点（T-B · 13-状态命令约定）**：\n  - `file-tree.refresh` 改为回可判读快照：`ok/viewMounted/rootCount/roots/expanded/stateVersion/updatedAt`（无视图也回，如实 `viewMounted:false`）。\n  - `file-tree.rename` 支持**程序化带参**（`uri`/`newName`/`expectedVersion?`/`idempotencyKey?`，无视图可用）：成功回后置状态（`newUri`/`name`/`stateVersion`）；`expectedVersion` 与当前 `stateVersion` 不一致 ⇒ `ECONFLICT` ＋ `details.stateVersion`（零副作用）；目标已存在 ⇒ `EEXIST`；参数非法/宿主失败 ⇒ `EBADARGS`/`EFS` 结构化返回（⛔ throw）；不带参仍进入行内重命名。\n  - 声明 `idempotencyKey`：同键重试由宿主回放首次结果（`replayed:true`，⛔ 再改一次）——rename 是「目标路径收敛」的写，同参重放不会产生第二份实体。\n  - 新增插件级 `stateVersion`（`services/FileTreeState.ts`）：经插件完成的树变更（rename/newFile/newFolder/delete/paste/行内改名）各 +1；外部改盘不计（文档已注明）。",
           "sha256": "efad298c3e74763cb5f1eaa24e5228f7f51642c08fae1c88c0484bd820eda690"
         },
         {
