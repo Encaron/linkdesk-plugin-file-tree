@@ -7,8 +7,9 @@
  *   · expectedVersion 陈旧 ⇒ ECONFLICT + details.stateVersion，且**零副作用**；
  *   · 参数/目标存在/宿主失败 ⇒ 返回式结构化错误（⛔ throw）。
  */
-import { describe, it, expect, beforeEach, beforeAll } from "vitest";
+import { describe, it, expect, beforeEach, beforeAll, vi } from "vitest";
 import { _resetTreeStateVersionForTest } from "../services/FileTreeState";
+import { clearFileTreeHandle, setFileTreeHandleRef } from "../components/FileTreeContextMenu/host-bridge";
 
 type Handler = (...args: unknown[]) => Promise<unknown> | unknown;
 
@@ -49,6 +50,7 @@ beforeAll(async () => {
 
 beforeEach(() => {
   _resetTreeStateVersionForTest();
+  clearFileTreeHandle();
   renamedCalls.length = 0;
   events.length = 0;
   existsReply = false;
@@ -128,8 +130,34 @@ describe("file-tree.rename：程序化改名（带参）", () => {
     expect(res.message).toMatch(/EBUSY/);
   });
 
-  it("不带参数 ⇒ 行内重命名（interactive:true，无视图也不炸）", async () => {
-    const res = await call("rename")() as Record<string, unknown>;
-    expect(res).toMatchObject({ renamed: false, interactive: true, stateVersion: 0 });
+  it("无参 + 无视图 ⇒ ENOVIEW（⛔ 空动作冒充 interactive 成功）", async () => {
+    const res = await call("rename")() as { isPluginError?: boolean; code?: string; hint?: string };
+    expect(res.isPluginError).toBe(true);
+    expect(res.code).toBe("ENOVIEW");
+    expect(res.hint).toMatch(/uri\+newName|open-tab/);
+  });
+
+  it("无参 + 有视图 ⇒ 进入行内重命名（interactive:true ＋ 真调 startRename）", async () => {
+    const startRename = vi.fn();
+    setFileTreeHandleRef({ current: { startRename } } as never);
+    try {
+      const res = await call("rename")() as Record<string, unknown>;
+      expect(res).toMatchObject({ renamed: false, interactive: true, stateVersion: 0 });
+      expect(startRename).toHaveBeenCalledTimes(1);
+    } finally {
+      clearFileTreeHandle();
+    }
+  });
+
+  it("只给 uri 或只给 newName ⇒ EBADARGS（⛔ 半参走行内/空动作）", async () => {
+    const onlyUri = await call("rename")({ uri: "C:/proj/b.txt" }) as { isPluginError?: boolean; code?: string };
+    expect(onlyUri.isPluginError).toBe(true);
+    expect(onlyUri.code).toBe("EBADARGS");
+
+    const onlyName = await call("rename")({ newName: "b.txt" }) as { isPluginError?: boolean; code?: string };
+    expect(onlyName.isPluginError).toBe(true);
+    expect(onlyName.code).toBe("EBADARGS");
+
+    expect(renamedCalls).toHaveLength(0); // 零副作用
   });
 });

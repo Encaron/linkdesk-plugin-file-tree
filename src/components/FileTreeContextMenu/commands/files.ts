@@ -123,10 +123,26 @@ export function registerFileCommands(): void {
   // ── E4V#27: F2 行内重命名 ＋ T-B：带参的程序化 rename（无视图也可用）──
   lk.commands.registerCommand("file-tree.rename", async (...args) => {
     const { uri, newName, expectedVersion } = parseRenameArgs(args);
-    // 无参 / 右键 context（键名不含 newName）⇒ 旧行为：进入行内重命名
-    if (!uri || !newName) {
-      h()?.startRename();
+    // 三态：都不给 = 行内改名；只给一个 = 坏参（⛔ 空动作冒充成功）；两个都给 = 程序化
+    if (!uri && !newName) {
+      const hd = h();
+      if (!hd) {
+        return fileTreeError(
+          FILETREE_ERROR_CODES.ENOVIEW,
+          "无 file-tree 视图——无参 rename 是行内改名，需要视图在场",
+          "传 uri+newName 走程序化改名（无视图可用），或先 open-tab file-tree 再调用",
+        );
+      }
+      hd.startRename();
       return { renamed: false, interactive: true, stateVersion: treeStateVersion() };
+    }
+    if (!uri || !newName) {
+      return fileTreeError(
+        FILETREE_ERROR_CODES.EBADARGS,
+        `rename 参数缺一半：uri 与 newName 必须同给（收到 uri=${JSON.stringify(uri)} newName=${JSON.stringify(newName)}）`,
+        "程序化改名请同时给 uri+newName；行内改名请两个都不传",
+        { uri: uri ?? null, newName: newName ?? null },
+      );
     }
     // 参数归一（newName 只能是同一目录下的名字，⛔ 带分隔符）
     if (uri.trim() === "" || newName.trim() === "" || /[\\/]/.test(newName) || newName === "." || newName === "..") {

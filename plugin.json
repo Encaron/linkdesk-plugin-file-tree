@@ -2,7 +2,7 @@
   "$schema": "./node_modules/@linkdesk/plugin-sdk/schemas/plugin.schema.json",
   "pluginId": "file-tree",
   "name": "文件树",
-  "version": "1.0.38",
+  "version": "1.0.39",
   "category": "documents",
   "categories": [
     "files"
@@ -403,7 +403,7 @@
           "newName": "b.txt"
         },
         "title": "重命名",
-        "description": "重命名文件/文件夹。uri+newName 两者同给 = 程序化改名并回后置状态（无视图也可用）；两者都不给 = 进入行内重命名（interactive:true）——required 均为 false，⛔ 不能只给一个。带 expectedVersion 时先比状态版本，不一致 ⇒ ECONFLICT（details.stateVersion=当前版本）。同一 idempotencyKey 重试不重复执行。",
+        "description": "重命名文件/文件夹。uri+newName 两者同给 = 程序化改名并回后置状态（无视图也可用）；两者都不给 = 进入行内重命名（interactive:true；无视图 ⇒ ENOVIEW）；只给一个 ⇒ EBADARGS——required 均为 false。带 expectedVersion 时先比状态版本，不一致 ⇒ ECONFLICT（details.stateVersion=当前版本）。同一 idempotencyKey 重试不重复执行。",
         "params": [
           {
             "name": "uri",

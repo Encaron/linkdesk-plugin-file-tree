@@ -19,6 +19,8 @@ export const FILETREE_ERROR_CODES = {
   EFS: "EFS",
   /** 乐观并发冲突：expectedVersion ≠ 当前 stateVersion（details.stateVersion = 当前值） */
   ECONFLICT: "ECONFLICT",
+  /** 需要 file-tree 视图才能执行（无参行内改名）；无视图时如实报，⛔ 空动作冒充成功 */
+  ENOVIEW: "ENOVIEW",
 } as const;
 
 export type FileTreeErrorCode = (typeof FILETREE_ERROR_CODES)[keyof typeof FILETREE_ERROR_CODES];
