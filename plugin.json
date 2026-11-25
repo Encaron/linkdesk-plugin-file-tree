@@ -2,7 +2,7 @@
   "$schema": "./node_modules/@linkdesk/plugin-sdk/schemas/plugin.schema.json",
   "pluginId": "file-tree",
   "name": "文件树",
-  "version": "1.0.40",
+  "version": "1.0.41",
   "category": "documents",
   "categories": [
     "files"
@@ -215,25 +215,91 @@
         "id": "file-tree.newFile",
         "risk": "R2",
         "activation": "entry",
-        "returns": [],
+        "returns": [
+          {
+            "name": "created",
+            "type": "boolean",
+            "description": "True when the file was created"
+          },
+          {
+            "name": "uri",
+            "type": "string",
+            "description": "Absolute uri of the created file"
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "description": "Base name of the created file"
+          },
+          {
+            "name": "stateVersion",
+            "type": "number",
+            "description": "Tree state version after creation"
+          }
+        ],
         "example": {
-          "uri": "C:/demo",
-          "isDirectory": true
+          "dir": "C:/proj",
+          "name": "notes.txt"
         },
         "title": "新建文件",
-        "description": "在目标目录里新建一个空文件。重名时按 file-tree.incrementalNaming（默认 smart）自动加数字后缀（test.txt → test-1.txt）。目标目录取右键项（目录本身或文件所在目录），没有右键项时回退到聚焦项/第一个工作区根。"
+        "description": "新建空文件。程序化：传 dir（目标目录的绝对 uri）＋可选 name（同目录文件名，省略走自动递增命名）；不带 dir = 旧 UI 行为（选中项目录/首个根）。成功回后置状态（uri/name/stateVersion）。",
+        "params": [
+          {
+            "name": "dir",
+            "type": "string",
+            "description": "目标目录的绝对 uri（如 C:/proj）"
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "description": "新文件名（不含分隔符；省略走自动递增命名）"
+          }
+        ]
       },
       {
         "id": "file-tree.newFolder",
         "risk": "R2",
         "activation": "entry",
-        "returns": [],
+        "returns": [
+          {
+            "name": "created",
+            "type": "boolean",
+            "description": "True when the folder was created"
+          },
+          {
+            "name": "uri",
+            "type": "string",
+            "description": "Absolute uri of the created folder"
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "description": "Base name of the created folder"
+          },
+          {
+            "name": "stateVersion",
+            "type": "number",
+            "description": "Tree state version after creation"
+          }
+        ],
         "example": {
-          "uri": "C:/demo",
-          "isDirectory": true
+          "dir": "C:/proj",
+          "name": "assets"
         },
         "title": "新建文件夹",
-        "description": "在目标目录里新建一个文件夹，命名规则与目标目录回退同「新建文件」。"
+        "description": "新建空文件夹。程序化：传 dir（目标目录的绝对 uri）＋可选 name（省略走自动递增命名）；不带 dir = 旧 UI 行为。成功回后置状态（uri/name/stateVersion）。",
+        "params": [
+          {
+            "name": "dir",
+            "type": "string",
+            "description": "目标目录的绝对 uri（如 C:/proj）"
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "description": "新文件夹名（不含分隔符；省略走自动递增命名）"
+          }
+        ]
       },
       {
         "id": "file-tree.openFile",
@@ -350,13 +416,81 @@
         "id": "file-tree.paste",
         "risk": "R2",
         "activation": "entry",
-        "returns": [],
+        "returns": [
+          {
+            "name": "pasted",
+            "type": "boolean",
+            "description": "True when at least one entry was pasted"
+          },
+          {
+            "name": "done",
+            "type": "number",
+            "description": "Entries copied/moved"
+          },
+          {
+            "name": "failed",
+            "type": "number",
+            "description": "Entries that failed"
+          },
+          {
+            "name": "cancelled",
+            "type": "boolean",
+            "description": "True when the user cancelled the confirm dialog"
+          },
+          {
+            "name": "mode",
+            "type": "string",
+            "description": "copy | move actually used"
+          },
+          {
+            "name": "targetDir",
+            "type": "string",
+            "description": "Target directory used"
+          },
+          {
+            "name": "stateVersion",
+            "type": "number",
+            "description": "Tree state version after the operation"
+          },
+          {
+            "name": "reason",
+            "type": "string",
+            "optional": true,
+            "description": "disabled | cancelled — why nothing was pasted"
+          }
+        ],
         "example": {
-          "uri": "C:/demo",
-          "isDirectory": true
+          "sources": [
+            "C:/proj/a.txt"
+          ],
+          "targetDir": "C:/proj/out",
+          "mode": "copy",
+          "confirm": true
         },
         "title": "粘贴",
-        "description": "把剪贴板里的路径落到目标目录：剪切来的移动、复制来的复制，重名冲突走与拖放同一套安全流程。目标目录取右键项的目录或聚焦项所在目录，最后回退第一个工作区根。"
+        "description": "粘贴（复制/移动）。程序化：传 sources（绝对路径数组）＋ targetDir（绝对目录 uri）＋可选 mode(copy|move)、confirm:true；不带 sources = 旧 UI 行为（插件剪贴板）。回后置状态：done/failed/cancelled/stateVersion。",
+        "params": [
+          {
+            "name": "sources",
+            "type": "object",
+            "description": "要粘贴的绝对路径数组（type=object，值为 string[]；元素可为字符串或 {path,name}）"
+          },
+          {
+            "name": "targetDir",
+            "type": "string",
+            "description": "目标目录的绝对 uri"
+          },
+          {
+            "name": "mode",
+            "type": "string",
+            "description": "copy | move（缺省 copy）"
+          },
+          {
+            "name": "confirm",
+            "type": "boolean",
+            "description": "true = 跳过粘贴确认框（无人值守 AI 必传）"
+          }
+        ]
       },
       {
         "id": "file-tree.rename",
@@ -433,12 +567,59 @@
         "id": "file-tree.delete",
         "risk": "R3",
         "activation": "entry",
-        "returns": [],
+        "returns": [
+          {
+            "name": "deleted",
+            "type": "number",
+            "description": "Entries removed"
+          },
+          {
+            "name": "failed",
+            "type": "number",
+            "description": "Entries that failed to remove"
+          },
+          {
+            "name": "deletedUris",
+            "type": "array",
+            "description": "Uris actually removed"
+          },
+          {
+            "name": "failures",
+            "type": "array",
+            "optional": true,
+            "description": "Failure entries [{name,detail}] (present only when failed > 0)"
+          },
+          {
+            "name": "cancelled",
+            "type": "boolean",
+            "description": "True when the user cancelled the confirm dialog"
+          },
+          {
+            "name": "stateVersion",
+            "type": "number",
+            "description": "Tree state version after the operation"
+          }
+        ],
         "example": {
-          "uri": "C:/demo/old.txt"
+          "uris": [
+            "C:/proj/a.txt"
+          ],
+          "confirm": true
         },
         "title": "删除",
-        "description": "删除当前选中集；无多选时取右键项，再回退聚焦项。file-tree.confirmDelete 为真（默认）时先弹确认框。逐项删除、逐项报告失败，只有真删掉的项才刷新其父目录。"
+        "description": "删除文件/文件夹（R3，破坏性）。程序化：传 uris（绝对路径数组）＋ confirm:true 跳过确认框；不带 uris = 旧 UI 行为（选中/聚焦项）。回后置状态：deleted/failed/deletedUris/stateVersion；取消 ⇒ cancelled:true。",
+        "params": [
+          {
+            "name": "uris",
+            "type": "object",
+            "description": "要删除的绝对路径数组（type=object，值为 string[]，如 [\"C:/proj/a.txt\"]）"
+          },
+          {
+            "name": "confirm",
+            "type": "boolean",
+            "description": "true = 跳过删除确认框（无人值守 AI 必传）"
+          }
+        ]
       },
       {
         "id": "file-tree.findInFolder",

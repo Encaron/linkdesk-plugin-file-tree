@@ -13,24 +13,41 @@ const lk = window.linkdesk;
  * OS 拖入和树内拖拽两分支都调此函数，三个检查只写一处。
  * 对标 VS Code FileDragAndDrop。
  */
+export interface DropOutcome {
+  /** 本次请求处理的源数 */
+  attempted: number;
+  /** 真正落盘成功的条数 */
+  done: number;
+  /** 失败条数 */
+  failed: number;
+  /** 用户在确认框点了取消 */
+  cancelled: boolean;
+  /** 拖放开关关闭（未执行） */
+  disabled: boolean;
+  failures: FailureItem[];
+}
+
 export async function executeSafeDrop(
   sources: { path: string; name: string }[],
   targetDir: string,
   operation: "copy" | "move",
-): Promise<void> {
+  opts: { skipConfirm?: boolean } = {},
+): Promise<DropOutcome> {
+  const base: DropOutcome = { attempted: sources.length, done: 0, failed: 0, cancelled: false, disabled: false, failures: [] };
   // E4V#34e: file-tree.enableDragAndDrop 配置开关
-  if ((await lk.configuration.get("file-tree.enableDragAndDrop") ?? true) === false) return;
-  // E4V#34h1: file-tree.confirmDragAndDrop——移动/复制前弹确认框
-  if (await lk.configuration.get("file-tree.confirmDragAndDrop") ?? true) {
+  if ((await lk.configuration.get("file-tree.enableDragAndDrop") ?? true) === false) return { ...base, disabled: true };
+  // E4V#34h1: file-tree.confirmDragAndDrop——移动/复制前弹确认框（程序化调用可 skipConfirm 跳过）
+  if (!opts.skipConfirm && (await lk.configuration.get("file-tree.confirmDragAndDrop") ?? true)) {
     const names = sources.map((s) => `"${s.name}"`).join(", ");
     const targetName = targetDir.split("/").pop() ?? targetDir;
     const confirmed = await window.linkdesk?.dialog?.confirm?.(`确定${operation === "move" ? "移动" : "复制"} ${names} 到 "${targetName}"？`);
-    if (!confirmed) return;
+    if (!confirmed) return { ...base, cancelled: true };
   }
   const t = normalizePath(targetDir);
   // E6#73m K2：**逐项**兜住——老写法首项抛错即整批中止（后面的源连试都没试），而异常还会沿
   // `onDrop`（React 不 await）悬空成静默失败。现在失败收进 failures、循环继续，收尾一次报清。
   const failures: FailureItem[] = [];
+  let done = 0;
   for (const src of sources) {
     const s = normalizePath(src.path);
     const dest = joinPath(t, src.name);
@@ -40,10 +57,12 @@ export async function executeSafeDrop(
     try {
       await lk.filesystem.copy(src.path, dest);
       if (operation === "move") await lk.filesystem.remove(src.path);
+      done += 1;
     } catch (e) {
       // 复制成了、删原件没成 = 移动没完成，但目标处已有一份——照实报失败，不粉饰
       failures.push({ name: src.name, detail: errText(e) });
     }
   }
   notifyFailure(i18n.t(operation === "move" ? "移动" : "复制"), failures);
+  return { ...base, done, failed: failures.length, failures };
 }

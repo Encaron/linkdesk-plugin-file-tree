@@ -98,8 +98,8 @@ describe("executeSafeDrop", () => {
 
   /* ── 空源 ── */
 
-  it("空源列表——不抛错", async () => {
-    await expect(executeSafeDrop([], "/root", "copy")).resolves.toBeUndefined();
+  it("空源列表——不抛错，回零计数 outcome", async () => {
+    await expect(executeSafeDrop([], "/root", "copy")).resolves.toMatchObject({ attempted: 0, done: 0, failed: 0 });
     expect(mockedCopy).not.toHaveBeenCalled();
   });
 

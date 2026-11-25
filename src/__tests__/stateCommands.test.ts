@@ -15,6 +15,10 @@ type Handler = (...args: unknown[]) => Promise<unknown> | unknown;
 
 const handlers = new Map<string, Handler>();
 const renamedCalls: Array<[string, string]> = [];
+const written: string[] = [];
+const createdDirs: string[] = [];
+const copied: Array<[string, string]> = [];
+const removed: string[] = [];
 const events: Array<[string, unknown]> = [];
 let existsReply = false;
 let renameFail: string | null = null;
@@ -36,6 +40,10 @@ beforeAll(async () => {
         if (renameFail) throw new Error(renameFail);
         renamedCalls.push([from, to]);
       },
+      writeTextFile: async (p: string) => { written.push(p); },
+      createDir: async (p: string) => { createdDirs.push(p); },
+      copy: async (from: string, to: string) => { copied.push([from, to]); },
+      remove: async (p: string) => { removed.push(p); },
     },
     commands: {
       registerCommand: (id: string, handler: Handler) => { handlers.set(id, handler); },
@@ -43,15 +51,21 @@ beforeAll(async () => {
     events: { emit: (topic: string, payload: unknown) => { events.push([topic, payload]); } },
     configuration: { get: async () => "smart" },
   };
-  // files.ts 在模块顶层 `const lk = window.linkdesk` ⇒ 必须先装桩再 import
+  // files.ts / clipboard.ts 在模块顶层 `const lk = window.linkdesk` ⇒ 必须先装桩再 import
   const mod = await import("../components/FileTreeContextMenu/commands/files");
   mod.registerFileCommands();
+  const clip = await import("../components/FileTreeContextMenu/commands/clipboard");
+  clip.registerClipboardCommands();
 });
 
 beforeEach(() => {
   _resetTreeStateVersionForTest();
   clearFileTreeHandle();
   renamedCalls.length = 0;
+  written.length = 0;
+  createdDirs.length = 0;
+  copied.length = 0;
+  removed.length = 0;
   events.length = 0;
   existsReply = false;
   renameFail = null;
@@ -159,5 +173,78 @@ describe("file-tree.rename：程序化改名（带参）", () => {
     expect(onlyName.code).toBe("EBADARGS");
 
     expect(renamedCalls).toHaveLength(0); // 零副作用
+  });
+});
+
+describe("file-tree.newFile/newFolder：程序化新建（无视图可用）", () => {
+  it("newFile dir+name ⇒ created/uri/stateVersion+1（⛔ 只回 true）", async () => {
+    const res = await call("newFile")({ dir: "C:/proj", name: "notes.txt" }) as Record<string, unknown>;
+    expect(res).toMatchObject({ created: true, uri: "C:/proj/notes.txt", name: "notes.txt", stateVersion: 1 });
+    expect(written).toEqual(["C:/proj/notes.txt"]);
+  });
+
+  it("newFile 显式 name 已存在 ⇒ EEXIST，零副作用", async () => {
+    existsReply = true;
+    const res = await call("newFile")({ dir: "C:/proj", name: "notes.txt" }) as { isPluginError?: boolean; code?: string };
+    expect(res.isPluginError).toBe(true);
+    expect(res.code).toBe("EEXIST");
+    expect(written).toHaveLength(0);
+  });
+
+  it("newFile 无 dir 无视图 ⇒ ENOVIEW；坏 name ⇒ EBADARGS", async () => {
+    const noView = await call("newFile")() as { isPluginError?: boolean; code?: string };
+    expect(noView.code).toBe("ENOVIEW");
+    const bad = await call("newFile")({ dir: "C:/proj", name: "a/b.txt" }) as { isPluginError?: boolean; code?: string };
+    expect(bad.code).toBe("EBADARGS");
+    expect(written).toHaveLength(0);
+  });
+
+  it("newFolder dir+name ⇒ created/uri/stateVersion，且走 createDir", async () => {
+    const res = await call("newFolder")({ dir: "C:/proj", name: "assets" }) as Record<string, unknown>;
+    expect(res).toMatchObject({ created: true, uri: "C:/proj/assets", name: "assets", stateVersion: 1 });
+    expect(createdDirs).toEqual(["C:/proj/assets"]);
+  });
+});
+
+describe("file-tree.delete：程序化删除（uris＋confirm）", () => {
+  it("uris + confirm:true ⇒ deleted 计数/删除清单/stateVersion；无视图也可用", async () => {
+    const res = await call("delete")({ uris: ["C:/proj/a.txt", "C:/proj/b.txt"], confirm: true }) as Record<string, unknown>;
+    expect(res).toMatchObject({ deleted: 2, failed: 0, deletedUris: ["C:/proj/a.txt", "C:/proj/b.txt"], cancelled: false, stateVersion: 1 });
+    expect(removed).toEqual(["C:/proj/a.txt", "C:/proj/b.txt"]);
+  });
+
+  it("空 uris ⇒ EBADARGS；无 uris 无视图 ⇒ ENOVIEW（⛔ 空动作）", async () => {
+    const empty = await call("delete")({ uris: [], confirm: true }) as { isPluginError?: boolean; code?: string };
+    expect(empty.code).toBe("EBADARGS");
+    const noView = await call("delete")() as { isPluginError?: boolean; code?: string };
+    expect(noView.code).toBe("ENOVIEW");
+    expect(removed).toHaveLength(0);
+  });
+});
+
+describe("file-tree.paste：程序化粘贴（sources＋targetDir）", () => {
+  it("copy 两条成功 ⇒ pasted/done/mode/targetDir/stateVersion；发 copy 调用", async () => {
+    const res = await call("paste")({
+      sources: ["C:/proj/a.txt"], targetDir: "C:/proj/out", mode: "copy", confirm: true,
+    }) as Record<string, unknown>;
+    expect(res).toMatchObject({
+      pasted: true, done: 1, failed: 0, cancelled: false, mode: "copy", targetDir: "C:/proj/out", stateVersion: 1,
+    });
+    expect(copied).toEqual([["C:/proj/a.txt", "C:/proj/out/a.txt"]]);
+  });
+
+  it("move ⇒ 先 copy 后 remove 源；版本 +1", async () => {
+    const res = await call("paste")({
+      sources: ["C:/proj/a.txt"], targetDir: "C:/proj/out", mode: "move", confirm: true,
+    }) as Record<string, unknown>;
+    expect(res).toMatchObject({ pasted: true, done: 1, mode: "move", stateVersion: 1 });
+    expect(removed).toEqual(["C:/proj/a.txt"]);
+  });
+
+  it("缺 sources/targetDir ⇒ EBADARGS；无 sources 无视图 ⇒ ENOVIEW", async () => {
+    const bad = await call("paste")({ sources: [], targetDir: "C:/proj/out" }) as { isPluginError?: boolean; code?: string };
+    expect(bad.code).toBe("EBADARGS");
+    const noView = await call("paste")() as { isPluginError?: boolean; code?: string };
+    expect(noView.code).toBe("ENOVIEW");
   });
 });

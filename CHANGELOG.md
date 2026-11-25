@@ -1,3 +1,12 @@
+## v1.0.41（2026-11-25）
+
+- **四条写命令参数化 ＋ 后置状态（Block 2）**：
+  - `newFile` / `newFolder`：`dir`（目标目录绝对 uri）＋可选 `name`；省略 name 走自动递增；成功回 `{created, uri, name, stateVersion}`；显式 name 已存在 ⇒ `EEXIST`（不覆盖），坏名 ⇒ `EBADARGS`，无 dir 无视图 ⇒ `ENOVIEW`。
+  - `delete`（R3）：`uris`（绝对路径数组）＋ `confirm:true` 跳过确认；回 `{deleted, failed, deletedUris, failures?, cancelled, stateVersion}`；空 uris ⇒ `EBADARGS`，无 uris 无视图 ⇒ `ENOVIEW`。
+  - `paste`：`sources`（绝对路径数组）＋ `targetDir` ＋可选 `mode(copy|move)`、`confirm:true`；回 `{pasted, done, failed, cancelled, mode, targetDir, stateVersion, reason?}`；`executeSafeDrop` 改为返回计数（拖放调用方零改动）。
+  - **幂等结论**：四条全部**不声明** `idempotencyKey`——newFile/newFolder/paste 是创建/追加式（自然重放会多一条），delete 是破坏性且重放会 ENOENT；只有 rename 属「目标收敛写」已声明。
+- 无视图/无靶子的空动作一律给可判读码（ENOVIEW/EBADARGS），⛔ 不再静默返回。
+
 ## v1.0.40（2026-11-25）
 
 - **错误码文档化**：README（中/英）新增「命令错误码」表（EBADARGS/EEXIST/EFS/ECONFLICT/ENOVIEW），逐条写语义与下一步；`rename` 的 describe 描述补 `ENOVIEW` 的 hint（传 uri+newName 程序化，或先 open-tab file-tree）。

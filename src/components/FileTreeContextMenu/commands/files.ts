@@ -66,31 +66,109 @@ function parseRenameArgs(args: unknown[]): { uri?: string; newName?: string; exp
   return { uri, newName, expectedVersion: ev };
 }
 
+/** newFile/newFolder 入参（具名对象或逐位 `dir, name`；都不给 = 旧 UI 行为） */
+interface CreateArgs { dir?: unknown; name?: unknown }
+function parseCreateArgs(args: unknown[]): { dir?: string; name?: string } {
+  const named = args.length === 1 && args[0] !== null && typeof args[0] === "object" && !Array.isArray(args[0])
+    ? (args[0] as CreateArgs)
+    : undefined;
+  const dir = typeof args[0] === "string" ? args[0] : typeof named?.dir === "string" ? named.dir : undefined;
+  const name = typeof args[1] === "string" ? args[1] : typeof named?.name === "string" ? named.name : undefined;
+  return { dir, name };
+}
+
+/** 名字合法性（新建/重命名共用口径）：非空、不含分隔符、不是 . / .. */
+function badName(name: string): boolean {
+  return name.trim() === "" || /[\\/]/.test(name) || name === "." || name === "..";
+}
+
 export function registerFileCommands(): void {
   lk.commands.registerCommand("file-tree.newFile", async (...args) => {
-    const hd = h(); if (!hd) return;
-    const model = hd.getModel();
-    const dirUri = resolveDirUri(args[0] as FileMenuContext | undefined);
-    if (!dirUri) return;
-    const name = await nextName(dirUri, "新建文件");
-    await lk.filesystem.writeTextFile(joinPath(dirUri, name), "");
-    bumpTreeStateVersion();
-    await model.refresh(dirUri);
-    const parent = model.findClosest(dirUri);
-    if (parent && model.isExpanded(parent.uri)) await model.getChildren(parent).catch((e) => { console.error("[file-tree] 刷新目录失败:", e); });
+    const { dir, name: explicitName } = parseCreateArgs(args);
+    const hd = h();
+    const model = hd?.getModel();
+    const dirUri = dir ?? resolveDirUri(args[0] as FileMenuContext | undefined);
+    if (!dirUri) {
+      return fileTreeError(
+        FILETREE_ERROR_CODES.ENOVIEW,
+        "无 file-tree 视图且未给目录——无法确定新建位置",
+        "程序化请传 dir（目标目录 uri）＋可选 name；或先 open-tab file-tree",
+      );
+    }
+    if (explicitName !== undefined && badName(explicitName)) {
+      return fileTreeError(
+        FILETREE_ERROR_CODES.EBADARGS,
+        `name 非法（收到 ${JSON.stringify(explicitName)}）——必须是不含分隔符的文件名`,
+        "省略 name 走自动命名，或换一个合法名字",
+        { dir: dirUri, name: explicitName },
+      );
+    }
+    if (explicitName !== undefined && await lk.filesystem.exists(joinPath(dirUri, explicitName))) {
+      return fileTreeError(
+        FILETREE_ERROR_CODES.EEXIST,
+        `目标已存在：${joinPath(dirUri, explicitName)}——newFile ⛔ 覆盖`,
+        "换一个 name，或省略 name 走自动递增命名",
+        { dir: dirUri, name: explicitName },
+      );
+    }
+    const name = explicitName ?? await nextName(dirUri, "新建文件");
+    const uri = joinPath(dirUri, name);
+    try {
+      await lk.filesystem.writeTextFile(uri, "");
+    } catch (e) {
+      return fileTreeError(FILETREE_ERROR_CODES.EFS, `新建文件失败：${errText(e)}`, "检查目录写权限", { dir: dirUri, name });
+    }
+    const stateVersion = bumpTreeStateVersion();
+    if (model) {
+      await model.refresh(dirUri);
+      const parent = model.findClosest(dirUri);
+      if (parent && model.isExpanded(parent.uri)) await model.getChildren(parent).catch((e) => { console.error("[file-tree] 刷新目录失败:", e); });
+    }
+    return { created: true, uri, name, stateVersion };
   });
 
   lk.commands.registerCommand("file-tree.newFolder", async (...args) => {
-    const hd = h(); if (!hd) return;
-    const model = hd.getModel();
-    const dirUri = resolveDirUri(args[0] as FileMenuContext | undefined);
-    if (!dirUri) return;
-    const name = await nextName(dirUri, "新建文件夹");
-    await lk.filesystem.createDir(joinPath(dirUri, name));
-    bumpTreeStateVersion();
-    await model.refresh(dirUri);
-    const parent = model.findClosest(dirUri);
-    if (parent && model.isExpanded(parent.uri)) await model.getChildren(parent).catch((e) => { console.error("[file-tree] 刷新目录失败:", e); });
+    const { dir, name: explicitName } = parseCreateArgs(args);
+    const hd = h();
+    const model = hd?.getModel();
+    const dirUri = dir ?? resolveDirUri(args[0] as FileMenuContext | undefined);
+    if (!dirUri) {
+      return fileTreeError(
+        FILETREE_ERROR_CODES.ENOVIEW,
+        "无 file-tree 视图且未给目录——无法确定新建位置",
+        "程序化请传 dir（目标目录 uri）＋可选 name；或先 open-tab file-tree",
+      );
+    }
+    if (explicitName !== undefined && badName(explicitName)) {
+      return fileTreeError(
+        FILETREE_ERROR_CODES.EBADARGS,
+        `name 非法（收到 ${JSON.stringify(explicitName)}）——必须是不含分隔符的文件夹名`,
+        "省略 name 走自动命名，或换一个合法名字",
+        { dir: dirUri, name: explicitName },
+      );
+    }
+    if (explicitName !== undefined && await lk.filesystem.exists(joinPath(dirUri, explicitName))) {
+      return fileTreeError(
+        FILETREE_ERROR_CODES.EEXIST,
+        `目标已存在：${joinPath(dirUri, explicitName)}——newFolder ⛔ 覆盖`,
+        "换一个 name，或省略 name 走自动递增命名",
+        { dir: dirUri, name: explicitName },
+      );
+    }
+    const name = explicitName ?? await nextName(dirUri, "新建文件夹");
+    const uri = joinPath(dirUri, name);
+    try {
+      await lk.filesystem.createDir(uri);
+    } catch (e) {
+      return fileTreeError(FILETREE_ERROR_CODES.EFS, `新建文件夹失败：${errText(e)}`, "检查目录写权限", { dir: dirUri, name });
+    }
+    const stateVersion = bumpTreeStateVersion();
+    if (model) {
+      await model.refresh(dirUri);
+      const parent = model.findClosest(dirUri);
+      if (parent && model.isExpanded(parent.uri)) await model.getChildren(parent).catch((e) => { console.error("[file-tree] 刷新目录失败:", e); });
+    }
+    return { created: true, uri, name, stateVersion };
   });
 
   lk.commands.registerCommand("file-tree.refresh", async () => {
@@ -205,38 +283,86 @@ export function registerFileCommands(): void {
 
   // ── E4V#24: delete ──
   lk.commands.registerCommand("file-tree.delete", async (...args) => {
-    const hd = h(); if (!hd) return;
-    const model = hd.getModel();
-    const ctx = args[0] as FileMenuContext | undefined;
-    const selection = hd.getSelection();
-    const focused = hd.getFocusedUri();
-    const uris: string[] = selection.length > 0 ? selection : ctx ? [ctx.uri] : focused ? [focused] : [];
-    if (uris.length === 0) return;
+    // T-B：程序化入参（uris 数组 / 单个 uri / confirm）；UI 右键 context（带 isDirectory）走旧靶子解析
+    const a0 = args[0];
+    let programmatic: string[] | null = null;
+    let skipConfirm = false;
+    if (Array.isArray(a0)) {
+      programmatic = a0.filter((x): x is string => typeof x === "string" && x.length > 0);
+      skipConfirm = args[1] === true;
+    } else if (typeof a0 === "string" && a0) {
+      programmatic = [a0];
+      skipConfirm = args[1] === true;
+    } else if (a0 && typeof a0 === "object" && !("isDirectory" in (a0 as Record<string, unknown>))) {
+      const o = a0 as { uris?: unknown; uri?: unknown; confirm?: unknown };
+      const list = Array.isArray(o.uris)
+        ? o.uris.filter((x): x is string => typeof x === "string" && x.length > 0)
+        : typeof o.uri === "string" && o.uri ? [o.uri] : [];
+      programmatic = list;
+      skipConfirm = o.confirm === true;
+    }
+    if (programmatic !== null && programmatic.length === 0) {
+      return fileTreeError(
+        FILETREE_ERROR_CODES.EBADARGS,
+        "delete 没给要删的路径——传 uris: [路径…]（或单个 uri）",
+        "先 file-tree.refresh 核对路径；用绝对路径 uri",
+      );
+    }
+    const hd = h();
+    const model = hd?.getModel();
+    let uris: string[];
+    if (programmatic !== null) {
+      uris = programmatic;
+    } else {
+      const ctx = args[0] as FileMenuContext | undefined;
+      const selection = hd?.getSelection() ?? [];
+      const focused = hd?.getFocusedUri() ?? null;
+      uris = selection.length > 0 ? selection : ctx ? [ctx.uri] : focused ? [focused] : [];
+      if (!hd || uris.length === 0) {
+        return fileTreeError(
+          FILETREE_ERROR_CODES.ENOVIEW,
+          "无 file-tree 视图且没有选中项——无法确定删除靶子",
+          "程序化请传 uris: [路径…]；或先 open-tab file-tree 选中后再调用",
+        );
+      }
+    }
     const confirmDelete = await lk.configuration.get("file-tree.confirmDelete") ?? true;
-    if (confirmDelete) {
+    if (confirmDelete && !skipConfirm) {
       const nameList = uris.map((u) => `"${u.split("/").pop() ?? u}"`).join(", ");
       const confirmed = await window.linkdesk?.dialog?.confirm?.(`确定删除 ${nameList}？`);
-      if (!confirmed) return;
+      if (!confirmed) {
+        return { deleted: 0, failed: 0, deletedUris: [] as string[], cancelled: true, stateVersion: treeStateVersion() };
+      }
     }
     const parentUris = new Set<string>();
     // E6#73m K2：逐项兜住——删整个目录是长任务且**会失败**（占用/只读/权限），老写法首项抛错
     // 就整批中止、且异常沿命令 handler 悬空 ⇒ 用户看到「树没刷新，也没报错」。
     const failures: FailureItem[] = [];
+    const deletedUris: string[] = [];
     for (const uri of uris) {
       try {
         await lk.filesystem.remove(uri);
         lk.events.emit("file:deleted", { filePath: uri });
         parentUris.add(dirname(uri));
+        deletedUris.push(uri);
       } catch (e) {
         failures.push({ name: nameOf(uri), detail: errText(e) });
       }
     }
     // T-B：本轮命令真的删掉了东西才推进状态版本（失败项⛔ 计账）
-    if (parentUris.size > 0) bumpTreeStateVersion();
+    const stateVersion = deletedUris.length > 0 ? bumpTreeStateVersion() : treeStateVersion();
     // 失败项**不进 parentUris**——它们还在盘上，刷新那层只会白跑（真删掉的照常刷）
     notifyFailure(i18n.t("删除"), failures);
-    for (const parentUri of parentUris) {
-      await refreshDirSafe(model, parentUri);
+    if (model) {
+      for (const parentUri of parentUris) {
+        await refreshDirSafe(model, parentUri);
+      }
     }
+    // 后置状态：删了几条 / 哪些 / 失败几条，AI 可回读判读
+    return {
+      deleted: deletedUris.length, failed: failures.length, deletedUris,
+      ...(failures.length > 0 ? { failures } : {}),
+      cancelled: false, stateVersion,
+    };
   });
 }
