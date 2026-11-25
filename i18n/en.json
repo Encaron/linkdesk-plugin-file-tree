@@ -171,5 +171,15 @@
   "copy | move（缺省 copy）": "copy | move (default copy)",
   "true = 跳过粘贴确认框（无人值守 AI 必传）": "true = skip the paste confirmation dialog (required for unattended AI)",
   "要删除的绝对路径数组（type=object，值为 string[]，如 [\"C:/proj/a.txt\"]）": "Absolute paths to delete (type=object holding string[], e.g. [\"C:/proj/a.txt\"])",
-  "要粘贴的绝对路径数组（type=object，值为 string[]；元素可为字符串或 {path,name}）": "Absolute paths to paste (type=object holding string[]; items may be strings or {path,name})"
+  "要粘贴的绝对路径数组（type=object，值为 string[]；元素可为字符串或 {path,name}）": "Absolute paths to paste (type=object holding string[]; items may be strings or {path,name})",
+  "要定位的项：{ uri }（也接受 filePath 或路径字符串）；缺省 = 聚焦项": "Item to reveal: { uri } (filePath or a path string also accepted); omitted = focused item",
+  "要打开的文件：{ uri, isDirectory? }；isDirectory=true 时不动": "File to open: { uri, isDirectory? }; no-op when isDirectory=true",
+  "要在侧边打开的文件：{ uri, isDirectory? }；isDirectory=true 时不动": "File to open to the side: { uri, isDirectory? }; no-op when isDirectory=true",
+  "要打开的文件：{ uri?, filePath?, ext? }；缺省 = 聚焦文件": "File to open: { uri?, filePath?, ext? }; omitted = focused file",
+  "目标项：{ uri, isDirectory? }（文件 ⇒ 用其父目录）": "Target item: { uri, isDirectory? } (a file uses its parent directory)",
+  "要定位的项：{ uri }；缺省 = 聚焦项": "Item to reveal in the OS file manager: { uri }; omitted = focused item",
+  "目标项：{ uri }；缺省 = 选择/聚焦项": "Target item: { uri }; omitted = selection/focused item",
+  "要关闭的工作区根：{ uri }；缺省 = 关闭全部根": "Workspace root to close: { uri }; omitted = close all roots",
+  "要比较的文件：{ uri }": "File to compare: { uri }",
+  "要与已选文件比较的文件：{ uri }": "File to compare against the selected one: { uri }"
 }
