@@ -60,6 +60,12 @@
 
 # 更新日志
 
+## v1.0.43（2026-11-26）
+
+- **`core: true` → `essential: true`**（插件语义二分，硬切无兼容）：`essential` 只表示「UI 不显示卸载入口」，与「随包出厂」（lock `seed`）和「能否更新」（住所 `updatable`）彻底分家；旧 `core` 已退役。
+- 随 `@linkdesk/plugin-sdk` ^0.1.122（schema 删 core 加 essential）。
+- 行为零变化：本插件在详情/列表依旧不显示卸载按钮。
+
 ## v1.0.32（2026-11-20）
 
 - **分类声明（R4-2.8/2.9）**：`plugin.json` 顶层补 `category: "documents"` ＋ `categories: ["files"]`——商店分类抽屉归位，随本次发版进入官方目录条目。
