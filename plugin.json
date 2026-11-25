@@ -2,7 +2,7 @@
   "$schema": "./node_modules/@linkdesk/plugin-sdk/schemas/plugin.schema.json",
   "pluginId": "file-tree",
   "name": "文件树",
-  "version": "1.0.37",
+  "version": "1.0.38",
   "category": "documents",
   "categories": [
     "files"
@@ -362,10 +362,72 @@
         "id": "file-tree.rename",
         "risk": "R2",
         "activation": "entry",
-        "returns": [],
-        "example": {},
+        "returns": [
+          {
+            "name": "renamed",
+            "type": "boolean",
+            "description": "True when this call renamed the entry"
+          },
+          {
+            "name": "interactive",
+            "type": "boolean",
+            "optional": true,
+            "description": "True when no uri/newName was given and the inline rename UI was started"
+          },
+          {
+            "name": "oldUri",
+            "type": "string",
+            "optional": true,
+            "description": "Source path before the rename"
+          },
+          {
+            "name": "newUri",
+            "type": "string",
+            "optional": true,
+            "description": "Post-rename path (read it back to confirm)"
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "optional": true,
+            "description": "New base name"
+          },
+          {
+            "name": "stateVersion",
+            "type": "number",
+            "description": "Tree state version after this call (unchanged when interactive/no-op)"
+          }
+        ],
+        "example": {
+          "uri": "C:/proj/a.txt",
+          "newName": "b.txt"
+        },
         "title": "重命名",
-        "description": "在当前聚焦行进入行内重命名（等于按 F2）。无聚焦项时无效果。"
+        "description": "重命名文件/文件夹。uri+newName 两者同给 = 程序化改名并回后置状态（无视图也可用）；两者都不给 = 进入行内重命名（interactive:true）——required 均为 false，⛔ 不能只给一个。带 expectedVersion 时先比状态版本，不一致 ⇒ ECONFLICT（details.stateVersion=当前版本）。同一 idempotencyKey 重试不重复执行。",
+        "params": [
+          {
+            "name": "uri",
+            "type": "string",
+            "required": false,
+            "description": "源路径（程序化改名时与 newName 同给；两者都缺 = 行内重命名）"
+          },
+          {
+            "name": "newName",
+            "type": "string",
+            "required": false,
+            "description": "同目录下的新名字（与 uri 同给；不含 / 或 \\）"
+          },
+          {
+            "name": "expectedVersion",
+            "type": "number",
+            "description": "期望的当前 stateVersion（file-tree.refresh 回执里的那个）；不一致 ⇒ ECONFLICT，⛔ 不覆盖"
+          },
+          {
+            "name": "idempotencyKey",
+            "type": "string",
+            "description": "重试键：同一键第二次调用回放首次结果（replayed:true），⛔ 再改一次"
+          }
+        ]
       },
       {
         "id": "file-tree.delete",
@@ -391,10 +453,46 @@
         "id": "file-tree.refresh",
         "risk": "R0",
         "activation": "entry",
-        "returns": [],
+        "returns": [
+          {
+            "name": "ok",
+            "type": "boolean",
+            "description": "True when the refresh completed"
+          },
+          {
+            "name": "viewMounted",
+            "type": "boolean",
+            "description": "True when a file-tree view was mounted (roots/expanded are meaningful)"
+          },
+          {
+            "name": "rootCount",
+            "type": "number",
+            "description": "Number of workspace roots"
+          },
+          {
+            "name": "roots",
+            "type": "array",
+            "description": "Root uris"
+          },
+          {
+            "name": "expanded",
+            "type": "array",
+            "description": "Currently expanded folder uris"
+          },
+          {
+            "name": "stateVersion",
+            "type": "number",
+            "description": "Current tree state version (pass to rename.expectedVersion for optimistic concurrency)"
+          },
+          {
+            "name": "updatedAt",
+            "type": "string",
+            "description": "ISO timestamp of this snapshot"
+          }
+        ],
         "example": {},
         "title": "刷新资源管理器",
-        "description": "重读所有工作区根，并把已展开目录的子节点重新拉一遍（未展开的层不动）。"
+        "description": "刷新树并回可判读状态快照（根目录/展开项/stateVersion）；无视图时 viewMounted:false 仍回快照。"
       },
       {
         "id": "file-tree.collapseAll",

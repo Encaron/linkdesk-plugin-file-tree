@@ -144,5 +144,11 @@
   "Git Bash": "Git Bash",
   "把目标文件夹从当前工作区移除（⛔ 不删盘）。传右键项（FileMenuContext.uri）关闭指定文件夹；不传则关闭所有工作区文件夹。": "Removes the target folder from the current workspace (does NOT delete it from disk). Pass the context-menu item (FileMenuContext.uri) to close that folder; omit it to close all workspace folders.",
   "把入参项的 uri 记为 Diff 比较基准（不打开标签、不改盘）。传 {uri}；无 uri 时无效果。": "Records the input item's uri as the Diff comparison base (opens no tab, writes nothing). Pass {uri}; no-op without a uri.",
-  "用 selectForCompare 记下的基准与入参项打开 Diff 标签（基准用完清空）。传 {uri}；未选基准或同项时无效果。": "Opens a Diff tab between the base recorded by selectForCompare and the input item (the base is cleared afterwards). Pass {uri}; no-op without a base or for the same item."
+  "用 selectForCompare 记下的基准与入参项打开 Diff 标签（基准用完清空）。传 {uri}；未选基准或同项时无效果。": "Opens a Diff tab between the base recorded by selectForCompare and the input item (the base is cleared afterwards). Pass {uri}; no-op without a base or for the same item.",
+  "源路径（文件/文件夹的完整 uri）": "Source path (full uri of the file or folder)",
+  "同目录下的新名字（⛔ 不含 / 或 \\）": "New name in the same directory (no / or \\)",
+  "期望的当前 stateVersion（file-tree.refresh 回执里的那个）；不一致 ⇒ ECONFLICT，⛔ 不覆盖": "Expected current stateVersion (from the file-tree.refresh receipt); mismatch ⇒ ECONFLICT, never overwrite",
+  "重试键：同一键第二次调用回放首次结果（replayed:true），⛔ 再改一次": "Retry key: the same key replays the first result (replayed:true) instead of renaming again",
+  "重命名文件/文件夹。带 uri+newName 时程序化改名并回后置状态（新路径/stateVersion），无视图也可用；不带参数 = 进入行内重命名。带 expectedVersion 时先比状态版本，不一致 ⇒ ECONFLICT（details.stateVersion=当前版本）。同一 idempotencyKey 重试不重复执行。": "Rename a file or folder. With uri+newName it renames programmatically and returns the post-state (new path/stateVersion), no view required; without args it starts inline rename. With expectedVersion it compares the tree state first and returns ECONFLICT (details.stateVersion = current) on mismatch. Retrying with the same idempotencyKey does not rename twice.",
+  "刷新树并回可判读状态快照（根目录/展开项/stateVersion）；无视图时 viewMounted:false 仍回快照。": "Refresh the tree and return a readable state snapshot (roots/expanded/stateVersion); without a view it still returns a snapshot with viewMounted:false."
 }

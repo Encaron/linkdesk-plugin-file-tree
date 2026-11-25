@@ -6,6 +6,7 @@
  */
 import { useCallback, useEffect, useState } from "react";
 import type { FileTreeModel } from "../../services/FileTreeModel";
+import { bumpTreeStateVersion } from "../../services/FileTreeState";
 
 const lk = window.linkdesk;
 
@@ -51,6 +52,7 @@ export function useTreeRename({
     const dest = dir + "/" + newName;
     // E5.8#25.2：原生原子重命名（替代 copy+remove 模拟——非原子 + 大文件全量复制慢）
     await lk.filesystem.rename(uri, dest);
+    bumpTreeStateVersion(); // T-B：行内改名成功 ⇒ 树状态版本 +1（插件内统一版本轴）
     lk.events.emit("file:renamed", { oldPath: uri, newPath: dest });
     await model.refresh(dir);
     const parent = model.findClosest(dir);

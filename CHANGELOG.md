@@ -1,3 +1,11 @@
+## v1.0.38（2026-11-25）
+
+- **状态命令试点（T-B · 13-状态命令约定）**：
+  - `file-tree.refresh` 改为回可判读快照：`ok/viewMounted/rootCount/roots/expanded/stateVersion/updatedAt`（无视图也回，如实 `viewMounted:false`）。
+  - `file-tree.rename` 支持**程序化带参**（`uri`/`newName`/`expectedVersion?`/`idempotencyKey?`，无视图可用）：成功回后置状态（`newUri`/`name`/`stateVersion`）；`expectedVersion` 与当前 `stateVersion` 不一致 ⇒ `ECONFLICT` ＋ `details.stateVersion`（零副作用）；目标已存在 ⇒ `EEXIST`；参数非法/宿主失败 ⇒ `EBADARGS`/`EFS` 结构化返回（⛔ throw）；不带参仍进入行内重命名。
+  - 声明 `idempotencyKey`：同键重试由宿主回放首次结果（`replayed:true`，⛔ 再改一次）——rename 是「目标路径收敛」的写，同参重放不会产生第二份实体。
+  - 新增插件级 `stateVersion`（`services/FileTreeState.ts`）：经插件完成的树变更（rename/newFile/newFolder/delete/paste/行内改名）各 +1；外部改盘不计（文档已注明）。
+
 ## v1.0.37（2026-11-25）
 
 - AI 门外契约补齐：命令声明补 `risk`/`activation`/`returns`/`example`。

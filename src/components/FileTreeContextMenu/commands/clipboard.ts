@@ -4,6 +4,7 @@
 import { dirname, normalizePath } from "../../../utils/hostPath";
 import { fileTreeClipboard } from "../../../services/FileTreeClipboard";
 import { executeSafeDrop } from "../../../services/FileTreeDnD";
+import { bumpTreeStateVersion } from "../../../services/FileTreeState";
 import { h } from "../host-bridge";
 import { refreshDirSafe, type FileMenuContext } from "./shared";
 
@@ -86,6 +87,7 @@ export function registerClipboardCommands(): void {
     if (uris.length === 0) return;
     const sources = uris.map((u) => ({ path: u, name: u.split("/").pop() ?? "unnamed" }));
     await executeSafeDrop(sources, targetDir, isCut ? "move" : "copy");
+    bumpTreeStateVersion(); // T-B：粘贴成功 ⇒ 树状态版本 +1
     hd.rerender();
     await refreshDirSafe(model, targetDir);
   });
