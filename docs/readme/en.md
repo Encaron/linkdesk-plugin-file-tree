@@ -64,6 +64,20 @@ Browse and manage files — modeled on the VS Code Explorer
 - **External Terminal** (`file-tree.external.windowsExec`) — External terminal for "Open in Terminal". Select "Custom" to enter a launch command in the template below.
 - **Custom Terminal Command** (`file-tree.external.customCommand`) — Custom terminal launch command. Use {{dirPath}} as the target directory. E.g.: wt -d "{{dirPath}}"
 
+## Command error codes (AI / scripts)
+
+Expected failures of write commands use the returned structured envelope `{isPluginError:true, code, message, hint?, details?}` (never a bare throw or a Chinese-only message), so callers can branch on `code`.
+
+| code | Meaning | Next step |
+|:--|:--|:--|
+| `EBADARGS` | Invalid arguments / `rename` received only one of `uri` and `newName` | Pass both (programmatic) or neither (inline) |
+| `EEXIST` | `rename` target already exists (never overwritten) | Choose another name, or remove/move the target first |
+| `EFS` | Host filesystem operation failed (locked/permission/source missing) | Read `message`; run `file-tree.refresh` to re-check |
+| `ECONFLICT` | `expectedVersion` does not match the current `stateVersion` | Run `file-tree.refresh` for the latest version, then retry |
+| `ENOVIEW` | Argument-less `rename` is inline rename, but no file-tree view is mounted | Pass `uri`+`newName` for programmatic rename, or open-tab file-tree first |
+
+> `ENOVIEW` is a **plugin-level semantic code**. The shell's `EVIEWREQUIRED` (for view-scoped commands) is a different path — they are **not synonyms** and do not replace each other.
+
 ## Install
 
 Open the Plugin Store, find this plugin, and click Install. For offline use, install the `.linkdesk-plugin` package from disk.

@@ -27,6 +27,20 @@
 
 它是文件图标主题机制的第一个消费方，也是默认消费方。文件图标数据与解析不在本插件里私有——它住在共享文件图标服务（一处），文件树每一行、编辑器文件标签、搜索结果行同消费；第三方作者也能按公开契约贡献新图标 / 整套文件图标主题，见 [06-图标.md](../../docs/02-Electron架构/E6_插件生态与发布/03-插件市场/06-图标.md)。
 
+## 命令错误码（AI / 脚本）
+
+写命令的**预期失败**走返回式结构化错误：`{isPluginError:true, code, message, hint?, details?}`（⛔ 裸中文/裸 throw，门外可直接判读）。
+
+| code | 语义 | 下一步 |
+|:--|:--|:--|
+| `EBADARGS` | 参数非法 / `rename` 只给了 `uri` 或 `newName` 之一 | 两个同给（程序化）或都不给（行内） |
+| `EEXIST` | `rename` 的目标已存在（不覆盖） | 换名字，或先删除/移动目标 |
+| `EFS` | 宿主文件系统操作失败（占用/权限/源不在） | 看 message；先 `file-tree.refresh` 核对 |
+| `ECONFLICT` | `expectedVersion` 与当前 `stateVersion` 不一致 | 先 `file-tree.refresh` 取新版本再重试 |
+| `ENOVIEW` | 无参 `rename` 是行内改名，但当前没有 file-tree 视图 | 传 `uri`+`newName` 走程序化，或先 open-tab file-tree |
+
+> `ENOVIEW` 是**本插件的语义码**；壳对视图态命令产生的 `EVIEWREQUIRED` 是另一条链路，二者**不是同义词**、互不替代。
+
 ## 图标身份（E6#69 三图模型）
 
 - `icon`（界面小图标）= `resources/icon-bar.svg` —— **Type-1 线稿剪影**（codicon files 字形），仅图标栏那枚竖排钮用

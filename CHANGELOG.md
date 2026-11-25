@@ -1,3 +1,8 @@
+## v1.0.40（2026-11-25）
+
+- **错误码文档化**：README（中/英）新增「命令错误码」表（EBADARGS/EEXIST/EFS/ECONFLICT/ENOVIEW），逐条写语义与下一步；`rename` 的 describe 描述补 `ENOVIEW` 的 hint（传 uri+newName 程序化，或先 open-tab file-tree）。
+- 明确 `ENOVIEW` 是**插件语义码**，壳的 `EVIEWREQUIRED` 是另一条链路，二者不是同义词——⛔ 插件不抛壳保留码。
+
 ## v1.0.39（2026-11-25）
 
 - **rename 三态判据修正**（1.0.38 实测 bug）：只给 `uri` 或只给 `newName` 不再落入行内改名，改回 **EBADARGS**（返回式信封，零副作用）；两者都不给且**无视图**时不再返回可被当成成功的 `interactive:true`，改回 **ENOVIEW**（hint：传 uri+newName 程序化，或先 open-tab file-tree）。两者都不给且有视图仍进入行内改名。
